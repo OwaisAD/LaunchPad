@@ -1,0 +1,27 @@
+# Ignore all files in the "dist" directory
+dist/
+
+# Ignore all files in the "node_modules" directory
+/node_modules/*
+/server/src/generated/*
+
+# Ignore specific files
+src/config.js
+src/assets/*.png
+
+# Ignore specific directories
+src/test/
+
+# Ignore files with a specific extension
+**/*.log
+**/*.css
+
+# Ignore files matching a specific pattern
+**/generated-*.js
+
+/server/prisma/*
+
+**.js
+
+/client/cypress.config.ts
+/client/src/components/ui

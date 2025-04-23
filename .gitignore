@@ -24,6 +24,8 @@ dist-ssr
 *.sw?
 .env
 .env.test
+.env.production
+.env.staging
 
 .DS_Store
 
