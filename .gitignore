@@ -23,9 +23,8 @@ dist-ssr
 *.sln
 *.sw?
 .env
-.env.test
-.env.production
-.env.staging
+.env.*
+!.env.example
 
 .DS_Store
 
@@ -36,3 +35,6 @@ server/coverage
 # docker
 .docker/client_build/
 docker-data
+
+
+/coverage
