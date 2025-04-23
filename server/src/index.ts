@@ -1,20 +1,19 @@
-// index.ts
-import express from "express";
-import cors from "cors";
-import helmet from "helmet";
-import morgan from "morgan";
-import { middleware } from "#middlewares/middlewares.js";
+import createServer from "#server.js";
 
-const app = express();
+export const app = createServer();
 const port = process.env.PORT ?? "9001";
 
-app.use(express.json());
-app.use(cors());
-app.use(helmet());
-app.use(morgan("dev"));
+async function main() {
+  app.listen(port, () => {
+    console.log(`Server is listening on port http://localhost:${port}`);
+  });
+}
 
-app.get("/", middleware);
-
-app.listen(port, () => {
-  console.log(`Example app listening on port http://localhost:${port}`);
-});
+main()
+  .then(async () => {
+    console.log("Server started successfully");
+  })
+  .catch(async (e) => {
+    console.error("Error starting server:", e);
+    process.exit(1);
+  });
