@@ -1,5 +1,5 @@
 import express from "express";
-import routes from "#routes.js";
+import routes from "../routes";
 import cors from "cors";
 import cookieParser from "cookie-parser";
 import compression from "compression";
@@ -17,7 +17,6 @@ function createServer() {
   );
 
   app.use(compression());
-
   app.use(cookieParser());
 
   app.use(helmet());
