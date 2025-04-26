@@ -2,7 +2,7 @@ name: Testing LaunchPad Client
 on:
   push:
     branches-ignore:
-      - master
+      - main
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
