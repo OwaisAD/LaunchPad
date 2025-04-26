@@ -47,8 +47,11 @@ jobs:
       - name: Install dependencies
         run: npm install
 
-      - name: Run tests
-        run: npm test
+      - name: Run unit tests (Vitest)
+        run: npm run test --workspace=client
+      
+      - name: Run UI tests (Playwright)
+        run: npm run test:ui --workspace=client
 
       - name: Build client
         run: npm run build
