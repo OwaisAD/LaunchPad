@@ -5,7 +5,7 @@ on:
       - main
 
 env:
-  DATABASE_URL: postgresql://postgres:postgres@localhost:5432/invopilot
+  DATABASE_URL: postgresql://postgres:postgres@localhost:5432/launchpad_test
   REDIS_URL: redis://localhost:6379
 
 concurrency:
@@ -17,11 +17,10 @@ jobs:
     runs-on: ubuntu-latest
     services:
       postgres:
-        image: postgres:17.4-alpine3.21
+        image: postgres:15.3-alpine3.18
         env:
-          POSTGRES_DB: launchpad
-          POSTGRES_USER: ${POSTGRES_USER}
-          POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+          POSTGRES_DB: launchpad_test
+          POSTGRES_PASSWORD: postgres
         ports:
           - 5432:5432
         options: >-
