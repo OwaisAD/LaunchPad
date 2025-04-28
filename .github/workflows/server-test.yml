@@ -2,7 +2,7 @@ name: Testing LaunchPad Server
 on:
   push:
     branches-ignore:
-      - master
+      - main
 
 env:
   DATABASE_URL: postgresql://postgres:postgres@localhost:5432/invopilot
