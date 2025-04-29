@@ -52,19 +52,29 @@ jobs:
       - name: Build & push client image (once, multiple tags)
         run: |
           IMAGE_NAME="ghcr.io/$(echo "${{ github.repository }}" | tr '[:upper:]' '[:lower:]')/client"
+
           docker build -t $IMAGE_NAME:${{ github.sha }} ./client
-          docker tag $IMAGE_NAME:${{ github.sha }} $IMAGE_NAME:${{ env.RELEASE_VERSION }}
+
+          if [ -n "${{ env.RELEASE_VERSION }}" ]; then
+            docker tag $IMAGE_NAME:${{ github.sha }} $IMAGE_NAME:${{ env.RELEASE_VERSION }}
+            docker push $IMAGE_NAME:${{ env.RELEASE_VERSION }}
+          fi
+
           docker tag $IMAGE_NAME:${{ github.sha }} $IMAGE_NAME:latest
           docker push $IMAGE_NAME:${{ github.sha }}
-          docker push $IMAGE_NAME:${{ env.RELEASE_VERSION }}
           docker push $IMAGE_NAME:latest
 
-          - name: Build & push server image (once, multiple tags)
-          run: |
-            IMAGE_NAME="ghcr.io/$(echo "${{ github.repository }}" | tr '[:upper:]' '[:lower:]')/server"
-            docker build -t $IMAGE_NAME:${{ github.sha }} ./server
+      - name: Build & push server image (once, multiple tags)
+        run: |
+          IMAGE_NAME="ghcr.io/$(echo "${{ github.repository }}" | tr '[:upper:]' '[:lower:]')/server"
+
+          docker build -t $IMAGE_NAME:${{ github.sha }} ./server
+
+          if [ -n "${{ env.RELEASE_VERSION }}" ]; then
             docker tag $IMAGE_NAME:${{ github.sha }} $IMAGE_NAME:${{ env.RELEASE_VERSION }}
-            docker tag $IMAGE_NAME:${{ github.sha }} $IMAGE_NAME:latest
-            docker push $IMAGE_NAME:${{ github.sha }}
             docker push $IMAGE_NAME:${{ env.RELEASE_VERSION }}
-            docker push $IMAGE_NAME:latest
+          fi
+
+          docker tag $IMAGE_NAME:${{ github.sha }} $IMAGE_NAME:latest
+          docker push $IMAGE_NAME:${{ github.sha }}
+          docker push $IMAGE_NAME:latest
