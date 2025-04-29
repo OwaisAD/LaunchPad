@@ -1,4 +1,4 @@
-name: Master and Releaser
+name: Deploying LaunchPad Client
 
 on:
   push:

@@ -1,12 +1,12 @@
-name: Master and Releaser
+name: Deploying LaunchPad Server
 
 on:
   push:
     branches:
       - master
     paths:
-      - 'server/**'
-      - '.github/workflows/server-deploy.yml'
+      - "server/**"
+      - ".github/workflows/server-deploy.yml"
 
 jobs:
   build:
