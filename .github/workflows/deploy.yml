@@ -18,12 +18,18 @@ jobs:
       - name: Build the application
         run: npm run build
 
-      # Run Semantic Release to calculate version
+  deploy:
+    permissions:
+      contents: write
+      issues: write
+      pull-requests: write
+    runs-on: ubuntu-latest
+    steps:
       - name: Semantic Release
         id: semantic
         run: npx semantic-release
         env:
-          GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       # Only proceed if a release was created
       - name: Extract new version
@@ -38,7 +44,7 @@ jobs:
         with:
           registry: ghcr.io
           username: ${{ github.actor }} # Use the GitHub actor (the user triggering the action)
-          password: ${{ secrets.GH_TOKEN }} # Use the provided GitHub token
+          password: ${{ secrets.GITHUB_TOKEN }} # Use the provided GitHub token
 
       - name: Build & push client image (once, multiple tags)
         run: |
