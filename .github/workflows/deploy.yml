@@ -51,8 +51,7 @@ jobs:
 
       - name: Build & push client image (once, multiple tags)
         run: |
-          OWNER_REPO=$(echo "${{ github.repository }}" | tr '[:upper:]' '[:lower:]' | tr '/' '-')
-          IMAGE_BASE="ghcr.io/$OWNER_REPO-client"
+          IMAGE_NAME="ghcr.io/$(echo "${{ github.repository }}" | tr '[:upper:]' '[:lower:]')/client"
           docker build -t $IMAGE_BASE:${{ github.sha }} ./client
           docker tag $IMAGE_BASE:${{ github.sha }} $IMAGE_BASE:${{ env.RELEASE_VERSION }}
           docker tag $IMAGE_BASE:${{ github.sha }} $IMAGE_BASE:latest
@@ -62,8 +61,7 @@ jobs:
 
       - name: Build & push server image (once, multiple tags)
         run: |
-          OWNER_REPO=$(echo "${{ github.repository }}" | tr '[:upper:]' '[:lower:]' | tr '/' '-')
-          IMAGE_BASE="ghcr.io/$OWNER_REPO-server"
+          IMAGE_NAME="ghcr.io/$(echo "${{ github.repository }}" | tr '[:upper:]' '[:lower:]')/server"
           docker build -t $IMAGE_BASE:${{ github.sha }} ./server
           docker tag $IMAGE_BASE:${{ github.sha }} $IMAGE_BASE:${{ env.RELEASE_VERSION }}
           docker tag $IMAGE_BASE:${{ github.sha }} $IMAGE_BASE:latest
