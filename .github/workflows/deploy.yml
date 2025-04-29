@@ -52,19 +52,19 @@ jobs:
       - name: Build & push client image (once, multiple tags)
         run: |
           IMAGE_NAME="ghcr.io/$(echo "${{ github.repository }}" | tr '[:upper:]' '[:lower:]')/client"
-          docker build -t $IMAGE_BASE:${{ github.sha }} ./client
-          docker tag $IMAGE_BASE:${{ github.sha }} $IMAGE_BASE:${{ env.RELEASE_VERSION }}
-          docker tag $IMAGE_BASE:${{ github.sha }} $IMAGE_BASE:latest
-          docker push $IMAGE_BASE:${{ github.sha }}
-          docker push $IMAGE_BASE:${{ env.RELEASE_VERSION }}
-          docker push $IMAGE_BASE:latest
+          docker build -t $IMAGE_NAME:${{ github.sha }} ./client
+          docker tag $IMAGE_NAME:${{ github.sha }} $IMAGE_NAME:${{ env.RELEASE_VERSION }}
+          docker tag $IMAGE_NAME:${{ github.sha }} $IMAGE_NAME:latest
+          docker push $IMAGE_NAME:${{ github.sha }}
+          docker push $IMAGE_NAME:${{ env.RELEASE_VERSION }}
+          docker push $IMAGE_NAME:latest
 
-      - name: Build & push server image (once, multiple tags)
-        run: |
-          IMAGE_NAME="ghcr.io/$(echo "${{ github.repository }}" | tr '[:upper:]' '[:lower:]')/server"
-          docker build -t $IMAGE_BASE:${{ github.sha }} ./server
-          docker tag $IMAGE_BASE:${{ github.sha }} $IMAGE_BASE:${{ env.RELEASE_VERSION }}
-          docker tag $IMAGE_BASE:${{ github.sha }} $IMAGE_BASE:latest
-          docker push $IMAGE_BASE:${{ github.sha }}
-          docker push $IMAGE_BASE:${{ env.RELEASE_VERSION }}
-          docker push $IMAGE_BASE:latest
+          - name: Build & push server image (once, multiple tags)
+          run: |
+            IMAGE_NAME="ghcr.io/$(echo "${{ github.repository }}" | tr '[:upper:]' '[:lower:]')/server"
+            docker build -t $IMAGE_NAME:${{ github.sha }} ./server
+            docker tag $IMAGE_NAME:${{ github.sha }} $IMAGE_NAME:${{ env.RELEASE_VERSION }}
+            docker tag $IMAGE_NAME:${{ github.sha }} $IMAGE_NAME:latest
+            docker push $IMAGE_NAME:${{ github.sha }}
+            docker push $IMAGE_NAME:${{ env.RELEASE_VERSION }}
+            docker push $IMAGE_NAME:latest
