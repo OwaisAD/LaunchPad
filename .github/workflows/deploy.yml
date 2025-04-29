@@ -45,7 +45,7 @@ jobs:
 
       - name: Build & push client image (once, multiple tags)
         run: |
-          IMAGE_BASE="ghcr.io/${{ github.repository_owner }}/${{ github.repository }}-client"
+          IMAGE_BASE="ghcr.io/${{ github.repository }}-client"
           docker build -t $IMAGE_BASE:${{ github.sha }} ./client
           docker tag $IMAGE_BASE:${{ github.sha }} $IMAGE_BASE:${{ env.RELEASE_VERSION }}
           docker tag $IMAGE_BASE:${{ github.sha }} $IMAGE_BASE:latest
@@ -55,7 +55,7 @@ jobs:
 
       - name: Build & push server image (once, multiple tags)
         run: |
-          IMAGE_BASE="ghcr.io/${{ github.repository_owner }}/${{ github.repository }}-server"
+          IMAGE_BASE="ghcr.io/${{ github.repository }}-server"
           docker build -t $IMAGE_BASE:${{ github.sha }} ./server
           docker tag $IMAGE_BASE:${{ github.sha }} $IMAGE_BASE:${{ env.RELEASE_VERSION }}
           docker tag $IMAGE_BASE:${{ github.sha }} $IMAGE_BASE:latest
