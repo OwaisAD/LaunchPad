@@ -33,6 +33,12 @@ jobs:
         if: steps.semantic.outputs.new-release-published == 'true'
         run: echo "RELEASE_VERSION=${{ steps.semantic.outputs.release-version }}" >> $GITHUB_ENV
 
+      - name: Fail if no new release
+        if: steps.semantic.outputs.new-release-published != 'true'
+        run: |
+          echo "No new release published. Skipping Docker build and push."
+          exit 0
+
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v2
 
@@ -45,7 +51,8 @@ jobs:
 
       - name: Build & push client image (once, multiple tags)
         run: |
-          IMAGE_BASE="ghcr.io/${{ github.repository }}-client"
+          OWNER_REPO=$(echo "${{ github.repository }}" | tr '[:upper:]' '[:lower:]' | tr '/' '-')
+          IMAGE_BASE="ghcr.io/$OWNER_REPO-client"
           docker build -t $IMAGE_BASE:${{ github.sha }} ./client
           docker tag $IMAGE_BASE:${{ github.sha }} $IMAGE_BASE:${{ env.RELEASE_VERSION }}
           docker tag $IMAGE_BASE:${{ github.sha }} $IMAGE_BASE:latest
@@ -55,7 +62,8 @@ jobs:
 
       - name: Build & push server image (once, multiple tags)
         run: |
-          IMAGE_BASE="ghcr.io/${{ github.repository }}-server"
+          OWNER_REPO=$(echo "${{ github.repository }}" | tr '[:upper:]' '[:lower:]' | tr '/' '-')
+          IMAGE_BASE="ghcr.io/$OWNER_REPO-server"
           docker build -t $IMAGE_BASE:${{ github.sha }} ./server
           docker tag $IMAGE_BASE:${{ github.sha }} $IMAGE_BASE:${{ env.RELEASE_VERSION }}
           docker tag $IMAGE_BASE:${{ github.sha }} $IMAGE_BASE:latest
