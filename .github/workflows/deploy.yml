@@ -7,10 +7,7 @@ on:
 
 jobs:
   buildAndPush:
-    permissions:
-      contents: write
-      issues: write
-      pull-requests: write
+    permissions: write-all
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
@@ -54,12 +51,6 @@ jobs:
           IMAGE_NAME="ghcr.io/$(echo "${{ github.repository }}" | tr '[:upper:]' '[:lower:]')/client"
 
           docker build -t $IMAGE_NAME:${{ github.sha }} ./client
-
-          if [ -n "${{ env.RELEASE_VERSION }}" ]; then
-            docker tag $IMAGE_NAME:${{ github.sha }} $IMAGE_NAME:${{ env.RELEASE_VERSION }}
-            docker push $IMAGE_NAME:${{ env.RELEASE_VERSION }}
-          fi
-
           docker tag $IMAGE_NAME:${{ github.sha }} $IMAGE_NAME:latest
           docker push $IMAGE_NAME:${{ github.sha }}
           docker push $IMAGE_NAME:latest
@@ -69,12 +60,6 @@ jobs:
           IMAGE_NAME="ghcr.io/$(echo "${{ github.repository }}" | tr '[:upper:]' '[:lower:]')/server"
 
           docker build -t $IMAGE_NAME:${{ github.sha }} ./server
-
-          if [ -n "${{ env.RELEASE_VERSION }}" ]; then
-            docker tag $IMAGE_NAME:${{ github.sha }} $IMAGE_NAME:${{ env.RELEASE_VERSION }}
-            docker push $IMAGE_NAME:${{ env.RELEASE_VERSION }}
-          fi
-
           docker tag $IMAGE_NAME:${{ github.sha }} $IMAGE_NAME:latest
           docker push $IMAGE_NAME:${{ github.sha }}
           docker push $IMAGE_NAME:latest
