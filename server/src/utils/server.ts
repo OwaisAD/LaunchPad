@@ -1,10 +1,11 @@
-import express from "express";
-import routes from "../routes";
-import cors from "cors";
-import cookieParser from "cookie-parser";
 import compression from "compression";
+import cookieParser from "cookie-parser";
+import cors from "cors";
+import express from "express";
 import helmet from "helmet";
 import morgan from "morgan";
+
+import routes from "../routes";
 
 function createServer() {
   const app = express();
