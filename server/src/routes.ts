@@ -1,4 +1,4 @@
-import { Express, NextFunction, Request, Response } from "express";
+import { Express, Request, Response } from "express";
 
 function routes(app: Express) {
   app.get("/", (_req: Request, res: Response) => {

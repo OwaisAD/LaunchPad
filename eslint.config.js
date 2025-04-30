@@ -27,6 +27,8 @@ export default tseslint.config(
     rules: {
       ...vitest.configs.recommended.rules,
       "@typescript-eslint/unbound-method": "off",
+      "@typescript-eslint/require-await": "off",
+      "@typescript-eslint/use-unknown-in-catch-callback-variable": "off",
     },
   }
 );
