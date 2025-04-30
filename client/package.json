@@ -9,8 +9,9 @@
     "serve": "vite preview",
     "test": "vitest run",
     "test:ui": "npx playwright test",
-    "lint": "eslint",
-    "format": "prettier",
+    "lint": "eslint src",
+    "lint:fix": "eslint src --fix",
+    "format": "prettier --write src",
     "check": "prettier --write . && eslint --fix"
   },
   "dependencies": {
