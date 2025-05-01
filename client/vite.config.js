@@ -21,4 +21,12 @@ export default defineConfig({
       '@': resolve(__dirname, './src'),
     },
   },
+  server: {
+    cors: {
+			origin: ['https://mysubdomain.domain.io', 'http://localhost:5173'],
+			methods: ['GET', 'POST'],
+			allowedHeaders: ['Content-Type']
+		},
+    allowedHosts: ["launchpad.sportia.dk"]
+  }
 })

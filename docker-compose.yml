@@ -57,22 +57,23 @@ services:
     networks:
       - launchpad
 
-  nginx:
-    container_name: nginx
-    image: fholzer/nginx-brotli:latest
-    restart: always
-    ports:
-      - "80:80"
-      - "443:443"
-    volumes:
-      - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
-      - ./nginx/conf.d:/etc/nginx/conf.d:ro
-      - ./nginx/certs:/etc/nginx/certs:ro
-    depends_on:
-      - client
-      - server
-    networks:
-      - launchpad
+  # nginx:
+  #   container_name: nginx
+  #   image: fholzer/nginx-brotli:latest
+  #   restart: always
+  #   ports:
+  #     - "80:80"
+  #     - "443:443"
+  #   volumes:
+  #     - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+  #     - ./nginx/conf.d:/etc/nginx/conf.d:ro
+  #     - ./nginx/certs:/etc/nginx/certs:ro
+  #     - ./docker-data/nginx/certs/.well-known:/usr/share/nginx/html/.well-known:ro
+  #   depends_on:
+  #     - client
+  #     - server
+  #   networks:
+  #     - launchpad
 
   watchtower:
     container_name: watchtower
