@@ -1,44 +1,33 @@
 ---
 name: "New Feature"
-about: "Request to add a new feature to the project"
-title: "[Feature Request]"
-labels: "feature"
+about: "Add a new feature to the app (client or server)"
+title: "[Feature] <short title>"
+labels: ["feature"]
 assignees: ""
 ---
 
-### Feature Description
+### Summary
 
-**Describe the feature you'd like to request.**
+**What is the feature?**
 
-- Clearly describe the functionality and why it's needed.
-- If applicable, include the user story (e.g., As a user, I want to be able to...).
+- Describe briefly what this feature will do.
 
-### Use Cases
+### Target Area
 
-**What are the use cases for this feature?**
+- [ ] Client
+- [ ] Server
+- [ ] Both
 
-- Explain how this feature will be used by the end-user.
+### Requirements
+
+- Describe the scope, UI/API expectations, or user story.
 
 ### Acceptance Criteria
 
-**What should happen when this feature is implemented?**
+- [ ] Feature is implemented
+- [ ] Tests or manual checks done
+- [ ] No breaking changes introduced
 
-- List the specific conditions that must be met for the feature to be considered complete.
+### Notes
 
-### Mockups/Designs
-
-**If applicable, provide any mockups or designs for the feature.**
-
-- Attach any images, wireframes, or links to relevant design resources.
-
-### Additional Context
-
-**Any additional context or information you think may be helpful.**
-
-- Add any relevant links, documentation, or dependencies that might affect the implementation.
-
-### Related Issues
-
-**Are there any related issues or pull requests?**
-
-- Link to any related GitHub issues or PRs here.
+- Optional links, sketches, or design thoughts.
