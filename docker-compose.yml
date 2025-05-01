@@ -37,7 +37,6 @@ services:
     environment:
       DATABASE_URL: postgres://${POSTGRES_USER}:${POSTGRES_PASSWORD}@postgres:5432/launchpad
       REDIS_URL: redis://default:${REDIS_PASSWORD}@redis:6379
-      JWT_SECRET: ${JWT_SECRET}
       NODE_ENV: production
     volumes:
       - ./docker-data/server:/usr/src/app
