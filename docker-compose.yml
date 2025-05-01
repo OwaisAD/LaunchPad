@@ -58,7 +58,7 @@ services:
 
   nginx:
     container_name: nginx
-    image: nginx:latest
+    image: fholzer/nginx-brotli:latest
     restart: always
     ports:
       - "80:80"
