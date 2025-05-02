@@ -31,9 +31,6 @@ services:
     restart: always
     ports:
       - "8080:8080"
-    depends_on:
-      - postgres
-      - redis
     environment:
       PORT: 8080
       DATABASE_URL: postgres://${POSTGRES_USER}:${POSTGRES_PASSWORD}@postgres:5432/launchpad
@@ -80,6 +77,7 @@ services:
     image: containrrr/watchtower:latest
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
+      - /root/.docker/config.json:/config.json
     command: --interval 30
     restart: always
     networks:
