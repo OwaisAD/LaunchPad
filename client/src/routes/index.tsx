@@ -35,7 +35,7 @@ function App() {
           Learn TanStack
         </a>
 
-        <Loader />
+        <Loader loading={true} />
       </header>
     </div>
   )
