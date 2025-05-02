@@ -23,7 +23,7 @@ export default defineConfig({
   },
   server: {
     cors: {
-			origin: ['https://mysubdomain.domain.io', 'http://localhost:5173'],
+			origin: ['https://launchpad.sportia.dk', 'http://localhost:5173'],
 			methods: ['GET', 'POST'],
 			allowedHeaders: ['Content-Type']
 		},

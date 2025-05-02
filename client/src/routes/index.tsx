@@ -1,5 +1,6 @@
 import { createFileRoute } from '@tanstack/react-router'
 import logo from '../logo.svg'
+import Loader from '@/components/Loader'
 
 export const Route = createFileRoute('/')({
   component: App,
@@ -33,6 +34,8 @@ function App() {
         >
           Learn TanStack
         </a>
+
+        <Loader />
       </header>
     </div>
   )
