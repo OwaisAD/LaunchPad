@@ -8,7 +8,7 @@ import { Button } from "@/components/ui/button";
 import { passwordRegex } from "@/utils/regex";
 // import { useNavigate } from "react-router-dom";
 
-const Login = () => {
+const CreateAccount = () => {
   // const navigate = useNavigate();
 
   const handleClick = () => {
@@ -66,7 +66,7 @@ const Login = () => {
 
         <div className="flex justify-center items-center flex-col gap-6 w-full px-0 2xl:px-56">
           <div className="w-full flex">
-            <h1 className="text-4xl font-semibold ">Login to LaunchPad</h1>
+            <h1 className="text-4xl font-semibold ">Create LaunchPad account</h1>
           </div>
 
           <Form {...form}>
@@ -121,7 +121,7 @@ const Login = () => {
               />
 
               <Button type="submit" className="w-full">
-                Login
+                Create Account
               </Button>
             </form>
           </Form>
@@ -139,4 +139,4 @@ const Login = () => {
   );
 };
 
-export default Login;
+export default CreateAccount;
