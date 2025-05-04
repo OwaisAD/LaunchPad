@@ -11,10 +11,17 @@
 // Import Routes
 
 import { Route as rootRoute } from './routes/__root'
+import { Route as LayoutImport } from ./routes/_pages/loginout'
 import { Route as IndexImport } from './routes/index'
 import { Route as DemoTanstackQueryImport } from './routes/demo.tanstack-query'
+import { Route as PagesLoginImport } from './routes/login'
 
 // Create/Update Routes
+
+const LayoutRoute = LayoutImport.update({
+  id: '/_layout',
+  getParentRoute: () => rootRoute,
+} as any)
 
 const IndexRoute = IndexImport.update({
   id: '/',
@@ -28,6 +35,12 @@ const DemoTanstackQueryRoute = DemoTanstackQueryImport.update({
   getParentRoute: () => rootRoute,
 } as any)
 
+const PagesLoginRoute = PagesLoginImport.update({
+  id: '/_pages/login',
+  path: '/login',
+  getParentRoute: () => rootRoute,
+} as any)
+
 // Populate the FileRoutesByPath interface
 
 declare module '@tanstack/react-router' {
@@ -37,6 +50,20 @@ declare module '@tanstack/react-router' {
       path: '/'
       fullPath: '/'
       preLoaderRoute: typeof IndexImport
+      parentRoute: typeof rootRoute
+    }
+    '/_layout': {
+      id: '/_layout'
+      path: ''
+      fullPath: ''
+      preLoaderRoute: typeof LayoutImport
+      parentRoute: typeof rootRoute
+    }
+    '/_pages/login': {
+      id: '/_pages/login'
+      path: '/login'
+      fullPath: '/login'
+      preLoaderRoute: typeof PagesLoginImport
       parentRoute: typeof rootRoute
     }
     '/demo/tanstack-query': {
@@ -53,36 +80,46 @@ declare module '@tanstack/react-router' {
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '': typeof LayoutRoute
+  '/login': typeof PagesLoginRoute
   '/demo/tanstack-query': typeof DemoTanstackQueryRoute
 }
 
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '': typeof LayoutRoute
+  '/login': typeof PagesLoginRoute
   '/demo/tanstack-query': typeof DemoTanstackQueryRoute
 }
 
 export interface FileRoutesById {
   __root__: typeof rootRoute
   '/': typeof IndexRoute
+  '/_layout': typeof LayoutRoute
+  '/_pages/login': typeof PagesLoginRoute
   '/demo/tanstack-query': typeof DemoTanstackQueryRoute
 }
 
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/demo/tanstack-query'
+  fullPaths: '/' | '' | '/login' | '/demo/tanstack-query'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/demo/tanstack-query'
-  id: '__root__' | '/' | '/demo/tanstack-query'
+  to: '/' | '' | '/login' | '/demo/tanstack-query'
+  id: '__root__' | '/' | '/_layout' | '/_pages/login' | '/demo/tanstack-query'
   fileRoutesById: FileRoutesById
 }
 
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  LayoutRoute: typeof LayoutRoute
+  PagesLoginRoute: typeof PagesLoginRoute
   DemoTanstackQueryRoute: typeof DemoTanstackQueryRoute
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  LayoutRoute: LayoutRoute,
+  PagesLoginRoute: PagesLoginRoute,
   DemoTanstackQueryRoute: DemoTanstackQueryRoute,
 }
 
@@ -97,11 +134,19 @@ export const routeTree = rootRoute
       "filePath": "__root.tsx",
       "children": [
         "/",
+        "/_layout",
+        "/_pages/login",
         "/demo/tanstack-query"
       ]
     },
     "/": {
       "filePath": "index.tsx"
+    },
+    "/_layout": {
+      "filePath": "_layout.tsx"
+    },
+    "/_pages/login": {
+      "filePath": "_pages/login.tsx"
     },
     "/demo/tanstack-query": {
       "filePath": "demo.tanstack-query.tsx"
