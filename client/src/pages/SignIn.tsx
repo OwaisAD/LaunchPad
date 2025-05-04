@@ -6,9 +6,10 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Button } from "@/components/ui/button";
 import { passwordRegex } from "@/utils/regex";
+import { Link } from "react-router-dom";
 // import { useNavigate } from "react-router-dom";
 
-const Login = () => {
+const SignIn = () => {
   // const navigate = useNavigate();
 
   const handleClick = () => {
@@ -24,7 +25,7 @@ const Login = () => {
     window.location.href = mailtoUrl;
   };
 
-  const loginSchema = z.object({
+  const signInSchema = z.object({
     email: z
       .string()
       .email("Invalid email address")
@@ -40,8 +41,8 @@ const Login = () => {
     rememberMe: z.boolean().optional(),
   });
 
-  const form = useForm<z.infer<typeof loginSchema>>({
-    resolver: zodResolver(loginSchema),
+  const form = useForm<z.infer<typeof signInSchema>>({
+    resolver: zodResolver(signInSchema),
     defaultValues: {
       email: "",
       password: "",
@@ -50,7 +51,7 @@ const Login = () => {
   });
 
   // 2. Define a submit handler.
-  function onSubmit(values: z.infer<typeof loginSchema>) {
+  function onSubmit(values: z.infer<typeof signInSchema>) {
     // Do something with the form values.
     // ✅ This will be type-safe and validated.
     console.log(values);
@@ -66,7 +67,7 @@ const Login = () => {
 
         <div className="flex justify-center items-center flex-col gap-6 w-full px-0 2xl:px-56">
           <div className="w-full flex">
-            <h1 className="text-4xl font-semibold ">Login to LaunchPad</h1>
+            <h1 className="text-4xl font-semibold ">Sign In to LaunchPad</h1>
           </div>
 
           <Form {...form}>
@@ -121,11 +122,32 @@ const Login = () => {
               />
 
               <Button type="submit" className="w-full">
-                Login
+                Sign In
               </Button>
             </form>
           </Form>
+          <div className="flex flex-col items-center w-full text-sm">
+            <div className="flex items-center justify-between w-full">
+              <p className="text-sm font-light">Don't have an account?</p>
+              <Link className="text-blue-500 cursor-pointer" to="/sign-up">
+                Sign Up now
+              </Link>
+            </div>
+
+            <div className="flex items-center justify-between w-full">
+              <p className="text-sm font-light">Forgot your password?</p>
+              <button
+                className="text-blue-500 cursor-pointer"
+                onClick={() => {
+                  // navigate("/forgot-password");
+                }}
+              >
+                Reset password
+              </button>
+            </div>
+          </div>
         </div>
+
         <div className="flex items-center justify-between text-[10px] md:text-sm font-light">
           <p>&copy; 2025 LaunchPad. All rights reserved.</p>
           <button className="text-blue-500 cursor-pointer" onClick={handleClick}>
@@ -139,4 +161,4 @@ const Login = () => {
   );
 };
 
-export default Login;
+export default SignIn;

@@ -1,4 +1,3 @@
-import { Checkbox } from "@/components/ui/checkbox";
 import { Input } from "@/components/ui/input";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
@@ -6,9 +5,10 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Button } from "@/components/ui/button";
 import { passwordRegex } from "@/utils/regex";
+import { Link } from "react-router-dom";
 // import { useNavigate } from "react-router-dom";
 
-const CreateAccount = () => {
+const SignUp = () => {
   // const navigate = useNavigate();
 
   const handleClick = () => {
@@ -24,7 +24,21 @@ const CreateAccount = () => {
     window.location.href = mailtoUrl;
   };
 
-  const loginSchema = z.object({
+  const signUpSchema = z.object({
+    firstName: z.string().min(1, "First name is required").max(50, "First name must be less than 50 characters"),
+    lastName: z.string().min(1, "Last name is required").max(50, "Last name must be less than 50 characters"),
+    dateOfBirth: z.string().refine(
+      (date) => {
+        const today = new Date();
+        const birthDate = new Date(date);
+        const age = today.getFullYear() - birthDate.getFullYear();
+        const monthDiff = today.getMonth() - birthDate.getMonth();
+        return age > 18 || (age === 18 && monthDiff >= 0);
+      },
+      {
+        message: "You must be at least 18 years old",
+      }
+    ),
     email: z
       .string()
       .email("Invalid email address")
@@ -37,20 +51,29 @@ const CreateAccount = () => {
       })
       .min(8, "Password must be at least 8 characters long")
       .max(100, "Password must be less than 100 characters"),
-    rememberMe: z.boolean().optional(),
+    confirmPassword: z
+      .string()
+      .regex(passwordRegex, {
+        message: "Invalid password format",
+      })
+      .min(8, "Password must be at least 8 characters long")
+      .max(100, "Password must be less than 100 characters"),
   });
 
-  const form = useForm<z.infer<typeof loginSchema>>({
-    resolver: zodResolver(loginSchema),
+  const form = useForm<z.infer<typeof signUpSchema>>({
+    resolver: zodResolver(signUpSchema),
     defaultValues: {
+      firstName: "",
+      lastName: "",
+      dateOfBirth: "",
       email: "",
       password: "",
-      rememberMe: false,
+      confirmPassword: "",
     },
   });
 
   // 2. Define a submit handler.
-  function onSubmit(values: z.infer<typeof loginSchema>) {
+  function onSubmit(values: z.infer<typeof signUpSchema>) {
     // Do something with the form values.
     // ✅ This will be type-safe and validated.
     console.log(values);
@@ -71,6 +94,51 @@ const CreateAccount = () => {
 
           <Form {...form}>
             <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8 w-full">
+              <FormField
+                control={form.control}
+                name="firstName"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>First Name</FormLabel>
+                    <FormControl>
+                      <Input placeholder="First Name" {...field} />
+                    </FormControl>
+                    <FormDescription>Enter your first name.</FormDescription>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
+              <FormField
+                control={form.control}
+                name="lastName"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Last Name</FormLabel>
+                    <FormControl>
+                      <Input placeholder="Last Name" {...field} />
+                    </FormControl>
+                    <FormDescription>Enter your last name.</FormDescription>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
+              <FormField
+                control={form.control}
+                name="dateOfBirth"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Date of Birth</FormLabel>
+                    <FormControl>
+                      <Input type="date" placeholder="Date of Birth" {...field} />
+                    </FormControl>
+                    <FormDescription>Enter your date of birth.</FormDescription>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
               <FormField
                 control={form.control}
                 name="email"
@@ -109,13 +177,15 @@ const CreateAccount = () => {
 
               <FormField
                 control={form.control}
-                name="rememberMe"
+                name="confirmPassword"
                 render={({ field }) => (
-                  <FormItem className="flex items-center space-x-2">
+                  <FormItem>
+                    <FormLabel>Confirm Password</FormLabel>
                     <FormControl>
-                      <Checkbox id="rememberMe" checked={field.value} onCheckedChange={field.onChange} />
+                      <Input type="password" placeholder="Confirm Password" {...field} />
                     </FormControl>
-                    <FormLabel htmlFor="rememberMe">Remember me</FormLabel>
+                    <FormDescription>Re-enter your password.</FormDescription>
+                    <FormMessage />
                   </FormItem>
                 )}
               />
@@ -125,6 +195,14 @@ const CreateAccount = () => {
               </Button>
             </form>
           </Form>
+          <div className="flex flex-col items-center w-full text-sm">
+            <div className="flex items-center justify-between w-full">
+              <p className="text-sm font-light">Already have an account?</p>
+              <Link className="text-blue-500 cursor-pointer" to="/sign-in">
+                Sign In now
+              </Link>
+            </div>
+          </div>
         </div>
         <div className="flex items-center justify-between text-[10px] md:text-sm font-light">
           <p>&copy; 2025 LaunchPad. All rights reserved.</p>
@@ -139,4 +217,4 @@ const CreateAccount = () => {
   );
 };
 
-export default CreateAccount;
+export default SignUp;
