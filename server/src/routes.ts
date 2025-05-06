@@ -1,5 +1,5 @@
 import { Express, Request, Response } from "express";
-
+import AuthRouter from "./routes/auth.routes";
 function routes(app: Express) {
   app.get("/", (_req: Request, res: Response) => {
     res.send(`Hello from LaunchPad API!`);
@@ -10,6 +10,7 @@ function routes(app: Express) {
   });
 
   // Register API routes
+  app.use("/api/auth", AuthRouter);
 
   // Catch unregistered routes
   app.all("/{*any}", (req: Request, res: Response) => {

@@ -6,6 +6,9 @@ import helmet from "helmet";
 import morgan from "morgan";
 
 import routes from "../routes";
+import { attachCorrelationId } from "../middleware/attachCorrelationId";
+import { errorHandler } from "../middleware/errorHandler";
+import { logRequestDetails } from "../middleware/loggerMiddleware";
 
 function createServer() {
   const app = express();
@@ -20,13 +23,21 @@ function createServer() {
   app.use(compression());
   app.use(cookieParser());
 
+  app.use(attachCorrelationId);
+
   app.use(helmet());
 
   app.use(morgan("dev"));
 
   app.use(express.json());
 
+  app.use(logRequestDetails);
+
   routes(app);
+
+  app.use((err: Error, req: express.Request, res: express.Response, next: express.NextFunction) => {
+    errorHandler(err, req, res, next);
+  });
 
   return app;
 }
