@@ -11,7 +11,7 @@ function routes(app: Express) {
   });
 
   // Register API routes
-  app.use("/api/auth", AuthRouter);
+  app.use("/auth", AuthRouter);
 
   // Catch unregistered routes
   app.all("/{*any}", (req: Request, res: Response) => {

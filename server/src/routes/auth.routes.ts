@@ -5,6 +5,7 @@ import authController from "../controllers/auth.controller";
 const AuthRouter = express.Router();
 
 AuthRouter.post("/validate", isAuthenticated, (req: Request, res: Response) => {
+  console.log("should be here");
   res.status(200).json({
     message: "User is authenticated",
     userId: req.userId,
@@ -13,7 +14,7 @@ AuthRouter.post("/validate", isAuthenticated, (req: Request, res: Response) => {
 });
 
 AuthRouter.post("/signin", authController.handleLogin);
-AuthRouter.post("/register", authController.handleRegisterUser);
+AuthRouter.post("/signup", authController.handleRegisterUser);
 AuthRouter.post("/signout", isAuthenticated, authController.handleLogout);
 
 // forgot password

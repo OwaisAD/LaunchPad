@@ -9,7 +9,13 @@ import prisma from "../../prisma/client";
 import { UserAlreadyExistsError } from "../errors/UserAlreadyExistsError";
 import { PrismaClientKnownRequestError } from "@prisma/client/runtime/library";
 
-async function registerUser(user: { firstName: string; lastName: string; email: string; password: string }) {
+async function registerUser(user: {
+  firstName: string;
+  lastName: string;
+  email: string;
+  password: string;
+  dateOfBirth: string;
+}) {
   try {
     const hashedPassword = await bcrypt.hash(user.password, 10);
 
@@ -19,6 +25,7 @@ async function registerUser(user: { firstName: string; lastName: string; email: 
         lastName: user.lastName,
         email: user.email,
         passwordHash: hashedPassword,
+        dateOfBirth: new Date(user.dateOfBirth),
       },
     });
 

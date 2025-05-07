@@ -5,7 +5,10 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Button } from "@/components/ui/button";
 import { passwordRegex } from "@/utils/regex";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { useMutation } from "@tanstack/react-query";
+import { signUp } from "@/api/auth";
+import { toast } from "sonner";
 
 const signUpSchema = z
   .object({
@@ -13,6 +16,7 @@ const signUpSchema = z
     lastName: z.string().min(1, "Last name is required").max(50),
     dateOfBirth: z.string().refine(
       (date) => {
+        console.log("DATE RECEIVED", date)
         const today = new Date();
         const birthDate = new Date(date);
         const age = today.getFullYear() - birthDate.getFullYear();
@@ -33,6 +37,19 @@ const signUpSchema = z
   });
 
 const SignUp = () => {
+  const navigate = useNavigate();
+
+  const mutation = useMutation({
+    mutationFn: signUp,
+    onSuccess: () => {
+      toast.success("Sign up successful!");
+      navigate("/sign-in");
+    },
+    onError: (error: unknown) => {
+      toast.error(error instanceof Error ? error.message : "Failed to sign up. Please try again.");
+    },
+  });
+
   const form = useForm<z.infer<typeof signUpSchema>>({
     resolver: zodResolver(signUpSchema),
     defaultValues: {
@@ -53,8 +70,21 @@ const SignUp = () => {
     window.location.href = `mailto:owais@live.dk?subject=${subject}&body=${body}`;
   };
 
-  function onSubmit(values: z.infer<typeof signUpSchema>) {
+  function handleSignUp(values: z.infer<typeof signUpSchema>) {
     console.log("Form Submitted", values);
+    const loadingToastId = toast.loading("Creating account...");
+    mutation.mutate(
+      {
+        firstName: values.firstName,
+        lastName: values.lastName,
+        dateOfBirth: values.dateOfBirth,
+        email: values.email,
+        password: values.password,
+      },
+      {
+        onSettled: () => toast.dismiss(loadingToastId),
+      }
+    );
   }
 
   return (
@@ -67,7 +97,7 @@ const SignUp = () => {
         <h1 className="text-3xl md:text-4xl font-semibold text-center">Create LaunchPad Account</h1>
 
         <Form {...form}>
-          <form onSubmit={form.handleSubmit(onSubmit)} className="w-full space-y-6">
+          <form onSubmit={form.handleSubmit(handleSignUp)} className="w-full space-y-6">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <FormField
                 control={form.control}

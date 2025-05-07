@@ -38,6 +38,11 @@ services:
       - ./docker-data/redis:/data
     networks:
       - launchpad
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 1s
+      timeout: 3s
+      retries: 30
 
   server:
     container_name: server

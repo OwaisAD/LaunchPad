@@ -1,6 +1,7 @@
 import dotenv from "dotenv";
 import createServer from "./utils/server";
 import prisma from "../prisma/client";
+import { redisClient } from "./redis/client";
 
 dotenv.config();
 
@@ -16,11 +17,14 @@ async function main() {
 main()
   .then(async () => {
     await prisma.$connect();
-    console.log("Connected to the database");
+    await redisClient.connect();
+    redisClient.on("error", () => console.log("Connection to redis server failed"));
+    console.log("Connected to the databases");
     console.log("Server started successfully");
   })
   .catch(async (e) => {
     await prisma.$disconnect();
+    await redisClient.quit();
     console.error("Error starting server:", e);
     process.exit(1);
   });

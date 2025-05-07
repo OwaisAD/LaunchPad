@@ -61,21 +61,22 @@ async function handleLogin(req: Request, res: Response) {
 
 async function handleRegisterUser(req: Request, res: Response) {
   try {
-    const { email, password, firstName, lastName } = req.body;
+    const { email, password, firstName, lastName, dateOfBirth } = req.body;
 
-    const errors = validateRequiredFields(req.body, ["email", "password", "firstName", "lastName"]);
+    const errors = validateRequiredFields(req.body, ["email", "password", "firstName", "lastName", "dateOfBirth"]);
 
     if (errors.length > 0) {
       res.status(400).json({ errors });
     }
 
-    registerUserSchema.parse({ email, password, firstName, lastName });
+    registerUserSchema.parse({ email, password, firstName, lastName, dateOfBirth });
 
     const newUser = await registerUser({
       email,
       password,
       firstName,
       lastName,
+      dateOfBirth
     });
 
     if (!newUser) {
