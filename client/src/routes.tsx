@@ -3,6 +3,7 @@ import Error from "./pages/Error";
 import Login from "./pages/SignIn";
 import CreateAccount from "./pages/SignUp";
 import { ProtectedRoute } from "./ProtectedRoute";
+import Layout from "./Layout";
 
 function Routes() {
   return (
@@ -18,7 +19,9 @@ function Routes() {
         path="/dashboard"
         element={
           <ProtectedRoute>
-            <div>Dashboard</div>
+            <Layout>
+              <div>Dashboard</div>
+            </Layout>
           </ProtectedRoute>
         }
       />
@@ -27,7 +30,9 @@ function Routes() {
         path="/profile"
         element={
           <ProtectedRoute>
-            <div>Profile</div>
+            <Layout>
+              <div>Profile</div>
+            </Layout>
           </ProtectedRoute>
         }
       />
@@ -36,7 +41,9 @@ function Routes() {
         path="/settings"
         element={
           <ProtectedRoute>
-            <div>Settings</div>
+            <Layout>
+              <div>Settings</div>
+            </Layout>
           </ProtectedRoute>
         }
       />
