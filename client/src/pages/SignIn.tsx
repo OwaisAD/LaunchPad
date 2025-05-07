@@ -3,18 +3,14 @@ import { Input } from "@/components/ui/input";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
-import {
-  Form,
-  FormControl,
-  FormDescription,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from "@/components/ui/form";
+import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Button } from "@/components/ui/button";
 import { passwordRegex } from "@/utils/regex";
-import { Link } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
+import { useAuthStore } from "@/stores/useAuthStore";
+import { useMutation } from "@tanstack/react-query";
+import { signIn, validateSession } from "@/api/auth";
+import { toast } from "sonner";
 
 const signInSchema = z.object({
   email: z
@@ -33,6 +29,32 @@ const signInSchema = z.object({
 });
 
 const SignIn = () => {
+  const navigate = useNavigate();
+  const location = useLocation();
+  const from = location.state?.from?.pathname || "/dashboard";
+
+  const setUser = useAuthStore((state) => state.setUser);
+
+  const mutation = useMutation({
+    mutationFn: signIn,
+    onSuccess: async () => {
+      toast.success("Sign in successful!");
+      const data = await validateSession();
+      setUser({
+        email: data.email,
+        userId: data.userId,
+      });
+      navigate(from, { replace: true });
+    },
+    onError: (error: unknown) => {
+      if (error instanceof Error) {
+        toast.error(error.message || "Failed to sign in. Please try again.");
+      } else {
+        toast.error("Failed to sign in. Please try again.");
+      }
+    },
+  });
+
   const form = useForm<z.infer<typeof signInSchema>>({
     resolver: zodResolver(signInSchema),
     defaultValues: {
@@ -42,8 +64,15 @@ const SignIn = () => {
     },
   });
 
-  const onSubmit = (values: z.infer<typeof signInSchema>) => {
+  const handleSignIn = (values: z.infer<typeof signInSchema>) => {
     console.log(values);
+    const loadingToastId = toast.loading("Signing in...");
+    mutation.mutate({
+      email: values.email,
+      password: values.password,
+      rememberMe: values.rememberMe,
+    });
+    toast.dismiss(loadingToastId);
   };
 
   const handleClick = () => {
@@ -57,7 +86,7 @@ const SignIn = () => {
   return (
     <div className="min-h-screen grid grid-cols-1 lg:grid-cols-2">
       {/* LEFT SIDE (Form) */}
-      <div className="h-full flex flex-col justify-between px-6 py-10 lg:px-20 bg-slate-100 shadow-md">
+      <div className="h-screen flex flex-col justify-between px-6 py-10 lg:px-20 bg-slate-100 shadow-md">
         <div className="flex justify-center lg:justify-start mb-10">
           <img src="/logo.png" alt="LaunchPad logo" width={100} className="hover:scale-105 transition-transform" />
         </div>
@@ -68,7 +97,7 @@ const SignIn = () => {
           </div>
 
           <Form {...form}>
-            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+            <form onSubmit={form.handleSubmit(handleSignIn)} className="space-y-6">
               <FormField
                 control={form.control}
                 name="email"
@@ -78,9 +107,7 @@ const SignIn = () => {
                     <FormControl>
                       <Input placeholder="Email" {...field} />
                     </FormControl>
-                    <FormDescription>
-                      We'll send a confirmation to this email address.
-                    </FormDescription>
+                    <FormDescription>We'll send a confirmation to this email address.</FormDescription>
                     <FormMessage />
                   </FormItem>
                 )}
@@ -149,12 +176,8 @@ const SignIn = () => {
       </div>
 
       {/* RIGHT SIDE (Image) */}
-      <div className="hidden lg:block">
-        <img
-          src="/login.png"
-          alt="Login Illustration"
-          className="h-full w-full object-cover"
-        />
+      <div className="hidden lg:block h-screen overflow-hidden">
+        <img src="/login.png" alt="Login Illustration" className="w-full h-full object-cover" />
       </div>
     </div>
   );

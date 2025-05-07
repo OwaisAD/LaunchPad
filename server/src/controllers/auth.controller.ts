@@ -16,7 +16,6 @@ async function handleLogin(req: Request, res: Response) {
 
     if (!email || !password) {
       res.status(400).json({ error: "Email and password are required" });
-      return;
     }
 
     loginSchema.parse({ email, password });
@@ -32,29 +31,31 @@ async function handleLogin(req: Request, res: Response) {
     });
 
     res.status(200).json({ message: "Login successful!" });
-    return;
   } catch (error) {
+    const correlationId = req.correlationId;
+
     if (error instanceof ZodError) {
-      const errorMessages = getZodErrors(error);
-      const correlationId = req.correlationId;
-      logger.warn("Error during customer login", {
+      logger.warn("Error during login", {
         correlationId,
-        errorMessages,
+        errorMessages: getZodErrors(error),
       });
-      res.status(400).json({ errors: errorMessages });
-      return;
-    } else if (error instanceof UnauthenticatedError) {
-      const correlationId = req.correlationId;
-      logger.warn("Invalid credentials", { correlationId, email: req.body.email });
-      res.status(401).json({ message: error.message });
-      return;
-    } else if (error instanceof Error) {
-      res.status(401).json({ message: error.message });
-      return;
+      res.status(400).json({ errors: getZodErrors(error) });
     }
-    console.error(error);
-    res.status(500).send("Internal Server Error");
-    return;
+
+    if (error instanceof UnauthenticatedError) {
+      logger.warn("Invalid credentials", {
+        correlationId,
+        email: req.body.email,
+      });
+      res.status(401).json({ message: error.message });
+    }
+
+    console.error("Unexpected error during login", error);
+    logger.error("Unexpected error during login", {
+      correlationId,
+      error: (error as Error).message,
+    });
+    res.status(500).json({ message: "Internal Server Error" });
   }
 }
 
@@ -66,7 +67,6 @@ async function handleRegisterUser(req: Request, res: Response) {
 
     if (errors.length > 0) {
       res.status(400).json({ errors });
-      return;
     }
 
     registerUserSchema.parse({ email, password, firstName, lastName });
@@ -80,7 +80,6 @@ async function handleRegisterUser(req: Request, res: Response) {
 
     if (!newUser) {
       res.status(409).json({ message: "User already exists" });
-      return;
     }
 
     res.status(201).json(newUser);
@@ -89,13 +88,10 @@ async function handleRegisterUser(req: Request, res: Response) {
     if (error instanceof ZodError) {
       const errorMessages = getZodErrors(error);
       res.status(400).json({ errors: errorMessages });
-      return;
     } else if (error instanceof UserAlreadyExistsError) {
       res.status(409).json({ message: error.message });
-      return;
     } else if (error instanceof Error) {
       res.status(400).json({ message: error.message });
-      return;
     }
     console.error(error);
     res.status(500).json({ message: "Internal Server Error" });
@@ -110,11 +106,9 @@ async function handleLogout(req: Request, res: Response) {
 
     res.clearCookie("session");
     res.status(200).json({ message: "Logged out successfully" });
-    return;
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: "Internal Server Error" });
-    return;
   }
 }
 

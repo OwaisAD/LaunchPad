@@ -13,7 +13,7 @@ export default defineConfig({
   },
   server: {
     cors: {
-      origin: ["https://launchpad.sportia.dk", "http://localhost:5173"],
+      origin: ["https://launchpad.sportia.dk", "http://localhost:8080"],
       methods: ["GET", "POST"],
       allowedHeaders: ["Content-Type"],
     },

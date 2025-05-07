@@ -8,32 +8,25 @@ export const isAuthenticated = async (req: Request, res: Response, next: NextFun
     const cookies = parse(req.headers.cookie || "");
     const sessionId = cookies.session;
 
-    if (!sessionId) {
-      throw new UnauthenticatedError("Invalid session data");
-    }
+    if (!sessionId) throw new UnauthenticatedError("Missing session ID");
 
     const sessionData = await redisClient.get(`sessionToken-${sessionId}`);
+    if (!sessionData) throw new UnauthenticatedError("Session not found");
 
-    if (!sessionData) {
+    const { email, userId, role } = JSON.parse(sessionData);
+
+    if (!email || !userId || !role) {
       throw new UnauthenticatedError("Invalid session data");
     }
 
-    const parsedSessionData = JSON.parse(sessionData);
-
-    if (!parsedSessionData.email || !parsedSessionData.userId || !parsedSessionData.role) {
-      throw new UnauthenticatedError("Invalid session data");
-    }
-
-    req.email = parsedSessionData.email;
-    req.userId = parsedSessionData.userId;
-    req.role = parsedSessionData.role;
+    req.email = email;
+    req.userId = userId;
+    req.role = role;
 
     next();
   } catch (error) {
-    if (error instanceof UnauthenticatedError) {
-      res.status(401).json({ message: error.message });
-    } else {
-      res.status(500).json({ message: "Internal Server Error" });
-    }
+    const status = error instanceof UnauthenticatedError ? 401 : 500;
+    const message = error instanceof UnauthenticatedError ? error.message : "Internal Server Error";
+    res.status(status).json({ message });
   }
 };
