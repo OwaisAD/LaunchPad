@@ -1,2 +1,13 @@
 # @name isAuthenticated
 POST http://localhost:8080/api/auth/validate
+
+###
+
+# @name signin
+POST http://localhost:8080/api/auth/signin
+Content-Type: application/json
+
+{
+  "email": "owais@live.dk",
+  "password": "12345678"
+}

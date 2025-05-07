@@ -1,7 +1,7 @@
-const API_BASE = import.meta.env.MODE === "development" ? import.meta.env.VITE_API_URL : "";
+const API_BASE = import.meta.env.MODE === "development" ? import.meta.env.VITE_API_URL : "api";
 
 export async function validateSession() {
-  const response = await fetch(`${API_BASE}/api/auth/validate`, {
+  const response = await fetch(`${API_BASE}/auth/validate`, {
     method: "GET",
     credentials: "include",
   });
