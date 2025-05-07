@@ -1,12 +1,13 @@
 import { Express, Request, Response } from "express";
 import AuthRouter from "./routes/auth.routes";
+
 function routes(app: Express) {
   app.get("/", (_req: Request, res: Response) => {
     res.send(`Hello from LaunchPad API!`);
   });
 
   app.get("/healthcheck", (_req: Request, res: Response) => {
-    res.sendStatus(200);
+    res.sendStatus(200).end();
   });
 
   // Register API routes

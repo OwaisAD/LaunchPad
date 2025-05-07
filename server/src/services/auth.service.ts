@@ -6,8 +6,8 @@ import { UnauthenticatedError } from "../errors/UnauthenticatedError";
 import { getUserByEmail } from "../db/users";
 import bcrypt from "bcrypt";
 import prisma from "../../prisma/client";
-import { Prisma } from "../../generated/prisma";
 import { UserAlreadyExistsError } from "../errors/UserAlreadyExistsError";
+import { PrismaClientKnownRequestError } from "@prisma/client/runtime/library";
 
 async function registerUser(user: { firstName: string; lastName: string; email: string; password: string }) {
   try {
@@ -24,7 +24,7 @@ async function registerUser(user: { firstName: string; lastName: string; email: 
 
     return customer;
   } catch (error) {
-    if (error instanceof Prisma.PrismaClientKnownRequestError) {
+    if (error instanceof PrismaClientKnownRequestError) {
       if (error.code === "P2002" && (error.meta?.target as string[])?.includes("email")) {
         throw new UserAlreadyExistsError("A user with this email already exists");
       }

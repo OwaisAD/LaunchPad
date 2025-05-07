@@ -1,7 +1,7 @@
 import compression from "compression";
 import cookieParser from "cookie-parser";
 import cors from "cors";
-import express from "express";
+import express, { Request, Response, NextFunction } from "express";
 import helmet from "helmet";
 import morgan from "morgan";
 
@@ -12,6 +12,10 @@ import { logRequestDetails } from "../middleware/loggerMiddleware";
 
 function createServer() {
   const app = express();
+
+  app.get("/favicon.ico", (_req: Request, res: Response) => {
+    res.status(204).end();
+  });
 
   app.use(
     cors({
@@ -35,7 +39,7 @@ function createServer() {
 
   routes(app);
 
-  app.use((err: Error, req: express.Request, res: express.Response, next: express.NextFunction) => {
+  app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
     errorHandler(err, req, res, next);
   });
 
