@@ -47,10 +47,8 @@ export const createUser = async (newUser: {
   return await prisma.user.create({
     data: {
       email: newUser.email,
-      passwordHash: newUser.passwordHash,
       firstName: newUser.firstName,
       lastName: newUser.lastName,
-      dateOfBirth: newUser.dateOfBirth,
     },
   });
 };

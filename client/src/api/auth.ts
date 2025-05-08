@@ -2,11 +2,14 @@ const API_BASE = import.meta.env.MODE === "development" ? import.meta.env.VITE_A
 
 export async function validateSession() {
   const response = await fetch(`${API_BASE}/auth/validate`, {
-    method: "POST",
+    method: "GET",
     credentials: "include",
+    headers: {
+      "Content-Type": "application/json",
+    },
   });
-  if (!response.ok) throw new Error("Invalid session");
-  return await response.json();
+  if (!response.ok) throw new Error("Not authenticated");
+  return response.json();
 }
 
 export async function signIn(data: { email: string; password: string; rememberMe?: boolean }) {
@@ -56,6 +59,6 @@ export async function signOut() {
     method: "POST",
     credentials: "include",
   });
-  if (!response.ok) throw new Error("Logout failed");
-  return await response.json();
+  if (!response.ok) throw new Error("Sign out failed");
+  return response.json();
 }

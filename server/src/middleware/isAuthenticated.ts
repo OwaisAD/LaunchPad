@@ -1,11 +1,10 @@
-import { Request, Response, NextFunction } from "express";
+import { Request, Response } from "express";
 import { redisClient } from "../redis/client";
 import { parse } from "cookie";
 import { UnauthenticatedError } from "../errors/UnauthenticatedError";
 
-export const isAuthenticated = async (req: Request, res: Response, next: NextFunction) => {
+export const isAuthenticated = async (req: Request, res: Response) => {
   try {
-    console.log("We here");
     const cookies = parse(req.headers.cookie || "");
     const sessionId = cookies.session;
 
@@ -24,10 +23,14 @@ export const isAuthenticated = async (req: Request, res: Response, next: NextFun
       throw new UnauthenticatedError("Invalid session data");
     }
 
-    req.email = email;
-    req.userId = userId;
+    req.user.email = email;
+    req.user.userId = userId;
 
-    next();
+    res.status(200).json({
+      validateUser: true,
+      email: req.user.email,
+      userId: req.user.userId,
+    });
   } catch (error) {
     const status = error instanceof UnauthenticatedError ? 401 : 500;
     const message = error instanceof UnauthenticatedError ? error.message : "Internal Server Error";

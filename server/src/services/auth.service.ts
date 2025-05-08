@@ -1,10 +1,8 @@
 import { redisClient } from "../redis/client";
 import { logger } from "../utils/logger";
-import { getSessionKey, getUserSessionKey, manageUserSessions } from "../utils/manageUserSessions";
-import { validatePassword } from "../utils/validatePassword";
+import { getSessionKey, getUserSessionKey } from "../utils/manageUserSessions";
 import { UnauthenticatedError } from "../errors/UnauthenticatedError";
 import { getUserByEmail } from "../db/users";
-import bcrypt from "bcrypt";
 import prisma from "../../prisma/client";
 import { UserAlreadyExistsError } from "../errors/UserAlreadyExistsError";
 import { PrismaClientKnownRequestError } from "@prisma/client/runtime/library";
@@ -17,15 +15,13 @@ async function registerUser(user: {
   dateOfBirth: string;
 }) {
   try {
-    const hashedPassword = await bcrypt.hash(user.password, 10);
+    // const hashedPassword = await bcrypt.hash(user.password, 10);
 
     const customer = await prisma.user.create({
       data: {
         firstName: user.firstName,
         lastName: user.lastName,
         email: user.email,
-        passwordHash: hashedPassword,
-        dateOfBirth: new Date(user.dateOfBirth),
       },
     });
 
@@ -48,10 +44,9 @@ async function login(email: string, password: string, rememberMe: boolean, corre
     throw new UnauthenticatedError("Invalid credentials");
   }
 
-  await validatePassword(password, user.passwordHash);
+  // await validatePassword(password, user.passwordHash);
 
-  const sessionTokenData = await manageUserSessions(user.email, user.id, rememberMe);
-  return sessionTokenData;
+  return user;
 }
 
 async function logout(sessionToken: string) {

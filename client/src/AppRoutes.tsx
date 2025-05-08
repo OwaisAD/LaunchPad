@@ -3,34 +3,37 @@ import Error from "./pages/Error";
 import Login from "./pages/SignIn";
 import CreateAccount from "./pages/SignUp";
 import Layout from "./Layout";
-import { useValidateSession } from "./hooks/useValidateSession";
-import PublicRoutes from "./PublicRoutes";
-import ProtectedRoutes from "./ProtectedRoutes";
-import Loading from "./components/Loading";
+import LandingPage from "./pages/LandingPage";
+import RequireAuth from "./RequireAuth";
+import Dashboard from "./pages/Dashboard";
 
 function AppRoutes() {
-  const { isLoading } = useValidateSession();
-
-  if (isLoading) {
-    return <Loading />;
-  }
-
   return (
     <Routes>
       {/* Public Routes */}
-      <Route index path="/" element={<div>Landing page</div>} />
-      <Route element={<PublicRoutes />}>
-        <Route path="/sign-in" element={<Login />} />
-        <Route path="/sign-up" element={<CreateAccount />} />
-        <Route path="/about" element={<div>About</div>} />
-      </Route>
+      <Route index path="/" element={<LandingPage />} />
+
+      <Route path="/sign-in" element={<Login />} />
+      <Route path="/sign-up" element={<CreateAccount />} />
 
       {/* Protected Routes */}
-      <Route element={<ProtectedRoutes />}>
+      <Route element={<RequireAuth />}>
         <Route element={<Layout />}>
-          <Route path="/dashboard" element={<div>Dashboard</div>} />
-          <Route path="/profile" element={<div>Profile</div>} />
+          <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/settings" element={<div>Settings</div>} />
+          {/* Organizations */}
+          <Route path="/organizations" element={<div>My Organizations</div>} />
+          <Route path="/organizations/create" element={<div>Create Organization</div>} />
+          <Route path="/organizations/:orgId" element={<div>Organization Details</div>} />
+
+          {/* Projects */}
+          <Route path="/projects" element={<div>My Projects</div>} />
+          <Route path="/projects/new" element={<div>New Project</div>} />
+          <Route path="/projects/:projectId" element={<div>Project Details</div>} />
+          <Route path="/projects/:projectId/edit" element={<div>Edit Project</div>} />
+          <Route path="/projects/:projectId/edit" element={<div>Edit Project Overview</div>} />
+          {/* Create project */}
+          <Route path="/projects/create" element={<div>Create Project</div>} />
         </Route>
       </Route>
 

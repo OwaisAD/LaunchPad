@@ -1,25 +1,15 @@
-import express, { Request, Response } from "express";
+import express from "express";
 import { isAuthenticated } from "../middleware/isAuthenticated";
 import authController from "../controllers/auth.controller";
 
 const AuthRouter = express.Router();
 
-AuthRouter.post("/validate", isAuthenticated, (req: Request, res: Response) => {
-  console.log("should be here");
-  res.status(200).json({
-    message: "User is authenticated",
-    userId: req.userId,
-    email: req.email,
-  });
-});
+AuthRouter.get("/validate", isAuthenticated);
 
 AuthRouter.post("/signin", authController.handleLogin);
+AuthRouter.post("/refresh", authController.handleRefreshToken);
 AuthRouter.post("/signup", authController.handleRegisterUser);
-AuthRouter.post("/signout", isAuthenticated, authController.handleLogout);
-
-// forgot password
-AuthRouter.post("/forgotpassword", (req: Request, res: Response) => {
-  res.status(501).send("Not implemented");
-});
+AuthRouter.post("/signout", authController.handleLogout);
+AuthRouter.get("/protected", authController.protectedRoute);
 
 export default AuthRouter;

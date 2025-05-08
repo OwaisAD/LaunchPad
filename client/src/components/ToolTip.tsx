@@ -12,8 +12,11 @@ export default function ToolTip({
   return (
     <TooltipProvider>
       <Tooltip>
-        <TooltipTrigger>{children}</TooltipTrigger>
-        <TooltipContent side={tooltipSide} className="w-fit h-10 flex items-center justify-center text-[14px] font-semibold">
+        <TooltipTrigger asChild>{children}</TooltipTrigger>
+        <TooltipContent
+          side={tooltipSide}
+          className="w-fit h-10 flex items-center justify-center text-[14px] font-semibold"
+        >
           <p>{tooltipText}</p>
         </TooltipContent>
       </Tooltip>

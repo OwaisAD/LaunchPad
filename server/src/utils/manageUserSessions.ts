@@ -1,8 +1,8 @@
 import { redisClient } from "../redis/client";
 import { MAX_SESSIONS } from "../constants";
 
-async function manageUserSessions(email: string, userId: string, rememberMe: boolean) {
-  const sessionKey = userId;
+async function manageUserSessions(email: string, userId: string, rememberMe: boolean, refreshToken: string) {
+  const sessionKey = refreshToken || getUserSessionKey(userId);
   const customerSessions = await redisClient.lRange(sessionKey, 0, -1);
 
   // Remove the oldest session if the maximum number of sessions is reached

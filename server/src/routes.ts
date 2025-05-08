@@ -1,5 +1,6 @@
 import { Express, Request, Response } from "express";
-import AuthRouter from "./routes/auth.routes";
+// import AuthRouter from "./routes/auth.routes";
+import UsersRouter from "./routes/users.routes";
 
 function routes(app: Express) {
   app.get("/", (_req: Request, res: Response) => {
@@ -11,7 +12,8 @@ function routes(app: Express) {
   });
 
   // Register API routes
-  app.use("/auth", AuthRouter);
+  // app.use("/auth", AuthRouter);
+  app.use("/users", UsersRouter);
 
   // Catch unregistered routes
   app.all("/{*any}", (req: Request, res: Response) => {

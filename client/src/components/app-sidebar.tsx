@@ -2,7 +2,7 @@ import { Sidebar, SidebarContent, SidebarFooter, SidebarGroup, SidebarHeader } f
 
 export function AppSidebar() {
   return (
-    <Sidebar>
+    <Sidebar className="w-64" collapsible="icon">
       <SidebarHeader />
       <SidebarContent>
         <SidebarGroup />
