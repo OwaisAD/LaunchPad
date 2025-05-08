@@ -13,7 +13,6 @@ export const useValidateSession = () => {
     refetchOnWindowFocus: false,
   });
 
-  // Use useEffect to handle success or error
   useEffect(() => {
     if (query.isSuccess) {
       setUser(query.data);

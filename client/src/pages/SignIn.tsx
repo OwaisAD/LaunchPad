@@ -5,7 +5,6 @@ import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Button } from "@/components/ui/button";
-import { passwordRegex } from "@/utils/regex";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useAuthStore } from "@/stores/useAuthStore";
 import { useMutation } from "@tanstack/react-query";
@@ -18,13 +17,7 @@ const signInSchema = z.object({
     .email("Invalid email address")
     .min(1, "Email is required")
     .max(100, "Email must be less than 100 characters"),
-  password: z
-    .string()
-    .regex(passwordRegex, {
-      message: "Invalid password format",
-    })
-    .min(8, "Password must be at least 8 characters long")
-    .max(100, "Password must be less than 100 characters"),
+  password: z.string(),
   rememberMe: z.boolean().optional(),
 });
 
@@ -87,9 +80,9 @@ const SignIn = () => {
     <div className="min-h-screen grid grid-cols-1 lg:grid-cols-2">
       {/* LEFT SIDE (Form) */}
       <div className="h-screen flex flex-col justify-between px-6 py-10 lg:px-20 bg-slate-100 shadow-md">
-        <div className="flex justify-center lg:justify-start mb-10">
+        <Link to="/" className="flex justify-center lg:justify-start">
           <img src="/logo.png" alt="LaunchPad logo" width={100} className="hover:scale-105 transition-transform" />
-        </div>
+        </Link>
 
         <div className="flex flex-col gap-8 w-full max-w-xl mx-auto">
           <div>
@@ -107,7 +100,6 @@ const SignIn = () => {
                     <FormControl>
                       <Input placeholder="Email" {...field} />
                     </FormControl>
-                    <FormDescription>We'll send a confirmation to this email address.</FormDescription>
                     <FormMessage />
                   </FormItem>
                 )}
@@ -122,9 +114,6 @@ const SignIn = () => {
                     <FormControl>
                       <Input type="password" placeholder="Password" {...field} />
                     </FormControl>
-                    <FormDescription>
-                      Must be at least 8 characters with upper/lowercase, a number, and special character.
-                    </FormDescription>
                     <FormMessage />
                   </FormItem>
                 )}
