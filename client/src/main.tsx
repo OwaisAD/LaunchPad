@@ -7,7 +7,7 @@ import { HelmetProvider } from "react-helmet-async";
 import { Toaster } from "@/components/ui/sonner";
 import { ClerkProvider } from "@clerk/clerk-react";
 
-const PUBLISHABLE_KEY = import.meta.env.VITE_CLERK_PUBLISHABLE_KEY;
+const PUBLISHABLE_KEY = "pk_test_dGlnaHQta2lkLTc0LmNsZXJrLmFjY291bnRzLmRldiQ";
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
