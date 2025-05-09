@@ -3,21 +3,30 @@ import {
   SidebarContent,
   SidebarFooter,
   SidebarHeader,
-  SidebarMenu,
-  SidebarMenuButton,
-  SidebarMenuItem,
   SidebarTrigger,
   useSidebar,
 } from "@/components/ui/sidebar";
 import { MainSection } from "@/components/MainSection";
 import { Separator } from "./ui/separator";
 import { UserButton } from "@clerk/clerk-react";
-import { Link } from "react-router-dom";
-import { CiSettings } from "react-icons/ci";
-import { DropdownMenuDemo } from "./DropdownMenu";
+import { SidebarDropdownMenu } from "./SidebarDropdown";
+import { CustomeSidebarSection } from "./CustomSidebarSection";
 
 export function AppSidebar() {
   const { open } = useSidebar();
+
+  // should be fetched and cached maybe stored in local storage
+  const recentOrganizations = [
+    { id: "1", title: "Organization 1" },
+    { id: "2", title: "Organization 2" },
+    { id: "3", title: "Organization 3" },
+  ];
+
+  const recentProjects = [
+    { id: "1", title: "Full Stack Project 1" },
+    { id: "2", title: "Full Stack Project 2" },
+    { id: "3", title: "Full Stack Project 3" },
+  ];
 
   return (
     <Sidebar collapsible="icon" className="relative">
@@ -32,29 +41,18 @@ export function AppSidebar() {
         <MainSection />
         <Separator />
         {/* Latest Organizations */}
+        <CustomeSidebarSection
+          items={recentOrganizations}
+          sectionTitle="Recent Organizations"
+          seeMoreLink="/organizations"
+        />
+        <Separator />
+        <CustomeSidebarSection items={recentProjects} sectionTitle="Recent Projects" seeMoreLink="/projects" />
 
         {/* Latest Projects */}
       </SidebarContent>
       <SidebarFooter className="bg-[#F1F5F9]">
-        <SidebarMenu>
-          <SidebarMenuItem>
-            <SidebarMenuButton
-              tooltip={"Settings"}
-              asChild
-              isActive={location.pathname === "/settings"}
-              onClick={() => {}}
-              className="cursor-pointer"
-            >
-              <Link to={"/settings"} className="flex items-center gap-4">
-                <CiSettings />
-                <span className="text-sm">Settings</span>
-              </Link>
-            </SidebarMenuButton>
-            <SidebarMenuButton>
-              <DropdownMenuDemo />
-            </SidebarMenuButton>
-          </SidebarMenuItem>
-        </SidebarMenu>
+        <SidebarDropdownMenu />
       </SidebarFooter>
     </Sidebar>
   );

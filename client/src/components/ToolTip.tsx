@@ -15,7 +15,7 @@ export default function ToolTip({
         <TooltipTrigger asChild>{children}</TooltipTrigger>
         <TooltipContent
           side={tooltipSide}
-          className="w-fit h-10 flex items-center justify-center text-[14px] font-semibold"
+          className="w-fit h-8 flex items-center justify-center text-[12px] font-medium"
         >
           <p>{tooltipText}</p>
         </TooltipContent>

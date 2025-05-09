@@ -18,7 +18,7 @@ const Search = React.forwardRef<HTMLInputElement, SearchProps>(({ className }) =
       >
         <div className="flex items-center space-x-2">
           <SearchIcon className="h-[16px] w-[16px] text-muted-foreground transition-colors duration-200" />
-          <span className="text-muted-foreground transition-colors duration-200 hover:text-foreground">
+          <span className="text-muted-foreground font-extralight text-xs transition-colors duration-200 hover:text-foreground">
             Search for resources, orgs, projects...
           </span>
         </div>
