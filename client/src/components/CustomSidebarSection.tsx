@@ -22,7 +22,6 @@ export const CustomeSidebarSection = ({ items, sectionTitle, seeMoreLink }: Cust
     <SidebarGroup>
       <SidebarGroupLabel className="text-md">
         {sectionTitle}
-        <span className="text-xs text-gray-500">({items.length})</span>
       </SidebarGroupLabel>
       <SidebarGroupContent>
         <SidebarMenu>

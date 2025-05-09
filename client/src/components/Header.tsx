@@ -26,7 +26,6 @@ const Header = () => {
       <nav className="space-x-6 font-medium flex items-center">
         <SignedOut>
           <HeaderLink to="/sign-in" title="Sign In" active={location.pathname === "/sign-in"} />
-
           <HeaderLink to="/sign-up" title="Sign Up" active={location.pathname === "/sign-up"} />
         </SignedOut>
 

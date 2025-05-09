@@ -1,3 +1,5 @@
+import { Link } from "react-router-dom";
+
 const Dashboard = () => {
   return (
     <div>
@@ -7,19 +9,19 @@ const Dashboard = () => {
         <p className="text-lg font-semibold">Quick Links:</p>
         <ul className="list-disc list-inside">
           <li>
-            <a href="/projects" className="text-blue-500 hover:underline">
+            <Link to="/projects" className="text-blue-500 hover:underline">
               View Projects
-            </a>
+            </Link>
           </li>
           <li>
-            <a href="/organizations" className="text-blue-500 hover:underline">
+            <Link to="/organizations" className="text-blue-500 hover:underline">
               View Organizations
-            </a>
+            </Link>
           </li>
           <li>
-            <a href="/settings" className="text-blue-500 hover:underline">
+            <Link to="/settings" className="text-blue-500 hover:underline">
               Account Settings
-            </a>
+            </Link>
           </li>
         </ul>
       </div>

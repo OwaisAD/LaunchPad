@@ -1,4 +1,4 @@
-import { Calculator, Calendar, CreditCard, Settings, Smile, User } from "lucide-react";
+import { CreditCard, Settings, User } from "lucide-react";
 
 import {
   CommandDialog,
@@ -11,6 +11,9 @@ import {
   CommandShortcut,
 } from "@/components/ui/command";
 import { useEffect } from "react";
+import { SiAwsorganizations } from "react-icons/si";
+import { GoProjectSymlink } from "react-icons/go";
+import { useNavigate } from "react-router-dom";
 
 type CommandMenuProps = {
   open: boolean;
@@ -18,6 +21,8 @@ type CommandMenuProps = {
 };
 
 export function CommandMenu({ open, setOpen }: CommandMenuProps) {
+  const navigate = useNavigate();
+
   useEffect(() => {
     const down = (e: KeyboardEvent) => {
       if (e.key === "k" && (e.metaKey || e.ctrlKey)) {
@@ -37,17 +42,23 @@ export function CommandMenu({ open, setOpen }: CommandMenuProps) {
         <CommandList>
           <CommandEmpty>No results found.</CommandEmpty>
           <CommandGroup heading="Suggestions">
-            <CommandItem>
-              <Calendar />
-              <span>Calendar</span>
+            <CommandItem
+              onSelect={() => {
+                setOpen(false);
+                navigate("/organizations");
+              }}
+            >
+              <SiAwsorganizations />
+              <span>Organizations</span>
             </CommandItem>
-            <CommandItem>
-              <Smile />
-              <span>Search Emoji</span>
-            </CommandItem>
-            <CommandItem>
-              <Calculator />
-              <span>Calculator</span>
+            <CommandItem
+              onSelect={() => {
+                setOpen(false);
+                navigate("/projects");
+              }}
+            >
+              <GoProjectSymlink />
+              <span>Projects</span>
             </CommandItem>
           </CommandGroup>
           <CommandSeparator />
