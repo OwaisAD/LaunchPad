@@ -4,7 +4,7 @@
 @custom-variant dark (&:is(.dark *));
 
 body {
-  background-color: #f5f6f9;
+  background-color: #fefae0;
 }
 
 @theme inline {
@@ -121,4 +121,17 @@ body {
   body {
     @apply bg-background text-foreground;
   }
+}
+
+.cl-userButtonBox {
+  flex-direction: row-reverse;
+}
+
+.cl-userButtonOuterIdentifier {
+  font-size: 14px;
+}
+
+.cl-logoImage {
+  width: 100px;
+  height: 100px;
 }

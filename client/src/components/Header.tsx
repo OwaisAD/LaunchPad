@@ -1,39 +1,36 @@
-import { Link } from "react-router-dom";
-import { SignedIn, SignedOut, UserButton, useUser } from "@clerk/clerk-react";
+import { Link, useLocation } from "react-router-dom";
+import { SignedIn, SignedOut, useUser } from "@clerk/clerk-react";
+import HeaderLink from "./HeaderLink";
+import { Search } from "./Search";
+import { OrganizationSwitcherComboBox } from "./OrganizationSwitcherComboBox";
 
 const Header = () => {
+  const location = useLocation();
   const { isSignedIn } = useUser();
 
   return (
-    <header className="z-[9999] absolute h-[80px] top-0 left-0 w-full p-6 flex justify-between items-center bg-[#F1F5F9]  backdrop-blur-sm">
-      <Link to={isSignedIn ? "/dashboard" : "/"} className="flex justify-center lg:justify-start">
-        <img src="/logo.png" alt="LaunchPad logo" width={80} className="hover:scale-105 transition-transform" />
-      </Link>
+    <header className="relative w-full max-w-full z-10 h-[80px] px-6 flex justify-between items-center bg-[#F1F5F9] backdrop-blur-sm shadow-sm">
+      <div className="flex items-center gap-4 h-full">
+        <Link to={isSignedIn ? "/dashboard" : "/"} className="flex justify-center lg:justify-start">
+          <img src="/logo.png" alt="LaunchPad logo" width={80} className="hover:scale-105 transition-transform" />
+        </Link>
+
+        <SignedIn>
+          <Search placeholder="Search by resource name or public IP" className="w-[400px] bg-[#F1F5F9]" />
+        </SignedIn>
+      </div>
+
       <nav className="space-x-6 font-medium flex items-center">
         <SignedOut>
-          <Link to="/sign-in" className="hover:underline">
-            Sign In
-          </Link>
-          <Link to="/sign-up" className="hover:underline">
-            Sign Up
-          </Link>
+          <HeaderLink to="/sign-in" title="Sign In" active={location.pathname === "/sign-in"} />
+
+          <HeaderLink to="/sign-up" title="Sign Up" active={location.pathname === "/sign-up"} />
         </SignedOut>
 
         <SignedIn>
-          <Link to="/organizations" className="hover:underline">
-            Organizations
-          </Link>
-          <Link to="/projects" className="hover:underline">
-            Projects
-          </Link>
-
-          <Link to="/settings" className="hover:underline">
-            Settings
-          </Link>
-
-          <div className="z-[9999]">
-            <UserButton userProfileMode="modal" showName />
-          </div>
+          <HeaderLink to="/organizations" title="Organizations" active={location.pathname === "/organizations"} />
+          <HeaderLink to="/projects" title="Projects" active={location.pathname === "/projects"} />
+          <OrganizationSwitcherComboBox />
         </SignedIn>
       </nav>
     </header>

@@ -6,6 +6,8 @@ import Layout from "./Layout";
 import LandingPage from "./pages/LandingPage";
 import RequireAuth from "./RequireAuth";
 import Dashboard from "./pages/Dashboard";
+import Settings from "./pages/Settings";
+import Organizations from "./pages/Organization/MyOrganizations";
 
 function AppRoutes() {
   return (
@@ -22,7 +24,7 @@ function AppRoutes() {
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/settings" element={<div>Settings</div>} />
           {/* Organizations */}
-          <Route path="/organizations" element={<div>My Organizations</div>} />
+          <Route path="/organizations" element={<Organizations />} />
           <Route path="/organizations/create" element={<div>Create Organization</div>} />
           <Route path="/organizations/:orgId" element={<div>Organization Details</div>} />
 
@@ -34,6 +36,9 @@ function AppRoutes() {
           <Route path="/projects/:projectId/edit" element={<div>Edit Project Overview</div>} />
           {/* Create project */}
           <Route path="/projects/create" element={<div>Create Project</div>} />
+
+          {/* Settings page */}
+          <Route path="/settings" element={<Settings />} />
         </Route>
       </Route>
 
