@@ -11,7 +11,7 @@ const SignUp = () => {
 
   return (
     <div className="min-h-screen flex flex-col justify-center items-center bg-slate-100 px-4 py-10 ">
-      <SignUpClerk signInUrl="/sign-in" />
+      <SignUpClerk signInUrl="/sign-in" afterSignOutUrl="/sign-in" fallbackRedirectUrl="/dashboard" />
 
       <div className="flex flex-col items-center justify-between text-[10px] md:text-sm font-light pt-4 border-t">
         <p>&copy; 2025 LaunchPad. All rights reserved.</p>

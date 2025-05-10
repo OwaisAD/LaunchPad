@@ -1,7 +1,6 @@
 import * as React from "react";
 import { Slot } from "@radix-ui/react-slot";
 import { VariantProps, cva } from "class-variance-authority";
-import { PanelLeftIcon } from "lucide-react";
 
 import { useIsMobile } from "@/hooks/use-mobile";
 import { cn } from "@/lib/utils";
@@ -12,6 +11,7 @@ import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle } from "
 import { Skeleton } from "@/components/ui/skeleton";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 import ToolTip from "../ToolTip";
+import { RxHamburgerMenu } from "react-icons/rx";
 
 const SIDEBAR_COOKIE_NAME = "sidebar_state";
 const SIDEBAR_COOKIE_MAX_AGE = 60 * 60 * 24 * 7;
@@ -242,7 +242,7 @@ function SidebarTrigger({ className, onClick, ...props }: React.ComponentProps<t
         data-slot="sidebar-trigger"
         variant="ghost"
         size="icon"
-        className={cn("size-7", className)}
+        className={cn("size-9 rounded-full", className)}
         title="Toggle Sidebar"
         onClick={(event) => {
           onClick?.(event);
@@ -250,7 +250,7 @@ function SidebarTrigger({ className, onClick, ...props }: React.ComponentProps<t
         }}
         {...props}
       >
-        <PanelLeftIcon />
+        <RxHamburgerMenu />
         <span className="sr-only">Toggle Sidebar</span>
       </Button>
     </ToolTip>

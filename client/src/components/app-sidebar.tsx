@@ -37,16 +37,19 @@ export function AppSidebar() {
       </SidebarHeader>
       <SidebarContent className="bg-[#F2F5F9] relative">
         <div className="opacity-0 group-hover/sidebar:opacity-100 transition cursor-col-resize absolute h-full w-1 bg-gray-200 right-0 top-0" />
-        <SidebarTrigger className="cursor-pointer absolute right-0 top-4 z-[99999]" />
         <MainSection />
-        <Separator />
+        <div className="mx-4">
+          <Separator decorative />
+        </div>
         {/* Latest Organizations */}
         <CustomeSidebarSection
           items={recentOrganizations}
           sectionTitle="Recent Organizations"
           seeMoreLink="/organizations"
         />
-        <Separator />
+        <div className="mx-4">
+          <Separator decorative />
+        </div>
         <CustomeSidebarSection items={recentProjects} sectionTitle="Recent Projects" seeMoreLink="/projects" />
 
         {/* Latest Projects */}

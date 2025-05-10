@@ -20,9 +20,7 @@ export const CustomeSidebarSection = ({ items, sectionTitle, seeMoreLink }: Cust
 
   return (
     <SidebarGroup>
-      <SidebarGroupLabel className="text-md">
-        {sectionTitle}
-      </SidebarGroupLabel>
+      <SidebarGroupLabel className="text-xs uppercase font-medium text-gray-500 ">{sectionTitle}</SidebarGroupLabel>
       <SidebarGroupContent>
         <SidebarMenu>
           {items.map((item) => (

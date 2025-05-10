@@ -3,6 +3,6 @@ import usersController from "../controllers/users.controller";
 
 const UsersRouter = express.Router();
 
-UsersRouter.post("/webhook", usersController.handleClerkWebhook);
+UsersRouter.post("/webhook", express.raw({ type: "application/json" }), usersController.handleClerkWebhook);
 
 export default UsersRouter;

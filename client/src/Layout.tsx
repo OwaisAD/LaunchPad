@@ -1,4 +1,4 @@
-import { SidebarProvider } from "@/components/ui/sidebar";
+import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
 import { AppSidebar } from "@/components/app-sidebar";
 import { Outlet } from "react-router-dom";
 import Header from "./components/Header";
@@ -16,7 +16,11 @@ export default function Layout() {
           <Header />
 
           {/* Page Content */}
-          <main className="flex-1 overflow-y-auto bg-white p-4">
+          <main className="flex-1 overflow-y-auto bg-white p-14 relative">
+            <div className="bg-[#F1F5F9] w-10 h-10 absolute left-0 top-4 z-[99999] rounded-br-xl rounded-tr-xl">
+              <SidebarTrigger className="cursor-pointer " />
+            </div>
+
             <Outlet />
           </main>
         </div>

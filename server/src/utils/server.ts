@@ -9,6 +9,7 @@ import routes from "../routes";
 import { attachCorrelationId } from "../middleware/attachCorrelationId";
 import { errorHandler } from "../middleware/errorHandler";
 import { logRequestDetails } from "../middleware/loggerMiddleware";
+import usersController from "../controllers/users.controller";
 
 function createServer() {
   const app = express();
@@ -32,6 +33,8 @@ function createServer() {
   app.use(helmet());
 
   app.use(morgan("dev"));
+
+  app.post("/users/webhook", express.raw({ type: "application/json" }), usersController.handleClerkWebhook);
 
   app.use(express.json());
 

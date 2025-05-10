@@ -31,7 +31,6 @@ export const MainSection = () => {
 
   return (
     <SidebarGroup>
-      <SidebarGroupLabel className="text-md">Quick Access</SidebarGroupLabel>
       <SidebarGroupContent>
         <SidebarMenu>
           {items.map((item) => (
