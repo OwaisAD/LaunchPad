@@ -1,5 +1,5 @@
 import { getOrganizations } from "@/api/organizations";
-import Loading from "@/components/Loading";
+import Loader from "@/components/Loader";
 import ToolTip from "@/components/ToolTip";
 import { Button } from "@/components/ui/button";
 import { useQuery } from "@tanstack/react-query";
@@ -11,7 +11,7 @@ const MyOrganizations = () => {
     queryFn: getOrganizations,
   });
 
-  if (isLoading) return <Loading />;
+  if (isLoading) return <Loader />;
   if (isError) return <p>Error: {error.message}</p>;
 
   return (
