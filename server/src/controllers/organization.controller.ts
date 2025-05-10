@@ -38,18 +38,18 @@ const getOrganization = async (req: Request, res: Response) => {
   }
 };
 
-const getOrganizationByIdOrSlug = async (req: Request, res: Response) => {};
+// const getOrganizationByIdOrSlug = async (req: Request, res: Response) => {};
 
-const createOrganization = async (req: Request, res: Response) => {};
+// const createOrganization = async (req: Request, res: Response) => {};
 
-const updateOrganization = async (req: Request, res: Response) => {};
+// const updateOrganization = async (req: Request, res: Response) => {};
 
-const deleteOrganization = async (req: Request, res: Response) => {};
+// const deleteOrganization = async (req: Request, res: Response) => {};
 
 export default {
   getOrganization,
-  getOrganizationByIdOrSlug,
-  createOrganization,
-  updateOrganization,
-  deleteOrganization,
+  // getOrganizationByIdOrSlug,
+  // createOrganization,
+  // updateOrganization,
+  // deleteOrganization,
 };
