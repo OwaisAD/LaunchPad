@@ -1,11 +1,4 @@
-import {
-  Sidebar,
-  SidebarContent,
-  SidebarFooter,
-  SidebarHeader,
-  SidebarTrigger,
-  useSidebar,
-} from "@/components/ui/sidebar";
+import { Sidebar, SidebarContent, SidebarFooter, SidebarHeader, useSidebar } from "@/components/ui/sidebar";
 import { MainSection } from "@/components/MainSection";
 import { Separator } from "./ui/separator";
 import { UserButton } from "@clerk/clerk-react";

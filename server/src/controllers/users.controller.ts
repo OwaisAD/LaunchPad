@@ -1,6 +1,6 @@
 import { Webhook } from "svix";
 import { Request, Response } from "express";
-import { verifyWebhook, WebhookEvent } from "@clerk/express/webhooks";
+import { WebhookEvent } from "@clerk/express/webhooks";
 
 import prisma from "../../prisma/client";
 
