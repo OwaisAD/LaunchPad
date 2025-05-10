@@ -4,12 +4,12 @@ import cors from "cors";
 import express, { Request, Response, NextFunction } from "express";
 import helmet from "helmet";
 import morgan from "morgan";
-
 import routes from "../routes";
 import { attachCorrelationId } from "../middleware/attachCorrelationId";
 import { errorHandler } from "../middleware/errorHandler";
 import { logRequestDetails } from "../middleware/loggerMiddleware";
 import usersController from "../controllers/users.controller";
+import { clerkMiddleware } from "@clerk/express";
 
 function createServer() {
   const app = express();
@@ -25,6 +25,7 @@ function createServer() {
     })
   );
 
+  app.use(clerkMiddleware());
   app.use(compression());
   app.use(cookieParser());
 
