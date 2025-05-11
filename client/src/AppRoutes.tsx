@@ -8,6 +8,8 @@ import RequireAuth from "./RequireAuth";
 import Dashboard from "./pages/Dashboard";
 import Settings from "./pages/Settings";
 import Organizations from "./pages/Organization/MyOrganizations";
+import ViewOrganization from "./pages/Organization/ViewOrganization";
+import OrganizationOverview from "./pages/Organization/OrganizationOverview";
 
 function AppRoutes() {
   return (
@@ -22,11 +24,21 @@ function AppRoutes() {
       <Route element={<RequireAuth />}>
         <Route element={<Layout />}>
           <Route path="/dashboard" element={<Dashboard />} />
-          <Route path="/settings" element={<div>Settings</div>} />
+          <Route path="/settings" element={<Settings />} />
+
           {/* Organizations */}
           <Route path="/organizations" element={<Organizations />} />
-          <Route path="/organizations/create" element={<div>Create Organization</div>} />
-          <Route path="/organizations/:orgId" element={<div>Organization Details</div>} />
+          <Route path="/organizations/:orgId" element={<ViewOrganization />}>
+            <Route index element={<OrganizationOverview />} />
+            <Route path="members" element={<div>Members</div>} />
+            <Route path="projects" element={<div>Projects</div>} />
+            <Route path="settings" element={<div>Settings</div>} />
+            <Route path="billing" element={<div>Billing</div>} />
+            <Route path="integrations" element={<div>Integrations</div>} />
+            <Route path="api-keys" element={<div>API Keys</div>} />
+            <Route path="webhooks" element={<div>Webhooks</div>} />
+            <Route path="audit-logs" element={<div>Audit Logs</div>} />
+          </Route>
 
           {/* Projects */}
           <Route path="/projects" element={<div>My Projects</div>} />

@@ -1,7 +1,9 @@
+import PageHeading from "@/components/PageHeading";
+
 const Settings = () => {
   return (
     <div>
-      <p>Settings Page</p>
+      <PageHeading title="Settings" description="......" />
     </div>
   );
 };

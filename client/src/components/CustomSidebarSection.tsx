@@ -9,7 +9,7 @@ import {
 import { Link, useLocation } from "react-router-dom";
 
 type CustomSidebarSectionProps = {
-  items: { id: string; title: string }[];
+  items: { name: string; slug: string }[];
   sectionTitle: string;
   seeMoreLink?: string;
 };
@@ -24,16 +24,16 @@ export const CustomeSidebarSection = ({ items, sectionTitle, seeMoreLink }: Cust
       <SidebarGroupContent>
         <SidebarMenu>
           {items.map((item) => (
-            <SidebarMenuItem key={item.title}>
+            <SidebarMenuItem key={item.name}>
               <SidebarMenuButton
-                tooltip={item.title}
+                tooltip={item.name}
                 asChild
-                isActive={location.pathname === `${seeMoreLink}/${item.id}`}
+                isActive={location.pathname === `${seeMoreLink}/${item.slug}`}
                 onClick={() => {}}
                 className="cursor-pointer"
               >
-                <Link to={`${seeMoreLink}/${item.id}`} className="flex items-center gap-4">
-                  <span className="text-sm">{item.title}</span>
+                <Link to={`${seeMoreLink}/${item.slug}`} className="flex items-center gap-4">
+                  <span className="text-sm">{item.name}</span>
                 </Link>
               </SidebarMenuButton>
             </SidebarMenuItem>

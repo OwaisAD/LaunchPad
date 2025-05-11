@@ -81,16 +81,76 @@ const handleCreateOrganization = async (req: Request, res: Response) => {
   }
 };
 
-// const getOrganizationByIdOrSlug = async (req: Request, res: Response) => {};
+const getOrganizationBySlug = async (req: Request, res: Response) => {
+  try {
+    const userId = validateUser(req);
+    const { slug } = req.params;
+
+    const organization = await prisma.organization.findUnique({
+      where: {
+        slug,
+        Membership: {
+          some: {
+            userId,
+          },
+        },
+      },
+    });
+
+    if (!organization) {
+      res.status(404).json({ error: "Organization not found" });
+      return;
+    }
+
+    res.status(200).json({
+      organization,
+    });
+  } catch (error) {
+    console.error("Error fetching organization:", error);
+    res.status(500).json({ error: "Internal server error" });
+  }
+};
+
+const deleteOrganization = async (req: Request, res: Response) => {
+  try {
+    const userId = validateUser(req);
+    const { id } = req.params;
+
+    const organization = await prisma.organization.findUnique({
+      where: {
+        id,
+        Membership: {
+          some: {
+            userId,
+            role: "ADMIN",
+          },
+        },
+      },
+    });
+
+    if (!organization) {
+      res.status(404).json({ error: "Organization not found" });
+      return;
+    }
+
+    await prisma.organization.delete({
+      where: { id },
+    });
+
+    res.status(200).json({ message: "Organization deleted successfully" });
+  } catch (error) {
+    console.error("Error deleting organization:", error);
+    res.status(500).json({ error: "Internal server error" });
+  }
+};
 
 // const updateOrganization = async (req: Request, res: Response) => {};
-
-// const deleteOrganization = async (req: Request, res: Response) => {};
 
 export default {
   handleGetUserOrganizations,
   handleCreateOrganization,
-  // getOrganizationByIdOrSlug,
+  getOrganizationBySlug,
+  // getOrganizationById
   // updateOrganization,
-  // deleteOrganization,
+  deleteOrganization,
 };

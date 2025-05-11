@@ -5,9 +5,10 @@ import { requireAuth } from "@clerk/express";
 const OrganizationRouter = express.Router();
 
 OrganizationRouter.get("/", requireAuth(), organizationController.handleGetUserOrganizations);
-OrganizationRouter.post("/", organizationController.handleCreateOrganization);
-// OrganizationRouter.get("/:id", organizationController.getOrganizationByIdOrSlug);
-// OrganizationRouter.put("/:id", organizationController.updateOrganization);
-// OrganizationRouter.delete("/:id", organizationController.deleteOrganization);
+OrganizationRouter.post("/", requireAuth(), organizationController.handleCreateOrganization);
+OrganizationRouter.get("/:slug", requireAuth(), organizationController.getOrganizationBySlug);
+OrganizationRouter.delete("/:id", requireAuth(), organizationController.deleteOrganization);
+// OrganizationRouter.get("/:id",requireAuth(), organizationController.getOrganizationById);
+// OrganizationRouter.put("/:id",requireAuth(), organizationController.updateOrganization);
 
 export default OrganizationRouter;

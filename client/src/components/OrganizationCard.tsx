@@ -26,7 +26,7 @@ interface OrganizationCardProps {
   onDelete: (orgId: string) => void;
 }
 
-const OrganizationCard = ({ organization, currentUserId, onDelete }: OrganizationCardProps) => {
+const OrganizationCard = ({ organization, currentUserId }: OrganizationCardProps) => {
   const navigate = useNavigate();
 
   return (
@@ -54,7 +54,7 @@ const OrganizationCard = ({ organization, currentUserId, onDelete }: Organizatio
             <DropdownMenuItem
               onClick={(e) => {
                 e.stopPropagation();
-                onDelete(organization.id);
+                navigate(`/organizations/${organization.slug}/members`);
               }}
             >
               Invite members
@@ -63,7 +63,7 @@ const OrganizationCard = ({ organization, currentUserId, onDelete }: Organizatio
             <DropdownMenuItem
               onClick={(e) => {
                 e.stopPropagation();
-                onDelete(organization.id);
+                navigate(`/organizations/${organization.slug}/settings`);
               }}
               className="text-red-600"
             >

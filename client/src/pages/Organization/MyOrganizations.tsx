@@ -43,8 +43,6 @@ const MyOrganizations = () => {
     <div>
       <PageHeading title="My Organizations" />
 
-      {/* <p>{JSON.stringify(organizations)}</p> */}
-
       <div className="flex justify-end items-center gap-2">
         <ToolTip tooltipText="Refresh">
           <Button

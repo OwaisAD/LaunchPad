@@ -9,17 +9,13 @@ export function AppSidebar() {
   const { open } = useSidebar();
 
   // should be fetched and cached maybe stored in local storage
-  const recentOrganizations = [
-    { id: "1", title: "Organization 1" },
-    { id: "2", title: "Organization 2" },
-    { id: "3", title: "Organization 3" },
-  ];
+  const recentOrganizations = localStorage.getItem("recentOrganizations")
+    ? JSON.parse(localStorage.getItem("recentOrganizations")!)
+    : [];
 
-  const recentProjects = [
-    { id: "1", title: "Full Stack Project 1" },
-    { id: "2", title: "Full Stack Project 2" },
-    { id: "3", title: "Full Stack Project 3" },
-  ];
+  const recentProjects = localStorage.getItem("recentProjects")
+    ? JSON.parse(localStorage.getItem("recentProjects")!)
+    : [];
 
   return (
     <Sidebar collapsible="icon" className="relative">
@@ -33,13 +29,22 @@ export function AppSidebar() {
         <MainSection />
         <Separator decorative />
         {/* Latest Organizations */}
-        <CustomeSidebarSection
-          items={recentOrganizations}
-          sectionTitle="Recent Organizations"
-          seeMoreLink="/organizations"
-        />
-        <Separator decorative />
-        <CustomeSidebarSection items={recentProjects} sectionTitle="Recent Projects" seeMoreLink="/projects" />
+        {recentOrganizations.length > 0 && (
+          <>
+            <CustomeSidebarSection
+              items={recentOrganizations}
+              sectionTitle="Recent Organizations"
+              seeMoreLink="/organizations"
+            />
+            <Separator decorative />
+          </>
+        )}
+        {recentProjects.length > 0 && (
+          <>
+            <CustomeSidebarSection items={recentProjects} sectionTitle="Recent Projects" seeMoreLink="/projects" />
+            <Separator decorative />
+          </>
+        )}
 
         {/* Latest Projects */}
       </SidebarContent>
