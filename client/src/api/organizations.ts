@@ -1,4 +1,5 @@
-const API_BASE = import.meta.env.MODE === "development" ? import.meta.env.VITE_API_URL : "api";
+const API_BASE =
+  import.meta.env.MODE === "development" ? import.meta.env.VITE_API_URL : "https://launchpad.sportia.dk/api";
 
 export async function getOrganizations() {
   const response = await fetch(`${API_BASE}/organizations`, {

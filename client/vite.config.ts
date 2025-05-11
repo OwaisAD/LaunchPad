@@ -5,6 +5,8 @@ import tailwindcss from "@tailwindcss/vite";
 
 // https://vite.dev/config/
 export default defineConfig({
+  envDir: "./env",
+  envPrefix: "VITE_",
   plugins: [react(), tailwindcss()],
   resolve: {
     alias: {
@@ -13,7 +15,7 @@ export default defineConfig({
   },
   server: {
     cors: {
-      origin: ["https://launchpad.sportia.dk", "http://localhost:8080"],
+      origin: ["https://launchpad.sportia.dk", "http://localhost:8080", "https://clerk.dev"],
       methods: ["GET", "POST"],
       allowedHeaders: ["Content-Type"],
     },

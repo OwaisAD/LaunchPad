@@ -7,6 +7,8 @@ import { HelmetProvider } from "react-helmet-async";
 import { Toaster } from "@/components/ui/sonner";
 import { ClerkProvider } from "@clerk/clerk-react";
 
+// should be dependent on the environment
+
 const PUBLISHABLE_KEY = "pk_live_Y2xlcmsuc3BvcnRpYS5kayQ";
 
 createRoot(document.getElementById("root")!).render(
