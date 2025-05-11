@@ -9,7 +9,7 @@
     "dev:staging": "tsx --watch --env-file .env.staging src/index.ts",
     "dev:production": "tsx --watch --env-file .env.production src/index.ts",
     "start": "node --env-file .env dist/src/index.js",
-    "start:prod": "npx prisma db push && NODE_ENV=production node src/index.js",
+    "start:prod": "npx prisma db push --accept-data-loss && NODE_ENV=production node src/index.js",
     "build": "tsc",
     "type-check": "tsc --noEmit",
     "lint": "eslint src",
