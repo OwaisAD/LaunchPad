@@ -9,7 +9,11 @@ import { ClerkProvider } from "@clerk/clerk-react";
 
 // should be dependent on the environment
 
-const PUBLISHABLE_KEY = import.meta.env.VITE_CLERK_FRONTEND_API_KEY;
+const isDev = import.meta.env.MODE === "development";
+
+const PUBLISHABLE_KEY = isDev
+  ? "pk_test_dGlnaHQta2lkLTc0LmNsZXJrLmFjY291bnRzLmRldiQ"
+  : "pk_live_Y2xlcmsuc3BvcnRpYS5kayQ";
 
 if (!PUBLISHABLE_KEY) {
   throw new Error("VITE_CLERK_FRONTEND_API_KEY is not defined");
