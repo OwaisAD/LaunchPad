@@ -1,28 +1,20 @@
 #!/bin/bash
 
-echo "Stopping and removing existing Docker Compose services..." # add --volumes if you want to remove data volumes
+set -e  # Exit immediately if a command exits with a non-zero status
+
+echo "🛑 Stopping and removing existing Docker Compose services (including volumes)..."
 docker-compose down --remove-orphans --volumes
-echo "Services stopped and removed successfully."
+echo "✅ Services stopped and cleaned up."
 
+# Optional: Uncomment if you want to remove *all* images (use with caution!)
+# echo "🧹 Removing all Docker images to ensure a clean build..."
+# docker rmi -f $(docker images -q) || true
+# echo "✅ All Docker images removed."
 
-# echo "Cleaning up old Docker images..."
-# # Get the image names from the docker-compose file
-# IMAGES=$(docker-compose config | grep 'image:' | awk '{print $2}')
-# for IMAGE in $IMAGES; do
-#   if docker image inspect "$IMAGE" &>/dev/null; then
-#     echo "Removing old image: $IMAGE"
-#     docker rmi -f "$IMAGE"
-#   fi
-# done
-# echo "Old Docker images cleaned up."
-
-
-echo "Pulling the latest Docker images..."
+echo "📦 Pulling the latest Docker images..."
 docker-compose pull
-echo "Docker images pulled successfully."
+echo "✅ Docker images pulled."
 
-echo "Starting Docker Compose services with a rebuild..."
-docker-compose up --build --remove-orphans -d 
-echo "Docker Compose services started successfully!"
-
-
+echo "🚀 Starting Docker Compose services with rebuild..."
+docker-compose up --build --remove-orphans -d
+echo "✅ Docker Compose services started successfully!"
