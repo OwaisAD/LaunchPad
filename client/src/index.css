@@ -5,6 +5,7 @@
 
 body {
   background-color: #fefae0;
+  @apply font-[Inter];
 }
 
 @theme inline {

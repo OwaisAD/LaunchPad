@@ -52,7 +52,7 @@ async function handleClerkWebhook(req: Request, res: Response) {
 
       await prisma.user.create({
         data: {
-          clerkId: data.id,
+          id: data.id,
           firstName: data.first_name || "",
           lastName: data.last_name || "",
           imageUrl: data.image_url,
@@ -70,7 +70,7 @@ async function handleClerkWebhook(req: Request, res: Response) {
 
       await prisma.user.delete({
         where: {
-          clerkId: data.id,
+          id: data.id,
         },
       });
     }
@@ -80,7 +80,7 @@ async function handleClerkWebhook(req: Request, res: Response) {
 
       await prisma.user.update({
         where: {
-          clerkId: data.id,
+          id: data.id,
         },
         data: {
           firstName: data.first_name || "",

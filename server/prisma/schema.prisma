@@ -14,8 +14,7 @@ datasource db {
 }
 
 model User {
-  id            String       @id @default(cuid())
-  clerkId       String?      @unique
+  id            String       @id @unique @default(cuid())
   imageUrl      String?
   firstName     String
   lastName      String
