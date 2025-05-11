@@ -22,6 +22,7 @@ function createServer() {
     cors({
       credentials: true,
       origin: [process.env.CLIENT_URL ?? "http://localhost:5173"],
+      methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
     })
   );
 
