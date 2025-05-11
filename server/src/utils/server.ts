@@ -26,9 +26,11 @@ function createServer() {
     })
   );
 
-  app.use(clerkMiddleware({
-    authorizedParties: ["https://launchpad.sportia.dk"]
-  }));
+  app.use(
+    clerkMiddleware({
+      authorizedParties: ["https://launchpad.sportia.dk", "http://localhost:3000"],
+    })
+  );
   app.use(compression());
   app.use(cookieParser());
 
