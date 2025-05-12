@@ -9,6 +9,7 @@ import {
 import { MoreVertical } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { MdOutlineAdminPanelSettings } from "react-icons/md";
+import { RiUserCommunityLine } from "react-icons/ri";
 
 type Organization = {
   id: string;
@@ -31,7 +32,7 @@ const OrganizationCard = ({ organization, currentUserId }: OrganizationCardProps
 
   return (
     <div
-      className="relative bg-white rounded-2xl shadow-md hover:shadow-xl transition p-6 h-64 flex flex-col justify-between cursor-pointer"
+      className="relative bg-white rounded-2xl shadow-[0px_0px_0px_1px_rgba(0,0,0,0.06),0px_1px_1px_-0.5px_rgba(0,0,0,0.06),0px_3px_3px_-1.5px_rgba(0,0,0,0.06),_0px_6px_6px_-3px_rgba(0,0,0,0.06),0px_12px_12px_-6px_rgba(0,0,0,0.06),0px_24px_24px_-12px_rgba(0,0,0,0.06)] hover:shadow-xl transition p-6 h-64 flex flex-col justify-between cursor-pointer"
       onClick={() => navigate(`/organizations/${organization.slug}`)}
     >
       {/* Dropdown Menu */}
@@ -57,25 +58,29 @@ const OrganizationCard = ({ organization, currentUserId }: OrganizationCardProps
                 navigate(`/organizations/${organization.slug}/members`);
               }}
             >
-              Invite members
+              {organization.ownerId === currentUserId ? "Manage Members" : "Members"}
             </DropdownMenuItem>
-            <DropdownMenuSeparator />
-            <DropdownMenuItem
-              onClick={(e) => {
-                e.stopPropagation();
-                navigate(`/organizations/${organization.slug}/settings`);
-              }}
-              className="text-red-600"
-            >
-              Delete
-            </DropdownMenuItem>
+            {organization.ownerId === currentUserId && (
+              <>
+                <DropdownMenuSeparator />
+                <DropdownMenuItem
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    navigate(`/organizations/${organization.slug}/settings`);
+                  }}
+                  className="text-red-600"
+                >
+                  Delete
+                </DropdownMenuItem>
+              </>
+            )}
           </DropdownMenuContent>
         </DropdownMenu>
       </div>
 
       {/* Content */}
       <div className="flex flex-col justify-center h-full w-full items-center">
-        <h3 className="text-xl md:text-2xl lg:text-3xl font-mediun text-gray-900">{organization.name}</h3>
+        <h3 className="text-lg md:text-xl lg:text-2xl font-mediun text-gray-900">{organization.name}</h3>
         {organization.description && <p className="text-sm text-muted-foreground mt-2">{organization.description}</p>}
         {organization.website && (
           <p className="text-sm text-blue-600 mt-1">
@@ -93,12 +98,19 @@ const OrganizationCard = ({ organization, currentUserId }: OrganizationCardProps
       </div>
 
       {/* Owner Tag */}
-      {organization.ownerId === currentUserId && (
-        <div className="absolute bottom-0 right-0 bg-muted text-xs text-gray-600 px-3 py-2 rounded-tl-lg rounded-br-lg">
-          <MdOutlineAdminPanelSettings className="inline-block mr-1" />
-          Owner
-        </div>
-      )}
+      <div className="absolute bottom-0 right-0 bg-muted text-xs text-gray-600 px-3 py-2 rounded-tl-lg rounded-br-lg">
+        {organization.ownerId === currentUserId ? (
+          <span className="flex items-center">
+            <MdOutlineAdminPanelSettings className="mr-1" />
+            Owner
+          </span>
+        ) : (
+          <span className="flex items-center">
+            <RiUserCommunityLine className="mr-1" />
+            Member
+          </span>
+        )}
+      </div>
     </div>
   );
 };

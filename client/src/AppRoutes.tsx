@@ -9,7 +9,10 @@ import Dashboard from "./pages/Dashboard";
 import Settings from "./pages/Settings";
 import Organizations from "./pages/Organization/MyOrganizations";
 import ViewOrganization from "./pages/Organization/ViewOrganization";
-import OrganizationOverview from "./pages/Organization/OrganizationOverview";
+import OrganizationOverview from "./pages/Organization/Overview";
+import OrganizationSettings from "./pages/Organization/Settings";
+import OrganizationMembers from "./pages/Organization/OrganizationMembers";
+import MyProjects from "./pages/Project/MyProjects";
 
 function AppRoutes() {
   return (
@@ -30,18 +33,18 @@ function AppRoutes() {
           <Route path="/organizations" element={<Organizations />} />
           <Route path="/organizations/:orgId" element={<ViewOrganization />}>
             <Route index element={<OrganizationOverview />} />
-            <Route path="members" element={<div>Members</div>} />
-            <Route path="projects" element={<div>Projects</div>} />
-            <Route path="settings" element={<div>Settings</div>} />
+            <Route path="members" element={<OrganizationMembers />} />
+            <Route path="projects" element={<MyProjects />} />
             <Route path="billing" element={<div>Billing</div>} />
             <Route path="integrations" element={<div>Integrations</div>} />
             <Route path="api-keys" element={<div>API Keys</div>} />
             <Route path="webhooks" element={<div>Webhooks</div>} />
             <Route path="audit-logs" element={<div>Audit Logs</div>} />
+            <Route path="settings" element={<OrganizationSettings />} />
           </Route>
 
           {/* Projects */}
-          <Route path="/projects" element={<div>My Projects</div>} />
+          <Route path="/projects" element={<MyProjects />} />
           <Route path="/projects/new" element={<div>New Project</div>} />
           <Route path="/projects/:projectId" element={<div>Project Details</div>} />
           <Route path="/projects/:projectId/edit" element={<div>Edit Project</div>} />

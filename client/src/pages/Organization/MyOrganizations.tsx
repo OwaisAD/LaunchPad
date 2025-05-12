@@ -72,6 +72,13 @@ const MyOrganizations = () => {
           />
         ))}
       </div>
+
+      {organizations.length === 0 && (
+        <div className="mt-4">
+          <p className="text-lg font-semibold">No organizations found</p>
+          <p className="text-gray-500">You can create a new organization by clicking the button above.</p>
+        </div>
+      )}
     </div>
   );
 };

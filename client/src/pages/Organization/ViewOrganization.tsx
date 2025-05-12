@@ -86,9 +86,6 @@ const ViewOrganization = () => {
     <div className="flex min-h-screen ">
       <PageSidebar title={organization.name} menuItems={menuItems} />
       <main className="flex-1 p-6">
-        <h1 className="text-2xl font-bold">{organization.name}</h1>
-        <p className="text-gray-600 mt-1">{organization.description}</p>
-
         <div className="mt-6">
           <Outlet
             context={{

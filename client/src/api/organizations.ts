@@ -54,3 +54,47 @@ export async function getOrganizationBySlug(slug: string) {
 
   return response.json();
 }
+
+export const inviteMember = async (organizationId: string, email: string) => {
+  const response = await fetch(`${API_BASE}/organizations/${organizationId}/invite`, {
+    method: "POST",
+    credentials: "include",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({ email }),
+  });
+
+  if (!response.ok) {
+    const data = await response.json();
+    throw new Error(data.error || "Failed to invite member");
+  }
+
+  return response.json();
+};
+
+export const changeRole = async ({
+  organizationId,
+  email,
+  role,
+}: {
+  organizationId: string;
+  email: string;
+  role: string;
+}) => {
+  const response = await fetch(`${API_BASE}/organizations/${organizationId}/role`, {
+    method: "POST",
+    credentials: "include",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({ email, role }),
+  });
+
+  if (!response.ok) {
+    const data = await response.json();
+    throw new Error(data.error || "Failed to change role");
+  }
+
+  return response.json();
+};

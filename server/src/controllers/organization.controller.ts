@@ -26,7 +26,15 @@ const handleGetUserOrganizations = async (req: Request, res: Response) => {
       return;
     }
 
-    const organizations = user.Organization;
+    const organizations = await prisma.organization.findMany({
+      where: {
+        Membership: {
+          some: {
+            userId,
+          },
+        },
+      },
+    });
 
     res.status(200).json({
       organizations,
@@ -95,6 +103,13 @@ const getOrganizationBySlug = async (req: Request, res: Response) => {
           },
         },
       },
+      include: {
+        Membership: {
+          include: {
+            user: true,
+          },
+        },
+      },
     });
 
     if (!organization) {
@@ -111,18 +126,21 @@ const getOrganizationBySlug = async (req: Request, res: Response) => {
   }
 };
 
-const deleteOrganization = async (req: Request, res: Response) => {
+const inviteMember = async (req: Request, res: Response) => {
   try {
+    // check if user exists and add to organization
     const userId = validateUser(req);
+    const { email } = req.body;
     const { id } = req.params;
 
     const organization = await prisma.organization.findUnique({
       where: {
         id,
+      },
+      include: {
         Membership: {
-          some: {
-            userId,
-            role: "ADMIN",
+          include: {
+            user: true,
           },
         },
       },
@@ -133,24 +151,149 @@ const deleteOrganization = async (req: Request, res: Response) => {
       return;
     }
 
-    await prisma.organization.delete({
-      where: { id },
+    const isAdmin = organization.Membership.some((member) => member.userId === userId && member.role === "ADMIN");
+
+    if (!isAdmin) {
+      res.status(403).json({ error: "You are not authorized to invite members to this organization." });
+      return;
+    }
+
+    const userAlreadyExists = organization.Membership.some((member) => member.user.email === email);
+
+    if (userAlreadyExists) {
+      res.status(400).json({ error: "User already exists in the organization" });
+      return;
+    }
+
+    // check if user exists in system
+    const user = await prisma.user.findUnique({
+      where: {
+        email,
+      },
     });
 
-    res.status(200).json({ message: "Organization deleted successfully" });
+    if (!user) {
+      res.status(404).json({ error: `User with email ${email} not found` });
+      return;
+    }
+
+    // add user to organization
+    await prisma.membership.create({
+      data: {
+        userId: user.id,
+        organizationId: organization.id,
+        role: "USER",
+      },
+    });
+
+    res.status(200).json({ message: "User added to organization successfully" });
+    // validate
   } catch (error) {
-    console.error("Error deleting organization:", error);
+    console.error("Error inviting member:", error);
     res.status(500).json({ error: "Internal server error" });
   }
 };
 
-// const updateOrganization = async (req: Request, res: Response) => {};
+// const deleteOrganization = async (req: Request, res: Response) => {
+//   try {
+//     const userId = validateUser(req);
+//     const { id } = req.params;
+
+//     const organization = await prisma.organization.findUnique({
+//       where: {
+//         id,
+//         Membership: {
+//           some: {
+//             userId,
+//             role: "ADMIN",
+//           },
+//         },
+//       },
+//     });
+
+//     if (!organization) {
+//       res.status(404).json({ error: "Organization not found" });
+//       return;
+//     }
+
+//     await prisma.organization.delete({
+//       where: { id },
+//     });
+
+//     res.status(200).json({ message: "Organization deleted successfully" });
+//   } catch (error) {
+//     console.error("Error deleting organization:", error);
+//     res.status(500).json({ error: "Internal server error" });
+//   }
+// };
+
+export const changeRole = async (req: Request, res: Response) => {
+  try {
+    const userId = validateUser(req);
+    const { id } = req.params;
+    const { email, role } = req.body;
+
+    // validate role
+    const validRoles = ["ADMIN", "USER"];
+
+    if (!validRoles.includes(role)) {
+      res.status(400).json({ error: "Invalid role" });
+      return;
+    }
+
+    const organization = await prisma.organization.findUnique({
+      where: {
+        id,
+      },
+      include: {
+        Membership: {
+          include: {
+            user: true,
+          },
+        },
+      },
+    });
+
+    if (!organization) {
+      res.status(404).json({ error: "Organization not found" });
+      return;
+    }
+
+    const isAdmin = organization.Membership.some((member) => member.userId === userId && member.role === "ADMIN");
+
+    if (!isAdmin) {
+      res.status(403).json({ error: "You are not authorized to change roles in this organization." });
+      return;
+    }
+
+    const userToChange = organization.Membership.find((member) => member.user.email === email);
+
+    if (!userToChange) {
+      res.status(404).json({ error: `User with email ${email} not found in the organization` });
+      return;
+    }
+
+    await prisma.membership.update({
+      where: {
+        id: userToChange.id,
+      },
+      data: {
+        role,
+      },
+    });
+
+    res.status(200).json({ message: "User role updated successfully" });
+  } catch (error) {
+    console.error("Error changing role:", error);
+    res.status(500).json({ error: "Internal server error" });
+  }
+};
 
 export default {
   handleGetUserOrganizations,
   handleCreateOrganization,
   getOrganizationBySlug,
-  // getOrganizationById
-  // updateOrganization,
-  deleteOrganization,
+  // deleteOrganization,
+  inviteMember,
+  changeRole,
 };

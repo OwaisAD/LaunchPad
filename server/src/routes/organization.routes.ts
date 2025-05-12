@@ -7,8 +7,9 @@ const OrganizationRouter = express.Router();
 OrganizationRouter.get("/", requireAuth(), organizationController.handleGetUserOrganizations);
 OrganizationRouter.post("/", requireAuth(), organizationController.handleCreateOrganization);
 OrganizationRouter.get("/:slug", requireAuth(), organizationController.getOrganizationBySlug);
-OrganizationRouter.delete("/:id", requireAuth(), organizationController.deleteOrganization);
-// OrganizationRouter.get("/:id",requireAuth(), organizationController.getOrganizationById);
-// OrganizationRouter.put("/:id",requireAuth(), organizationController.updateOrganization);
+OrganizationRouter.post("/:id/invite", requireAuth(), organizationController.inviteMember);
+//OrganizationRouter.post("/:id/join", requireAuth(), organizationController.joinOrganization);
+//OrganizationRouter.post("/:id/leave", requireAuth(), organizationController.leaveOrganization);
+OrganizationRouter.post("/:id/role", requireAuth(), organizationController.changeRole);
 
 export default OrganizationRouter;
