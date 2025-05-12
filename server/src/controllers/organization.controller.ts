@@ -151,14 +151,18 @@ const inviteMember = async (req: Request, res: Response) => {
       return;
     }
 
-    const isAdmin = organization.Membership.some((member) => member.userId === userId && member.role === "ADMIN");
+    const isAdmin = organization.Membership.some(
+      (member: { userId: string; role: string }) => member.userId === userId && member.role === "ADMIN"
+    );
 
     if (!isAdmin) {
       res.status(403).json({ error: "You are not authorized to invite members to this organization." });
       return;
     }
 
-    const userAlreadyExists = organization.Membership.some((member) => member.user.email === email);
+    const userAlreadyExists = organization.Membership.some(
+      (member: { userId: string; role: string; user: { email: string } }) => member.user.email === email
+    );
 
     if (userAlreadyExists) {
       res.status(400).json({ error: "User already exists in the organization" });
@@ -259,14 +263,18 @@ export const changeRole = async (req: Request, res: Response) => {
       return;
     }
 
-    const isAdmin = organization.Membership.some((member) => member.userId === userId && member.role === "ADMIN");
+    const isAdmin = organization.Membership.some(
+      (member: { userId: string; role: string }) => member.userId === userId && member.role === "ADMIN"
+    );
 
     if (!isAdmin) {
       res.status(403).json({ error: "You are not authorized to change roles in this organization." });
       return;
     }
 
-    const userToChange = organization.Membership.find((member) => member.user.email === email);
+    const userToChange = organization.Membership.find(
+      (member: { userId: string; role: string; user: { email: string } }) => member.user.email === email
+    );
 
     if (!userToChange) {
       res.status(404).json({ error: `User with email ${email} not found in the organization` });
