@@ -10,6 +10,7 @@ import { MoreVertical } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { MdOutlineAdminPanelSettings } from "react-icons/md";
 import { RiUserCommunityLine } from "react-icons/ri";
+import { useCommonDataStore } from "@/stores/useCommonDataStore";
 
 type Organization = {
   id: string;
@@ -29,11 +30,18 @@ interface OrganizationCardProps {
 
 const OrganizationCard = ({ organization, currentUserId }: OrganizationCardProps) => {
   const navigate = useNavigate();
+  const { setSelectedOrg } = useCommonDataStore();
 
   return (
     <div
       className="relative bg-white rounded-2xl shadow-[0px_0px_0px_1px_rgba(0,0,0,0.06),0px_1px_1px_-0.5px_rgba(0,0,0,0.06),0px_3px_3px_-1.5px_rgba(0,0,0,0.06),_0px_6px_6px_-3px_rgba(0,0,0,0.06),0px_12px_12px_-6px_rgba(0,0,0,0.06),0px_24px_24px_-12px_rgba(0,0,0,0.06)] hover:shadow-xl transition p-6 h-64 flex flex-col justify-between cursor-pointer"
-      onClick={() => navigate(`/organizations/${organization.slug}`)}
+      onClick={() => {
+        setSelectedOrg({
+          name: organization.name,
+          slug: organization.slug,
+        });
+        navigate(`/organizations/${organization.slug}`);
+      }}
     >
       {/* Dropdown Menu */}
       <div className="absolute top-3 right-3 z-10">

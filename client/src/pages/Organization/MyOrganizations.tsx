@@ -5,25 +5,16 @@ import { Button } from "@/components/ui/button";
 import { useQuery } from "@tanstack/react-query";
 import { IoReload } from "react-icons/io5";
 import CreateOrganizationDialog from "./CreateOrganizationDialog";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { useAuth } from "@clerk/clerk-react";
 import OrganizationCard from "@/components/OrganizationCard";
 import PageHeading from "@/components/PageHeading";
 import { toast } from "sonner";
-
-type Organization = {
-  id: string;
-  name: string;
-  description: string;
-  website: string;
-  location: string;
-  slug: string;
-  ownerId: string;
-};
+import { useCommonDataStore } from "@/stores/useCommonDataStore";
 
 const MyOrganizations = () => {
+  const { organizations, setOrganizations } = useCommonDataStore();
   const { userId } = useAuth();
-  const [organizations, setOrganizations] = useState<Organization[]>([]);
 
   const { data, isLoading, isError, error, refetch } = useQuery({
     queryKey: ["organizations"],
@@ -34,7 +25,7 @@ const MyOrganizations = () => {
     if (data) {
       setOrganizations(data.organizations);
     }
-  }, [data]);
+  }, [setOrganizations, data]);
 
   if (isLoading) return <Loader />;
   if (isError) return <p>Error: {error.message}</p>;

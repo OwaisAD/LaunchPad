@@ -40,8 +40,9 @@ const MyProjects = () => {
       </div>
 
 
-      {/* PROJECT */}
+      {/* PROJECT CARDS*/}
       {/* REMEMBER github repo */}
+      {/* MONITORING PAGE WITHIN */}
     </div>
   );
 };

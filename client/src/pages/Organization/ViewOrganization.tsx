@@ -6,11 +6,13 @@ import PageSidebar from "@/components/page-sidebar";
 import { useEffect } from "react";
 import { toast } from "sonner";
 import { useAuth } from "@clerk/clerk-react";
+import { useCommonDataStore } from "@/stores/useCommonDataStore";
 
 const ViewOrganization = () => {
   const { orgId } = useParams();
   const { userId } = useAuth();
   const navigate = useNavigate();
+  const { selectedOrg, setSelectedOrg } = useCommonDataStore();
 
   const { data, isLoading, isError, error } = useQuery({
     queryKey: ["org", orgId],
@@ -25,6 +27,13 @@ const ViewOrganization = () => {
       return false;
     },
   });
+
+  useEffect(() => {
+    setSelectedOrg({
+      name: data?.organization.name,
+      slug: data?.organization.slug,
+    });
+  }, [data, setSelectedOrg]);
 
   useEffect(() => {
     if (!data?.organization) return;

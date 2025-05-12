@@ -1,4 +1,3 @@
-import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { useMutation } from "@tanstack/react-query";
 import { z } from "zod";
@@ -11,10 +10,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
 
 // Replace this with your actual API mutation
-const createProject = async (data: any) => {
-  await new Promise((res) => setTimeout(res, 1000));
-  return { success: true, data };
-};
+const createProject = async () => {};
 
 // Validation schema
 const createProjectSchema = z.object({
@@ -26,6 +22,10 @@ const createProjectSchema = z.object({
   deployment: z.string().min(1, "Select a deployment"),
   repo: z.string().min(1, "Select a repo"),
   dbConnector: z.string().min(1, "Select a DB connector"),
+  logging: z.string().optional(),
+  monitoring: z.string().optional(),
+  testing: z.string().optional(),
+  auth: z.string().optional(),
 });
 
 type CreateProjectFormValues = z.infer<typeof createProjectSchema>;
@@ -41,6 +41,10 @@ const techOptions = {
   deployment: ["DigitalOcean", "AWS", "Azure"],
   repo: ["GitHub", "GitLab", "ADO"],
   dbConnector: ["Kysely", "Prisma ORM", "PG", "TypeORM", "Sequelize", "Mongoose", "neo4j-driver", "Redis Client"],
+  logging: ["Winston", "Pino", "Morgan"],
+  monitoring: ["Prometheus", "Grafana", "Sentry"],
+  testing: ["Jest", "Mocha", "Chai"],
+  auth: ["Auth0", "Firebase Auth", "Clerk"],
 };
 
 const ToggleButtonGroup = ({
@@ -50,7 +54,7 @@ const ToggleButtonGroup = ({
   labelKey = "name",
   subLabelKey = "note",
 }: {
-  options: any[];
+  options: Array<string | { [key: string]: string }>;
   selected: string;
   setSelected: (value: string) => void;
   labelKey?: string;
@@ -100,13 +104,13 @@ const CreateProjectForm = () => {
       toast.success("Project created successfully");
       form.reset();
     },
-    onError: (err: any) => {
+    onError: (err) => {
       toast.error(err.message || "Something went wrong");
     },
   });
 
   const onSubmit = (values: CreateProjectFormValues) => {
-    mutation.mutate(values);
+    console.log(values);
   };
 
   return (
@@ -139,7 +143,12 @@ const CreateProjectForm = () => {
               <FormItem>
                 <FormLabel>Description</FormLabel>
                 <FormControl>
-                  <Textarea {...field} placeholder="Brief description" />
+                  <Textarea
+                    {...field}
+                    placeholder="Brief description"
+                    className="resize-y-none max-h-[200px]"
+                    rows={3}
+                  />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -154,6 +163,10 @@ const CreateProjectForm = () => {
               ["deployment", "Select where you want the deployment", techOptions.deployment],
               ["repo", "Select a place to store your code", techOptions.repo],
               ["dbConnector", "Select one or more database connectors (optional)", techOptions.dbConnector],
+              ["logging", "Select one or more logging libraries (optional)", techOptions.logging],
+              ["monitoring", "Select one or more monitoring libraries (optional)", techOptions.monitoring],
+              ["testing", "Select one or more testing libraries (optional)", techOptions.testing],
+              ["auth", "Select one or more authentication libraries (optional)", techOptions.auth],
             ] as const
           ).map(([key, label, options]) => (
             <FormField
@@ -164,7 +177,7 @@ const CreateProjectForm = () => {
                 <FormItem>
                   <FormLabel>{label}</FormLabel>
                   <FormControl>
-                    <ToggleButtonGroup options={options} selected={field.value} setSelected={field.onChange} />
+                    <ToggleButtonGroup options={options} selected={field.value || ""} setSelected={field.onChange} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
