@@ -12,7 +12,7 @@ const ViewOrganization = () => {
   const { orgId } = useParams();
   const { userId } = useAuth();
   const navigate = useNavigate();
-  const { selectedOrg, setSelectedOrg } = useCommonDataStore();
+  const { setSelectedOrg } = useCommonDataStore();
 
   const { data, isLoading, isError, error } = useQuery({
     queryKey: ["org", orgId],
