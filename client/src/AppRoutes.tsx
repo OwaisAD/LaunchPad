@@ -13,6 +13,7 @@ import OrganizationOverview from "./pages/Organization/Overview";
 import OrganizationSettings from "./pages/Organization/Settings";
 import OrganizationMembers from "./pages/Organization/OrganizationMembers";
 import MyProjects from "./pages/Project/MyProjects";
+import CreateProject from "./pages/Project/CreateProject";
 
 function AppRoutes() {
   return (
@@ -45,7 +46,7 @@ function AppRoutes() {
 
           {/* Projects */}
           <Route path="/projects" element={<MyProjects />} />
-          <Route path="/projects/new" element={<div>New Project</div>} />
+          <Route path="/projects/create" element={<CreateProject />} />
           <Route path="/projects/:projectId" element={<div>Project Details</div>} />
           <Route path="/projects/:projectId/edit" element={<div>Edit Project</div>} />
           <Route path="/projects/:projectId/edit" element={<div>Edit Project Overview</div>} />

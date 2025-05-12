@@ -38,6 +38,10 @@ const MyProjects = () => {
         <p className="text-lg font-semibold">No projects found</p>
         <p className="text-gray-500">You can create a new project by clicking the button above.</p>
       </div>
+
+
+      {/* PROJECT */}
+      {/* REMEMBER github repo */}
     </div>
   );
 };
