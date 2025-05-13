@@ -34,7 +34,8 @@ const OrganizationCard = ({ organization, currentUserId }: OrganizationCardProps
 
   return (
     <div
-      className="relative bg-white rounded-2xl shadow-[0px_0px_0px_1px_rgba(0,0,0,0.06),0px_1px_1px_-0.5px_rgba(0,0,0,0.06),0px_3px_3px_-1.5px_rgba(0,0,0,0.06),_0px_6px_6px_-3px_rgba(0,0,0,0.06),0px_12px_12px_-6px_rgba(0,0,0,0.06),0px_24px_24px_-12px_rgba(0,0,0,0.06)] hover:shadow-xl transition p-6 h-64 flex flex-col justify-between cursor-pointer"
+      className="relative bg-white rounded-2xl hover:-translate-y-1 hover:scale-[1.01] transition-all duration-300 ease-in-out p-6 h-64 flex flex-col justify-between cursor-pointer     shadow-[0px_0px_0px_1px_rgba(0,0,0,0.06),0px_1px_1px_-0.5px_rgba(0,0,0,0.06),0px_3px_3px_-1.5px_rgba(0,0,0,0.06),_0px_6px_6px_-3px_rgba(0,0,0,0.06),0px_12px_12px_-6px_rgba(0,0,0,0.06),0px_24px_24px_-12px_rgba(0,0,0,0.06)]
+"
       onClick={() => {
         setSelectedOrg({
           name: organization.name,
@@ -87,26 +88,30 @@ const OrganizationCard = ({ organization, currentUserId }: OrganizationCardProps
       </div>
 
       {/* Content */}
-      <div className="flex flex-col justify-center h-full w-full items-center">
-        <h3 className="text-lg md:text-xl lg:text-2xl font-mediun text-gray-900">{organization.name}</h3>
-        {organization.description && <p className="text-sm text-muted-foreground mt-2">{organization.description}</p>}
-        {organization.website && (
-          <p className="text-sm text-blue-600 mt-1">
-            <a
-              href={organization.website}
-              target="_blank"
-              rel="noopener noreferrer"
-              onClick={(e) => e.stopPropagation()}
-            >
-              {organization.website}
-            </a>
-          </p>
+      <div className="flex flex-col items-center text-center h-full w-full justify-center px-4">
+        <h3 className="text-xl md:text-2xl font-medium text-gray-900">{organization.name}</h3>
+
+        {organization.description && (
+          <p className="text-sm text-muted-foreground mt-2 leading-relaxed">{organization.description}</p>
         )}
-        {organization.location && <p className="text-sm text-gray-500 mt-1">{organization.location}</p>}
+
+        {organization.website && (
+          <a
+            href={organization.website}
+            target="_blank"
+            rel="noopener noreferrer"
+            onClick={(e) => e.stopPropagation()}
+            className="mt-2 text-sm text-blue-600 hover:underline break-words max-w-xs"
+          >
+            {organization.website.replace(/^https?:\/\//, "")}
+          </a>
+        )}
+
+        {organization.location && <p className="text-sm text-gray-500 mt-2">{organization.location}</p>}
       </div>
 
       {/* Owner Tag */}
-      <div className="absolute bottom-0 right-0 bg-muted text-xs text-gray-600 px-3 py-2 rounded-tl-lg rounded-br-lg">
+      <div className="absolute bottom-3 right-3 bg-gray-100 text-gray-600 text-xs px-3 py-1 rounded-full shadow-sm">
         {organization.ownerId === currentUserId ? (
           <span className="flex items-center">
             <MdOutlineAdminPanelSettings className="mr-1" />

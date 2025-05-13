@@ -4,7 +4,7 @@
 @custom-variant dark (&:is(.dark *));
 
 body {
-  @apply font-[Inter];
+  @apply font-[Raleway];
 }
 
 @theme inline {

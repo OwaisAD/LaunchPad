@@ -8,6 +8,9 @@ import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
+import { techOptions } from "@/data/techOptions";
+import { Progress } from "@/components/ui/progress";
+import { useState } from "react";
 
 // Replace this with your actual API mutation
 const createProject = async () => {};
@@ -18,72 +21,67 @@ const createProjectSchema = z.object({
   description: z.string().optional(),
   frontend: z.string().min(1, "Select a frontend"),
   backend: z.string().min(1, "Select a backend"),
-  database: z.string().min(1, "Select a database"),
+  databases: z.array(z.string()).min(1, "Select a database"),
   deployment: z.string().min(1, "Select a deployment"),
   repo: z.string().min(1, "Select a repo"),
-  dbConnector: z.string().min(1, "Select a DB connector"),
-  logging: z.string().optional(),
-  monitoring: z.string().optional(),
-  testing: z.string().optional(),
-  auth: z.string().optional(),
+  dbConnector: z.array(z.string()).optional(),
+  logging: z.array(z.string()).optional(),
+  monitoring: z.array(z.string()).optional(),
+  testing: z.array(z.string()).optional(),
+  auth: z.array(z.string()).optional(),
 });
 
 type CreateProjectFormValues = z.infer<typeof createProjectSchema>;
-
-// Options
-const techOptions = {
-  frontend: ["ReactJS", "Vue", "Angular"],
-  backend: [
-    { name: "ExpressJS", note: "Runs on Node.js 22.4.0 LTS" },
-    { name: "NestJS", note: "Runs on Node.js 22.4.0 LTS" },
-  ],
-  databases: ["PostgreSQL", "Redis", "MongoDB", "Neo4j"],
-  deployment: ["DigitalOcean", "AWS", "Azure"],
-  repo: ["GitHub", "GitLab", "ADO"],
-  dbConnector: ["Kysely", "Prisma ORM", "PG", "TypeORM", "Sequelize", "Mongoose", "neo4j-driver", "Redis Client"],
-  logging: ["Winston", "Pino", "Morgan"],
-  monitoring: ["Prometheus", "Grafana", "Sentry"],
-  testing: ["Jest", "Mocha", "Chai"],
-  auth: ["Auth0", "Firebase Auth", "Clerk"],
-};
 
 const ToggleButtonGroup = ({
   options,
   selected,
   setSelected,
-  labelKey = "name",
-  subLabelKey = "note",
+  multi = false,
 }: {
-  options: Array<string | { [key: string]: string }>;
-  selected: string;
-  setSelected: (value: string) => void;
-  labelKey?: string;
-  subLabelKey?: string;
-}) => (
-  <div className="flex flex-wrap gap-2 mt-2">
-    {options.map((opt) => {
-      const name = typeof opt === "string" ? opt : opt[labelKey];
-      const subLabel = typeof opt === "string" ? null : opt[subLabelKey];
-      return (
+  options: { name: string; note?: string }[];
+  selected: string | string[];
+  setSelected: (value: string | string[]) => void;
+  multi?: boolean;
+}) => {
+  const isSelected = (name: string) => (multi ? (selected as string[]).includes(name) : selected === name);
+
+  const handleClick = (name: string) => {
+    if (multi) {
+      const selectedArray = selected as string[];
+      const newValue = selectedArray.includes(name)
+        ? selectedArray.filter((item) => item !== name)
+        : [...selectedArray, name];
+      setSelected(newValue);
+    } else {
+      setSelected(name);
+    }
+  };
+
+  return (
+    <div className="flex flex-wrap gap-2 mt-2">
+      {options.map(({ name, note }) => (
         <button
           key={name}
           type="button"
           className={`border px-4 py-2 rounded-md text-sm transition ${
-            selected === name ? "bg-black text-white" : "bg-white text-black"
+            isSelected(name) ? "bg-black text-white" : "bg-white text-black"
           }`}
-          onClick={() => setSelected(name)}
+          onClick={() => handleClick(name)}
         >
           <div className="flex flex-col items-center">
             <span>{name}</span>
-            {subLabel && <span className="text-xs text-gray-500">{subLabel}</span>}
+            {note && <span className="text-xs text-gray-500">{note}</span>}
           </div>
         </button>
-      );
-    })}
-  </div>
-);
+      ))}
+    </div>
+  );
+};
 
 const CreateProjectForm = () => {
+  const [progress, setProgress] = useState(0);
+
   const form = useForm<CreateProjectFormValues>({
     resolver: zodResolver(createProjectSchema),
     defaultValues: {
@@ -91,10 +89,14 @@ const CreateProjectForm = () => {
       description: "",
       frontend: "",
       backend: "",
-      database: "",
+      databases: [],
       deployment: "",
       repo: "",
-      dbConnector: "",
+      dbConnector: [],
+      logging: [],
+      monitoring: [],
+      testing: [],
+      auth: [],
     },
   });
 
@@ -110,11 +112,12 @@ const CreateProjectForm = () => {
   });
 
   const onSubmit = (values: CreateProjectFormValues) => {
+    setTimeout(() => setProgress(100), 2000);
     console.log(values);
   };
 
   return (
-    <div className="max-w-3xl mx-auto mt-10 p-6 border rounded-lg shadow-sm space-y-6">
+    <div className="max-w-4xl mx-auto mt-10 p-6 border rounded-lg shadow-sm space-y-6">
       <PageHeading title="Create Project" />
       <p className="text-sm text-gray-700">
         You can create <strong>X</strong> more projects in your current plan.
@@ -157,18 +160,18 @@ const CreateProjectForm = () => {
 
           {(
             [
-              ["frontend", "Select client (frontend) framework", techOptions.frontend],
-              ["backend", "Select server (backend) framework", techOptions.backend],
-              ["database", "Select one or more databases", techOptions.databases],
-              ["deployment", "Select where you want the deployment", techOptions.deployment],
-              ["repo", "Select a place to store your code", techOptions.repo],
-              ["dbConnector", "Select one or more database connectors (optional)", techOptions.dbConnector],
-              ["logging", "Select one or more logging libraries (optional)", techOptions.logging],
-              ["monitoring", "Select one or more monitoring libraries (optional)", techOptions.monitoring],
-              ["testing", "Select one or more testing libraries (optional)", techOptions.testing],
-              ["auth", "Select one or more authentication libraries (optional)", techOptions.auth],
+              ["frontend", "Select client (frontend) framework", techOptions.frontend, false],
+              ["backend", "Select server (backend) framework", techOptions.backend, false],
+              ["databases", "Select one or more databases", techOptions.databases, true],
+              ["deployment", "Select where you want the deployment", techOptions.deployment, false],
+              ["repo", "Select a place to store your code", techOptions.repo, false],
+              ["dbConnector", "Select one or more database connectors (optional)", techOptions.dbConnector, true],
+              ["logging", "Select one or more logging libraries (optional)", techOptions.logging, true],
+              ["monitoring", "Select one or more monitoring libraries (optional)", techOptions.monitoring, true],
+              ["testing", "Select one or more testing libraries (optional)", techOptions.testing, true],
+              ["auth", "Select one or more authentication libraries (optional)", techOptions.auth, true],
             ] as const
-          ).map(([key, label, options]) => (
+          ).map(([key, label, options, multi]) => (
             <FormField
               key={key}
               control={form.control}
@@ -177,7 +180,12 @@ const CreateProjectForm = () => {
                 <FormItem>
                   <FormLabel>{label}</FormLabel>
                   <FormControl>
-                    <ToggleButtonGroup options={options} selected={field.value || ""} setSelected={field.onChange} />
+                    <ToggleButtonGroup
+                      options={options}
+                      selected={field.value || (multi ? [] : "")}
+                      setSelected={field.onChange}
+                      multi={multi}
+                    />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -194,6 +202,10 @@ const CreateProjectForm = () => {
           </Button>
         </form>
       </Form>
+
+      <div className="mt-4">
+        <Progress value={progress} className="h-2" />
+      </div>
     </div>
   );
 };

@@ -1,6 +1,8 @@
 import { Link } from "react-router-dom";
 
 const Dashboard = () => {
+  // https://www.chartjs.org/docs/latest/samples/animations/delay.html
+
   return (
     <div>
       <p className="text-2xl">Welcome to your dashboard!</p>
