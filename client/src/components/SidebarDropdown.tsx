@@ -22,7 +22,7 @@ export function SidebarDropdownMenu() {
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
         <Button variant="outline" className="bg-[#F1F5F9] text-gray-700 hover:bg-[#E2E8F0] hover:text-gray-900">
-          <IoIosMore className="h-4 w-4 mr-2" />
+          <IoIosMore style={{ height: "1.5rem", width: "1.5rem" }} />
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent className="w-56">

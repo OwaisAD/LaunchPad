@@ -5,7 +5,7 @@ type PageHeadingProps = {
 
 const PageHeading = ({ title, description }: PageHeadingProps) => {
   return (
-    <div className="mb-6">
+    <div>
       <h1 className="text-3xl text-gray-800">{title}</h1>
       {description && <p className="mt-2 text-gray-600">{description}</p>}
     </div>

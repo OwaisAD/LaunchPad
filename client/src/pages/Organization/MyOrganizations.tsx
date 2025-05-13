@@ -32,25 +32,27 @@ const MyOrganizations = () => {
 
   return (
     <div>
-      <PageHeading title="My Organizations" />
+      <div className="flex flex-col lg:flex-row lg:justify-between items-start lg:items-center mb-10 gap-4">
+        <PageHeading title="My Organizations" />
 
-      <div className="flex justify-end items-center gap-2">
-        <ToolTip tooltipText="Refresh">
-          <Button
-            onClick={() => {
-              refetch();
-              toast.success("Refreshed successfully");
-            }}
-            className="bg-blue-500 text-white px-3 py-1 rounded cursor-pointer"
-          >
-            <IoReload />
-          </Button>
-        </ToolTip>
+        <div className="flex justify-end items-center gap-2">
+          <ToolTip tooltipText="Refresh">
+            <Button
+              onClick={() => {
+                refetch();
+                toast.success("Refreshed successfully");
+              }}
+              className="bg-blue-500 text-white px-3 py-1 rounded cursor-pointer"
+            >
+              <IoReload />
+            </Button>
+          </ToolTip>
 
-        <CreateOrganizationDialog refetch={refetch} />
+          <CreateOrganizationDialog refetch={refetch} />
+        </div>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+      <div className="grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-4">
         {organizations.map((org) => (
           <OrganizationCard
             key={org.id}

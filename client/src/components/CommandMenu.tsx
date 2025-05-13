@@ -14,6 +14,7 @@ import { useEffect } from "react";
 import { SiAwsorganizations } from "react-icons/si";
 import { GoProjectSymlink } from "react-icons/go";
 import { useNavigate } from "react-router-dom";
+import { useCommonDataStore } from "@/stores/useCommonDataStore";
 
 type CommandMenuProps = {
   open: boolean;
@@ -22,6 +23,7 @@ type CommandMenuProps = {
 
 export function CommandMenu({ open, setOpen }: CommandMenuProps) {
   const navigate = useNavigate();
+  const { organizations } = useCommonDataStore();
 
   useEffect(() => {
     const down = (e: KeyboardEvent) => {
@@ -51,6 +53,19 @@ export function CommandMenu({ open, setOpen }: CommandMenuProps) {
               <SiAwsorganizations />
               <span>Organizations</span>
             </CommandItem>
+
+            {organizations.map((org) => (
+              <CommandItem
+                key={org.id}
+                onSelect={() => {
+                  setOpen(false);
+                  navigate(`/organizations/${org.slug}`);
+                }}
+              >
+                <div className="pl-10">{org.name}</div>
+              </CommandItem>
+            ))}
+
             <CommandItem
               onSelect={() => {
                 setOpen(false);
