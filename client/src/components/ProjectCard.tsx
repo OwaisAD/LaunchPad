@@ -10,38 +10,55 @@ import { MoreVertical } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { MdOutlineAdminPanelSettings } from "react-icons/md";
 import { RiUserCommunityLine } from "react-icons/ri";
-import { useOrganizationDataStore } from "@/stores/useOrganizationDataStore";
+import { useProjectDataStore } from "@/stores/useProjectDataStore";
 
-type Organization = {
+type Project = {
   id: string;
   name: string;
-  description?: string;
-  website?: string;
-  location?: string;
+  description: string;
   slug: string;
-  ownerId: string;
+  status: string;
+  stack: string;
+  organizationId: string;
+  createdById: string;
+  createdAt: string;
+  updatedAt: string;
+  organization: {
+    id: string;
+    name: string;
+    slug: string;
+    logo: string | null;
+    website: string;
+  };
+  createdBy: {
+    id: string;
+    firstName: string;
+    lastName: string;
+    email: string;
+    imageUrl: string | null;
+  };
 };
 
-interface OrganizationCardProps {
-  organization: Organization;
+interface ProjectCardProps {
+  project: Project;
   currentUserId: string | null | undefined;
   onDelete: (orgId: string) => void;
 }
 
-const OrganizationCard = ({ organization, currentUserId }: OrganizationCardProps) => {
+const ProjectCard = ({ project, currentUserId }: ProjectCardProps) => {
   const navigate = useNavigate();
-  const { setSelectedOrg } = useOrganizationDataStore();
+  const { setSelectedProject } = useProjectDataStore();
 
   return (
     <div
       className="relative bg-white rounded-2xl hover:-translate-y-1 hover:scale-[1.01] transition-all duration-300 ease-in-out p-6 h-64 flex flex-col justify-between cursor-pointer shadow-[0px_0px_0px_1px_rgba(0,0,0,0.06),0px_1px_1px_-0.5px_rgba(0,0,0,0.06),0px_3px_3px_-1.5px_rgba(0,0,0,0.06),_0px_6px_6px_-3px_rgba(0,0,0,0.06),0px_12px_12px_-6px_rgba(0,0,0,0.06),0px_24px_24px_-12px_rgba(0,0,0,0.06)]
 "
       onClick={() => {
-        setSelectedOrg({
-          name: organization.name,
-          slug: organization.slug,
+        setSelectedProject({
+          name: project.name,
+          slug: project.slug,
         });
-        navigate(`/organizations/${organization.slug}`);
+        navigate(`/organizations/${project.organization.slug}/projects/${project.slug}`);
       }}
     >
       {/* Dropdown Menu */}
@@ -56,20 +73,20 @@ const OrganizationCard = ({ organization, currentUserId }: OrganizationCardProps
             <DropdownMenuItem
               onClick={(e) => {
                 e.stopPropagation();
-                navigate(`/organizations/${organization.slug}`);
+                navigate(`/organizations/${project.organization.slug}`);
               }}
             >
               View
             </DropdownMenuItem>
-            <DropdownMenuItem
+            {/* <DropdownMenuItem
               onClick={(e) => {
                 e.stopPropagation();
-                navigate(`/organizations/${organization.slug}/members`);
+                navigate(`/organizations/${project.organization.slug}/members`);
               }}
             >
-              {organization.ownerId === currentUserId ? "Manage Members" : "Members"}
-            </DropdownMenuItem>
-            {organization.ownerId === currentUserId && (
+              {projectorganization.ownerId === currentUserId ? "Manage Members" : "Members"}
+            </DropdownMenuItem> */}
+            {/* {organization.ownerId === currentUserId && (
               <>
                 <DropdownMenuSeparator />
                 <DropdownMenuItem
@@ -82,37 +99,26 @@ const OrganizationCard = ({ organization, currentUserId }: OrganizationCardProps
                   Delete
                 </DropdownMenuItem>
               </>
-            )}
+            )} */}
           </DropdownMenuContent>
         </DropdownMenu>
       </div>
 
       {/* Content */}
       <div className="flex flex-col items-center text-center h-full w-full justify-center px-4">
-        <h3 className="text-xl md:text-2xl font-medium text-gray-900">{organization.name}</h3>
+        <h3 className="text-xl md:text-2xl font-medium text-gray-900 break-all">{project.name}</h3>
 
-        {organization.description && (
-          <p className="text-sm text-muted-foreground mt-2 leading-relaxed">{organization.description}</p>
+        {project.description && (
+          <p className="text-sm text-muted-foreground mt-2 leading-relaxed">{project.description}</p>
         )}
-
-        {organization.website && (
-          <a
-            href={organization.website}
-            target="_blank"
-            rel="noopener noreferrer"
-            onClick={(e) => e.stopPropagation()}
-            className="mt-2 text-sm text-blue-600 hover:underline break-words max-w-xs"
-          >
-            {organization.website.replace(/^https?:\/\//, "")}
-          </a>
-        )}
-
-        {organization.location && <p className="text-sm text-gray-500 mt-2">{organization.location}</p>}
       </div>
-
+      {/* last updated at */}
+      <p className="text-xs text-gray-500 mt-2">
+        Last updated: {new Date(project.updatedAt).toLocaleDateString("en-US", { dateStyle: "medium" })}
+      </p>
       {/* Owner Tag */}
       <div className="absolute bottom-3 right-3 bg-gray-100 text-gray-600 text-xs px-3 py-1 rounded-full shadow-sm">
-        {organization.ownerId === currentUserId ? (
+        {project.createdBy.id === currentUserId ? (
           <span className="flex items-center">
             <MdOutlineAdminPanelSettings className="mr-1" />
             Owner
@@ -128,4 +134,4 @@ const OrganizationCard = ({ organization, currentUserId }: OrganizationCardProps
   );
 };
 
-export default OrganizationCard;
+export default ProjectCard;

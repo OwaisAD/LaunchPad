@@ -3,12 +3,12 @@ import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList } from "@/components/ui/command";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
-import { useCommonDataStore } from "@/stores/useCommonDataStore";
+import { useOrganizationDataStore } from "@/stores/useOrganizationDataStore";
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 
 export function OrganizationSwitcherComboBox() {
-  const { organizations, selectedOrg } = useCommonDataStore();
+  const { organizations, selectedOrg } = useOrganizationDataStore();
   const [open, setOpen] = useState(false);
   const navigate = useNavigate();
 

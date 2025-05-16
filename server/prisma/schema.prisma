@@ -26,6 +26,7 @@ model User {
   createdAt    DateTime       @default(now())
   updatedAt    DateTime       @updatedAt
   Organization Organization[]
+  Project      Project[]
 }
 
 model Organization {
@@ -65,14 +66,18 @@ model Membership {
 }
 
 model Project {
-  id             String       @id @default(cuid())
+  id             String        @id @default(cuid())
   name           String
   description    String?
-  slug           String       @unique
+  slug           String        @unique
+  status         ProjectStatus
+  createdBy      User          @relation(fields: [createdById], references: [id])
+  stack          String
   organizationId String
-  organization   Organization @relation(fields: [organizationId], references: [id])
-  createdAt      DateTime     @default(now())
-  updatedAt      DateTime     @updatedAt
+  organization   Organization  @relation(fields: [organizationId], references: [id])
+  createdAt      DateTime      @default(now())
+  updatedAt      DateTime      @updatedAt
+  createdById    String
 }
 
 model Invitation {
@@ -97,4 +102,11 @@ enum InvitationStatus {
   ACCEPTED
   REJECTED
   EXPIRED
+}
+
+enum ProjectStatus {
+  ACTIVE
+  INACTIVE
+  REMOVED
+  PENDING
 }

@@ -14,7 +14,7 @@ import { useEffect } from "react";
 import { SiAwsorganizations } from "react-icons/si";
 import { GoProjectSymlink } from "react-icons/go";
 import { useNavigate } from "react-router-dom";
-import { useCommonDataStore } from "@/stores/useCommonDataStore";
+import { useOrganizationDataStore } from "@/stores/useOrganizationDataStore";
 
 type CommandMenuProps = {
   open: boolean;
@@ -23,7 +23,7 @@ type CommandMenuProps = {
 
 export function CommandMenu({ open, setOpen }: CommandMenuProps) {
   const navigate = useNavigate();
-  const { organizations } = useCommonDataStore();
+  const { organizations } = useOrganizationDataStore();
 
   useEffect(() => {
     const down = (e: KeyboardEvent) => {

@@ -12,9 +12,12 @@ import { Button } from "@/components/ui/button";
 import { getTechOptions } from "@/api/tech-options";
 import Loader from "@/components/Loader";
 import ToggleButtonGroup from "./ToggleButtonGroup";
+import { createProject } from "@/api/projects";
+import { useParams } from "react-router-dom";
 
 // Schema & types
 const createProjectSchema = z.object({
+  orgSlug: z.string().min(1, "Organization is required"),
   projectName: z.string().min(1, "Project name is required"),
   description: z.string().optional(),
   frontend: z.string().min(1, "Select a frontend"),
@@ -40,6 +43,8 @@ export type TechOptionType = {
 };
 
 const CreateProjectForm = () => {
+  const { orgId } = useParams();
+
   const { data, isError, isLoading, error } = useQuery({
     queryKey: ["techOptions"],
     queryFn: getTechOptions,
@@ -50,6 +55,7 @@ const CreateProjectForm = () => {
   const form = useForm<CreateProjectFormValues>({
     resolver: zodResolver(createProjectSchema),
     defaultValues: {
+      orgSlug: orgId,
       projectName: "",
       description: "",
       frontend: "",
@@ -65,13 +71,10 @@ const CreateProjectForm = () => {
   });
 
   const mutation = useMutation({
-    mutationFn: async (data: CreateProjectFormValues) => {
-      // send to API
-      console.log("Creating project with data:", data);
-    },
+    mutationFn: createProject,
     onSuccess: () => {
       toast.success("Project created successfully");
-      form.reset();
+      // form.reset();
     },
     onError: (err) => {
       toast.error(err.message || "Something went wrong");
@@ -84,14 +87,14 @@ const CreateProjectForm = () => {
       `Are you sure you want to create a project with the name "${values.projectName}"?`
     );
     if (!confirmation) return;
-    // mutation.mutate(values);
+    mutation.mutate(values);
   };
 
   if (isLoading) return <Loader />;
   if (isError) return <p>Error: {error.message}</p>;
 
   return (
-    <div className="max-w-4xl mx-auto mt-10 p-6 border rounded-lg shadow-sm space-y-6">
+    <div className="max-w-4xl mx-auto p-6 border rounded-lg shadow-sm space-y-6">
       <PageHeading title="Create Project" />
       <p className="text-sm text-gray-700">
         You can create <strong>X</strong> more projects in your current plan.

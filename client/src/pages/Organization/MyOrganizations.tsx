@@ -10,10 +10,10 @@ import { useAuth } from "@clerk/clerk-react";
 import OrganizationCard from "@/components/OrganizationCard";
 import PageHeading from "@/components/PageHeading";
 import { toast } from "sonner";
-import { useCommonDataStore } from "@/stores/useCommonDataStore";
+import { useOrganizationDataStore } from "@/stores/useOrganizationDataStore";
 
 const MyOrganizations = () => {
-  const { organizations, setOrganizations } = useCommonDataStore();
+  const { organizations, setOrganizations } = useOrganizationDataStore();
   const { userId } = useAuth();
 
   const { data, isLoading, isError, error, refetch } = useQuery({

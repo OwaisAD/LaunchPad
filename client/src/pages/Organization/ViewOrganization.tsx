@@ -6,13 +6,13 @@ import PageSidebar from "@/components/page-sidebar";
 import { useEffect } from "react";
 import { toast } from "sonner";
 import { useAuth } from "@clerk/clerk-react";
-import { useCommonDataStore } from "@/stores/useCommonDataStore";
+import { useOrganizationDataStore } from "@/stores/useOrganizationDataStore";
 
 const ViewOrganization = () => {
   const { orgId } = useParams();
   const { userId } = useAuth();
   const navigate = useNavigate();
-  const { setSelectedOrg } = useCommonDataStore();
+  const { setSelectedOrg } = useOrganizationDataStore();
 
   const { data, isLoading, isError, error } = useQuery({
     queryKey: ["org", orgId],
@@ -95,7 +95,7 @@ const ViewOrganization = () => {
     <div className="flex min-h-screen ">
       <PageSidebar title={organization.name} menuItems={menuItems} />
       <main className="flex-1 p-6">
-        <div className="mt-6">
+        <div className="mt-2">
           <Outlet
             context={{
               organization,

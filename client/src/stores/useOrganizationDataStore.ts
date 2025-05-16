@@ -1,6 +1,6 @@
 import { create } from "zustand";
 
-interface CommonDataState {
+interface OrganizationDataState {
   selectedOrg: {
     name: string;
     slug: string;
@@ -29,7 +29,7 @@ interface CommonDataState {
   clearCommonData: () => void;
 }
 
-export const useCommonDataStore = create<CommonDataState>((set) => ({
+export const useOrganizationDataStore = create<OrganizationDataState>((set) => ({
   selectedOrg: {
     name: "",
     slug: "",
