@@ -4,8 +4,7 @@ import { Button } from "@/components/ui/button";
 type ToggleButtonGroupProps = {
   options: Array<{ name: string; note?: string }>;
   selected: string[] | string;
-  // @ts-ignore
-  setSelected: (value: any) => void;
+  setSelected: (value: string | string[] | ((prev: string | string[]) => string | string[])) => void;
   multi?: boolean;
 };
 
