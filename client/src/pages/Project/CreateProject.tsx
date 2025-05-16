@@ -1,5 +1,6 @@
+// src/pages/CreateProject.tsx
 import { useForm } from "react-hook-form";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { toast } from "sonner";
@@ -8,79 +9,43 @@ import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
-import { techOptions } from "@/data/techOptions";
-import { Progress } from "@/components/ui/progress";
-import { useState } from "react";
+import { getTechOptions } from "@/api/tech-options";
+import Loader from "@/components/Loader";
+import ToggleButtonGroup from "./ToggleButtonGroup";
 
-// Replace this with your actual API mutation
-const createProject = async () => {};
-
-// Validation schema
+// Schema & types
 const createProjectSchema = z.object({
   projectName: z.string().min(1, "Project name is required"),
   description: z.string().optional(),
   frontend: z.string().min(1, "Select a frontend"),
   backend: z.string().min(1, "Select a backend"),
   databases: z.array(z.string()).min(1, "Select a database"),
-  deployment: z.string().min(1, "Select a deployment"),
+  // deployment: z.string().min(1, "Select a deployment"),
   repo: z.string().min(1, "Select a repo"),
   dbConnector: z.array(z.string()).optional(),
   logging: z.array(z.string()).optional(),
   monitoring: z.array(z.string()).optional(),
   testing: z.array(z.string()).optional(),
-  auth: z.array(z.string()).optional(),
+  auth: z.string().optional(),
 });
 
 type CreateProjectFormValues = z.infer<typeof createProjectSchema>;
 
-const ToggleButtonGroup = ({
-  options,
-  selected,
-  setSelected,
-  multi = false,
-}: {
-  options: { name: string; note?: string }[];
-  selected: string | string[];
-  setSelected: (value: string | string[]) => void;
-  multi?: boolean;
-}) => {
-  const isSelected = (name: string) => (multi ? (selected as string[]).includes(name) : selected === name);
-
-  const handleClick = (name: string) => {
-    if (multi) {
-      const selectedArray = selected as string[];
-      const newValue = selectedArray.includes(name)
-        ? selectedArray.filter((item) => item !== name)
-        : [...selectedArray, name];
-      setSelected(newValue);
-    } else {
-      setSelected(name);
-    }
-  };
-
-  return (
-    <div className="flex flex-wrap gap-2 mt-2">
-      {options.map(({ name, note }) => (
-        <button
-          key={name}
-          type="button"
-          className={`border px-4 py-2 rounded-md text-sm transition ${
-            isSelected(name) ? "bg-black text-white" : "bg-white text-black"
-          }`}
-          onClick={() => handleClick(name)}
-        >
-          <div className="flex flex-col items-center">
-            <span>{name}</span>
-            {note && <span className="text-xs text-gray-500">{note}</span>}
-          </div>
-        </button>
-      ))}
-    </div>
-  );
+export type TechOptionType = {
+  key: string;
+  label: string;
+  multi: boolean;
+  isOptional: boolean;
+  options: Array<{ name: string; note?: string }>;
 };
 
 const CreateProjectForm = () => {
-  const [progress, setProgress] = useState(0);
+  const { data, isError, isLoading, error } = useQuery({
+    queryKey: ["techOptions"],
+    queryFn: getTechOptions,
+    refetchOnWindowFocus: false,
+    retry: false,
+  });
 
   const form = useForm<CreateProjectFormValues>({
     resolver: zodResolver(createProjectSchema),
@@ -90,18 +55,20 @@ const CreateProjectForm = () => {
       frontend: "",
       backend: "",
       databases: [],
-      deployment: "",
       repo: "",
       dbConnector: [],
       logging: [],
       monitoring: [],
       testing: [],
-      auth: [],
+      auth: "",
     },
   });
 
   const mutation = useMutation({
-    mutationFn: createProject,
+    mutationFn: async (data: CreateProjectFormValues) => {
+      // send to API
+      console.log("Creating project with data:", data);
+    },
     onSuccess: () => {
       toast.success("Project created successfully");
       form.reset();
@@ -112,9 +79,16 @@ const CreateProjectForm = () => {
   });
 
   const onSubmit = (values: CreateProjectFormValues) => {
-    setTimeout(() => setProgress(100), 2000);
     console.log(values);
+    const confirmation = window.confirm(
+      `Are you sure you want to create a project with the name "${values.projectName}"?`
+    );
+    if (!confirmation) return;
+    // mutation.mutate(values);
   };
+
+  if (isLoading) return <Loader />;
+  if (isError) return <p>Error: {error.message}</p>;
 
   return (
     <div className="max-w-4xl mx-auto mt-10 p-6 border rounded-lg shadow-sm space-y-6">
@@ -125,6 +99,7 @@ const CreateProjectForm = () => {
 
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+          {/* Basic Fields */}
           <FormField
             control={form.control}
             name="projectName"
@@ -146,43 +121,31 @@ const CreateProjectForm = () => {
               <FormItem>
                 <FormLabel>Description</FormLabel>
                 <FormControl>
-                  <Textarea
-                    {...field}
-                    placeholder="Brief description"
-                    className="resize-y-none max-h-[200px]"
-                    rows={3}
-                  />
+                  <Textarea {...field} placeholder="Brief description" className="resize-y-none" />
                 </FormControl>
                 <FormMessage />
               </FormItem>
             )}
           />
 
-          {(
-            [
-              ["frontend", "Select client (frontend) framework", techOptions.frontend, false],
-              ["backend", "Select server (backend) framework", techOptions.backend, false],
-              ["databases", "Select one or more databases", techOptions.databases, true],
-              ["deployment", "Select where you want the deployment", techOptions.deployment, false],
-              ["repo", "Select a place to store your code", techOptions.repo, false],
-              ["dbConnector", "Select one or more database connectors (optional)", techOptions.dbConnector, true],
-              ["logging", "Select one or more logging libraries (optional)", techOptions.logging, true],
-              ["monitoring", "Select one or more monitoring libraries (optional)", techOptions.monitoring, true],
-              ["testing", "Select one or more testing libraries (optional)", techOptions.testing, true],
-              ["auth", "Select one or more authentication libraries (optional)", techOptions.auth, true],
-            ] as const
-          ).map(([key, label, options, multi]) => (
+          {/* Dynamic Toggle Fields */}
+          {data.map(({ key, label, multi, options }: TechOptionType) => (
             <FormField
               key={key}
               control={form.control}
-              name={key}
+              name={key as keyof CreateProjectFormValues}
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>{label}</FormLabel>
+                  <FormLabel>
+                    {label}{" "}
+                    {data.find((d: { key: string }) => d.key === key)?.isOptional && (
+                      <span className="text-sm text-gray-400">(optional)</span>
+                    )}
+                  </FormLabel>
                   <FormControl>
                     <ToggleButtonGroup
                       options={options}
-                      selected={field.value || (multi ? [] : "")}
+                      selected={field.value ?? (multi ? [] : "")}
                       setSelected={field.onChange}
                       multi={multi}
                     />
@@ -202,10 +165,6 @@ const CreateProjectForm = () => {
           </Button>
         </form>
       </Form>
-
-      <div className="mt-4">
-        <Progress value={progress} className="h-2" />
-      </div>
     </div>
   );
 };

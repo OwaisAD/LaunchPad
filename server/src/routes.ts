@@ -1,5 +1,6 @@
 import { Express, Request, Response } from "express";
 import OrganizationRouter from "./routes/organization.routes";
+import TechOptionsRouter from "./routes/tech-options.routes";
 
 function routes(app: Express) {
   app.get("/", (_req: Request, res: Response) => {
@@ -12,6 +13,8 @@ function routes(app: Express) {
 
   // Register API routes
   app.use("/organizations", OrganizationRouter);
+  app.use("/tech-options", TechOptionsRouter);
+  // app.use("/projects", ProjectRouter);
 
   // Catch unregistered routes
   app.all("/{*any}", (req: Request, res: Response) => {

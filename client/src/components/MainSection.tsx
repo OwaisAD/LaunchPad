@@ -42,7 +42,13 @@ export const MainSection = () => {
                 className="cursor-pointer"
               >
                 <Link to={item.url} className="flex items-center gap-4">
-                  <item.icon />
+                  <item.icon
+                    style={{
+                      width: "18px",
+                      height: "18px",
+                      color: location.pathname === item.url ? "#000" : "#6B7280",
+                    }}
+                  />
                   <span className="text-sm">{item.title}</span>
                 </Link>
               </SidebarMenuButton>
