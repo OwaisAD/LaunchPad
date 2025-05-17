@@ -1,89 +1,154 @@
 import { OutletContextType } from "@/types/ProjectOutletContextType";
-import { useOutletContext } from "react-router-dom";
+import { Link, useNavigate, useOutletContext } from "react-router-dom";
+
+const Label = ({ children }: { children: React.ReactNode }) => (
+  <span className="font-medium text-gray-700">{children}</span>
+);
+
+const Pill = ({ text }: { text: string }) => (
+  <span className="bg-gray-100 text-gray-800 text-sm px-2 py-1 rounded-full">{text}</span>
+);
 
 const ProjectOverview = () => {
   const { project } = useOutletContext<OutletContextType>();
+  const stack = JSON.parse(project.stack);
 
   return (
-    <div>
-      <h1 className="text-2xl font-bold">Project Overview</h1>
-      <p className="mt-4 text-gray-600">
-        This is the overview of your project. Here you can find all the details about your project.
-      </p>
-      {/* Add more content here as needed */}
-      <p>
-        <strong>Project Name:</strong> {project.name}
-      </p>
-      <p>
-        <strong>Project Description:</strong> {project.description || "No description provided"}
-      </p>
+    <div className="space-y-10">
+      <div>
+        <h1 className="text-3xl font-semibold text-gray-900">Project Overview</h1>
+        <p className="mt-1 text-gray-500">General information and technology stack for this project.</p>
+      </div>
 
-      <p>
-        <strong>Created At:</strong> {new Date(project.createdAt).toLocaleDateString()}
-      </p>
+      {/* Basic Info */}
+      <section className="bg-white border border-gray-200 rounded-xl p-6 shadow-sm space-y-4">
+        <h2 className="text-lg font-semibold text-gray-800 mb-2">Basic Information</h2>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-y-4 gap-x-8">
+          <p>
+            <Label>Name:</Label> {project.name}
+          </p>
+          <p>
+            <Label>Slug:</Label> {project.slug}
+          </p>
+          <p>
+            <Label>Description:</Label> {project.description || "No description"}
+          </p>
+          <p>
+            <Label>Status:</Label> {project.status || "No status"}
+          </p>
+          <p>
+            <Label>Repository: </Label>{" "}
+            {project.repositoryUrl ? (
+              <a
+                href={project.repositoryUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-blue-600 hover:underline"
+              >
+                {stack.repo}
+              </a>
+            ) : (
+              "None"
+            )}
+          </p>
+        </div>
+      </section>
 
-      <p>
-        <strong>Last Updated At:</strong> {new Date(project.updatedAt).toLocaleDateString()}
-      </p>
+      {/* Stack Info */}
+      <section className="bg-white border border-gray-200 rounded-xl p-6 shadow-sm space-y-6">
+        <h2 className="text-lg font-semibold text-gray-800">Technology Stack</h2>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div>
+            <p>
+              <Label>Frontend:</Label> {stack.frontend}
+            </p>
+            <p>
+              <Label>Backend:</Label> {stack.backend}
+            </p>
+            <p>
+              <Label>Authentication:</Label> {stack.auth || "None"}
+            </p>
+          </div>
+          <div>
+            <p>
+              <Label>Database(s):</Label>
+            </p>
+            <div className="flex flex-wrap gap-2 mt-1">
+              {stack.databases?.map((db: string) => <Pill key={db} text={db} />)}
+            </div>
 
-      <p>
-        <strong>Created By:</strong> {project.createdBy.firstName} {project.createdBy.lastName}
-      </p>
+            <p className="mt-4">
+              <Label>DB Connector(s):</Label>
+            </p>
+            <div className="flex flex-wrap gap-2 mt-1">
+              {stack.dbConnector?.map((dbc: string) => <Pill key={dbc} text={dbc} />) || <span>None</span>}
+            </div>
 
-      <p>
-        <strong>Organization:</strong> {project.organization.name}
-      </p>
+            <p className="mt-4">
+              <Label>Logging:</Label>
+            </p>
+            <div className="flex flex-wrap gap-2 mt-1">
+              {stack.logging?.map((log: string) => <Pill key={log} text={log} />) || <span>None</span>}
+            </div>
 
-      <p>
-        <strong>Stack:</strong> {project.stack || "No stack provided"}
-      </p>
+            <p className="mt-4">
+              <Label>Monitoring:</Label>
+            </p>
+            <div className="flex flex-wrap gap-2 mt-1">
+              {stack.monitoring?.map((mon: string) => <Pill key={mon} text={mon} />) || <span>None</span>}
+            </div>
 
-      <p>
-        <strong>Status:</strong> {project.status || "No status provided"}
-      </p>
+            <p className="mt-4">
+              <Label>Testing:</Label>
+            </p>
+            <div className="flex flex-wrap gap-2 mt-1">
+              {stack.testing?.map((test: string) => <Pill key={test} text={test} />) || <span>None</span>}
+            </div>
+          </div>
+        </div>
+      </section>
 
-      <p>
-        <strong>Repository URL:</strong>{" "}
-        {project.repositoryUrl ? (
-          <a href={project.repositoryUrl} target="_blank" rel="noopener noreferrer">
-            {project.repositoryUrl}
-          </a>
-        ) : (
-          "No repository URL"
-        )}
-      </p>
-
-      <p className="flex items-center gap-2">
-        <strong>Created By ID:</strong> {project.createdBy.firstName} {project.createdBy.lastName}
-        <img src={project.createdBy.imageUrl || "/default-avatar.png"} alt="User Avatar" className="w-8 h-8 rounded-full" />
-      </p>
-
-      <p>
-        <strong>Project ID:</strong> {project.id}
-      </p>
-
-      <p>
-        <strong>Project Slug:</strong> {project.slug}
-      </p>
-
-      <p>
-        <strong>Organization ID:</strong> {project.organization.id}
-      </p>
-
-      <p>
-        <strong>Organization Slug:</strong> {project.organization.slug}
-      </p>
-
-      <p>
-        <strong>Organization Owner ID:</strong> {project.organization.ownerId}
-      </p>
-
-      <p>
-        <strong>Organization Created At:</strong> {new Date(project.organization.createdAt).toLocaleDateString()}
-      </p>
-
-      
-
+      {/* Creator & Org Info */}
+      <section className="bg-white border border-gray-200 rounded-xl p-6 shadow-sm space-y-4">
+        <h2 className="text-lg font-semibold text-gray-800 mb-2">Metadata</h2>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-y-4 gap-x-8">
+          <div>
+            <p>
+              <Label>Created By:</Label>
+            </p>
+            <div className="flex items-center gap-3 mt-1">
+              <img
+                src={project.createdBy.imageUrl || "/default-avatar.png"}
+                alt="User Avatar"
+                className="w-10 h-10 rounded-full"
+              />
+              <div>
+                <p className="font-medium text-gray-800">
+                  {project.createdBy.firstName} {project.createdBy.lastName}
+                </p>
+                <p className="text-sm text-gray-500">User ID: {project.createdBy.id}</p>
+              </div>
+            </div>
+          </div>
+          <div>
+            <p>
+              <Label>Organization:</Label>
+              <Link to={`/organizations/${project.organization.slug}`} className="text-blue-600 hover:underline">
+                {project.organization.name} ({project.organization.slug})
+              </Link>
+            </p>
+            <p>
+              <Label>Org ID:</Label> {project.organization.id}
+            </p>
+            <p>
+              <Label>Owner ID:</Label> {project.organization.ownerId}
+            </p>
+            <p>
+              <Label>Created At:</Label> {new Date(project.organization.createdAt).toLocaleDateString()}
+            </p>
+          </div>
+        </div>
+      </section>
     </div>
   );
 };
