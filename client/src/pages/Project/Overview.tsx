@@ -1,5 +1,6 @@
 import { OutletContextType } from "@/types/ProjectOutletContextType";
-import { Link, useNavigate, useOutletContext } from "react-router-dom";
+import { Link, useOutletContext } from "react-router-dom";
+import { format, formatDistanceToNow } from "date-fns";
 
 const Label = ({ children }: { children: React.ReactNode }) => (
   <span className="font-medium text-gray-700">{children}</span>
@@ -8,6 +9,18 @@ const Label = ({ children }: { children: React.ReactNode }) => (
 const Pill = ({ text }: { text: string }) => (
   <span className="bg-gray-100 text-gray-800 text-sm px-2 py-1 rounded-full">{text}</span>
 );
+
+const StatusBadge = ({ status }: { status: string }) => {
+  const statusColor =
+    {
+      active: "bg-green-100 text-green-800",
+      pending: "bg-yellow-100 text-yellow-800",
+      inactive: "bg-gray-200 text-gray-600",
+      removed: "bg-red-100 text-red-800",
+    }[status.toLowerCase()] || "bg-blue-100 text-blue-800";
+
+  return <span className={`inline-block px-3 py-1 text-sm rounded-full font-medium ${statusColor}`}>{status}</span>;
+};
 
 const ProjectOverview = () => {
   const { project } = useOutletContext<OutletContextType>();
@@ -33,8 +46,9 @@ const ProjectOverview = () => {
           <p>
             <Label>Description:</Label> {project.description || "No description"}
           </p>
-          <p>
-            <Label>Status:</Label> {project.status || "No status"}
+          <p className="flex items-center gap-2">
+            <Label>Status:</Label>
+            {project.status ? <StatusBadge status={project.status} /> : <span>None</span>}
           </p>
           <p>
             <Label>Repository: </Label>{" "}
@@ -51,6 +65,15 @@ const ProjectOverview = () => {
               "None"
             )}
           </p>
+          <div className="flex gap-4 text-sm text-gray-500">
+            <p>
+              <Label>Created At:</Label> {format(new Date(project.createdAt), "yyyy-MM-dd HH:mm")}
+            </p>
+            <p>
+              <Label>Last updated:</Label> {format(new Date(project.updatedAt), "yyyy-MM-dd HH:mm")} (
+              {formatDistanceToNow(new Date(project.updatedAt), { addSuffix: true })})
+            </p>
+          </div>
         </div>
       </section>
 

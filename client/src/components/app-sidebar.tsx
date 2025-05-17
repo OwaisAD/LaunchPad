@@ -1,21 +1,24 @@
 import { Sidebar, SidebarContent, SidebarFooter, SidebarHeader, useSidebar } from "@/components/ui/sidebar";
 import { MainSection } from "@/components/MainSection";
 import { Separator } from "./ui/separator";
-import { UserButton } from "@clerk/clerk-react";
+import { useAuth, UserButton } from "@clerk/clerk-react";
 import { SidebarDropdownMenu } from "./SidebarDropdown";
 import { CustomeSidebarSection } from "./CustomSidebarSection";
 
 export function AppSidebar() {
   const { open } = useSidebar();
+  const { userId } = useAuth();
 
-  // should be fetched and cached maybe stored in local storage
-  const recentOrganizations = localStorage.getItem("recentOrganizations")
-    ? JSON.parse(localStorage.getItem("recentOrganizations")!)
-    : [];
+  // TODO: should be fetched and cached maybe stored in local storage
+  // Get and filter recent organizations by userId
+  const storedOrganizations = localStorage.getItem("recentOrganizations");
+  const parsedOrganizations = storedOrganizations ? JSON.parse(storedOrganizations) : [];
+  const recentOrganizations = parsedOrganizations.filter((org: { userId: string }) => org.userId === userId);
 
-  const recentProjects = localStorage.getItem("recentProjects")
-    ? JSON.parse(localStorage.getItem("recentProjects")!)
-    : [];
+  // Get and filter recent projects by userId
+  const storedProjects = localStorage.getItem("recentProjects");
+  const parsedProjects = storedProjects ? JSON.parse(storedProjects) : [];
+  const recentProjects = parsedProjects.filter((project: { userId: string }) => project.userId === userId);
 
   return (
     <Sidebar collapsible="icon" className="relative">

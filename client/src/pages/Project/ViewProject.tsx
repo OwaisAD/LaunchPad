@@ -56,6 +56,7 @@ const ViewProject = () => {
     const newEntry = {
       name: project.name,
       slug: project.slug,
+      userId,
     };
 
     try {

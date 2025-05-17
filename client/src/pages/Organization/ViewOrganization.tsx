@@ -44,6 +44,7 @@ const ViewOrganization = () => {
     const newEntry = {
       name: org.name,
       slug: org.slug,
+      userId,
     };
 
     try {
