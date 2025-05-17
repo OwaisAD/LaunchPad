@@ -72,6 +72,11 @@ async function handleClerkWebhook(req: Request, res: Response) {
         where: {
           id: data.id,
         },
+        include: {
+          Membership: true,
+          Organization: true,
+          Project: true,
+        },
       });
     }
 

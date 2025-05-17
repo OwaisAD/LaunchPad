@@ -75,10 +75,10 @@ const ProjectCard = ({ project, currentUserId }: ProjectCardProps) => {
             <DropdownMenuItem
               onClick={(e) => {
                 e.stopPropagation();
-                navigate(`/organizations/${project.organization.slug}`);
+                navigate(`/organizations/${project.organization.slug}/projects/${project.slug}`);
               }}
             >
-              View
+              View Project
             </DropdownMenuItem>
             <DropdownMenuItem
               onClick={(e) => {

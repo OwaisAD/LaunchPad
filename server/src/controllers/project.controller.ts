@@ -160,11 +160,6 @@ const handleGetUserProjects = async (req: Request, res: Response) => {
       },
     });
 
-    if (!projects.length) {
-      res.status(404).json({ error: "No projects found" });
-      return;
-    }
-
     res.status(200).json({ projects });
   } catch (error) {
     if (error instanceof UnauthorizedError) {
