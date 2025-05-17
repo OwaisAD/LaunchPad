@@ -183,17 +183,70 @@ const handleGetUserProjects = async (req: Request, res: Response) => {
   }
 };
 
-// const handleGetProjectBySlug = async (req: Request, res: Response) => {
-//   try {
-//     console.log("Get project by slug");
-//     res.status(200).json({
-//       message: "Get project by slug",
-//     });
-//   } catch (error) {}
-// };
+const handleGetProjectBySlug = async (req: Request, res: Response) => {
+  try {
+    const userId = validateUser(req);
+    const { slug } = req.params;
+
+    // get a project that the user is part of
+    const project = await prisma.project.findFirst({
+      where: {
+        slug,
+        organization: {
+          Membership: {
+            some: {
+              userId,
+            },
+          },
+        },
+      },
+      include: {
+        organization: {
+          select: {
+            id: true,
+            name: true,
+            slug: true,
+            logo: true,
+            website: true,
+          },
+        },
+        createdBy: {
+          select: {
+            id: true,
+            firstName: true,
+            lastName: true,
+            email: true,
+            imageUrl: true,
+          },
+        },
+      },
+    });
+
+    if (!project) {
+      res.status(404).json({ error: "Project not found" });
+      return;
+    }
+
+    res.status(200).json({ project });
+  } catch (error) {
+    if (error instanceof UnauthorizedError) {
+      res.status(401).json({ error: error.message });
+      return;
+    }
+
+    if (error instanceof ZodError) {
+      const zodErrors = getZodErrors(error);
+      res.status(400).json({ error: zodErrors });
+      return;
+    }
+
+    logger.error("Error fetching project:", error);
+    res.status(500).json({ error: "Internal server error" });
+  }
+};
 
 export default {
   handleCreateProject,
   handleGetUserProjects,
-  // handleGetProjectBySlug,
+  handleGetProjectBySlug,
 };

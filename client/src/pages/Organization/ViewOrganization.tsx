@@ -78,11 +78,8 @@ const ViewOrganization = () => {
     { name: "Overview", path: `/organizations/${orgId}` },
     { name: "Members", path: `/organizations/${orgId}/members` },
     { name: "Projects", path: `/organizations/${orgId}/projects` },
-    { name: "Billing", path: `/organizations/${orgId}/billing` },
+    { name: "Billing & Plan", path: `/organizations/${orgId}/billing` },
     { name: "Integrations", path: `/organizations/${orgId}/integrations` },
-    { name: "API Keys", path: `/organizations/${orgId}/api-keys` },
-    { name: "Webhooks", path: `/organizations/${orgId}/webhooks` },
-    { name: "Audit Logs", path: `/organizations/${orgId}/audit-logs` },
     { name: "Settings", path: `/organizations/${orgId}/settings` },
   ];
 

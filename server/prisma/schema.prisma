@@ -73,6 +73,7 @@ model Project {
   status         ProjectStatus
   createdBy      User          @relation(fields: [createdById], references: [id])
   stack          String
+  repositoryUrl  String?
   organizationId String
   organization   Organization  @relation(fields: [organizationId], references: [id])
   createdAt      DateTime      @default(now())

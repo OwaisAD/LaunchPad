@@ -11,6 +11,7 @@ import { useNavigate } from "react-router-dom";
 import { MdOutlineAdminPanelSettings } from "react-icons/md";
 import { RiUserCommunityLine } from "react-icons/ri";
 import { useProjectDataStore } from "@/stores/useProjectDataStore";
+import { GoOrganization } from "react-icons/go";
 
 type Project = {
   id: string;
@@ -60,6 +61,7 @@ const ProjectCard = ({ project, currentUserId }: ProjectCardProps) => {
         });
         navigate(`/organizations/${project.organization.slug}/projects/${project.slug}`);
       }}
+      title="Click to view project"
     >
       {/* Dropdown Menu */}
       <div className="absolute top-3 right-3 z-10">
@@ -78,28 +80,28 @@ const ProjectCard = ({ project, currentUserId }: ProjectCardProps) => {
             >
               View
             </DropdownMenuItem>
-            {/* <DropdownMenuItem
+            <DropdownMenuItem
               onClick={(e) => {
                 e.stopPropagation();
-                navigate(`/organizations/${project.organization.slug}/members`);
+                navigate(`/organizations/${project.organization.slug}`);
               }}
             >
-              {projectorganization.ownerId === currentUserId ? "Manage Members" : "Members"}
-            </DropdownMenuItem> */}
-            {/* {organization.ownerId === currentUserId && (
+              View Organization
+            </DropdownMenuItem>
+            {project.createdById === currentUserId && (
               <>
                 <DropdownMenuSeparator />
                 <DropdownMenuItem
                   onClick={(e) => {
                     e.stopPropagation();
-                    navigate(`/organizations/${organization.slug}/settings`);
+                    navigate(`/organizations/${project.organization.slug}/projects/${project.slug}/settings`);
                   }}
                   className="text-red-600"
                 >
                   Delete
                 </DropdownMenuItem>
               </>
-            )} */}
+            )}
           </DropdownMenuContent>
         </DropdownMenu>
       </div>
@@ -111,11 +113,11 @@ const ProjectCard = ({ project, currentUserId }: ProjectCardProps) => {
         {project.description && (
           <p className="text-sm text-muted-foreground mt-2 leading-relaxed">{project.description}</p>
         )}
+        {/* last updated at */}
+        <p className="text-xs text-gray-500 mt-2">
+          Last updated: {new Date(project.updatedAt).toLocaleDateString("en-US", { dateStyle: "medium" })}
+        </p>
       </div>
-      {/* last updated at */}
-      <p className="text-xs text-gray-500 mt-2">
-        Last updated: {new Date(project.updatedAt).toLocaleDateString("en-US", { dateStyle: "medium" })}
-      </p>
       {/* Owner Tag */}
       <div className="absolute bottom-3 right-3 bg-gray-100 text-gray-600 text-xs px-3 py-1 rounded-full shadow-sm">
         {project.createdBy.id === currentUserId ? (
@@ -129,6 +131,13 @@ const ProjectCard = ({ project, currentUserId }: ProjectCardProps) => {
             Member
           </span>
         )}
+      </div>
+
+      <div className="absolute bottom-3 left-3 bg-gray-100 text-gray-600 text-xs px-3 py-1 rounded-full shadow-sm">
+        <span className="flex items-center">
+          <GoOrganization className="mr-1" />
+          {project.organization.name}
+        </span>
       </div>
     </div>
   );

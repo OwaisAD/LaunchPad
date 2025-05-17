@@ -14,6 +14,8 @@ import OrganizationSettings from "./pages/Organization/Settings";
 import OrganizationMembers from "./pages/Organization/OrganizationMembers";
 import MyProjects from "./pages/Project/MyProjects";
 import CreateProject from "./pages/Project/CreateProject";
+import ViewProject from "./pages/Project/ViewProject";
+import ProjectOverview from "./pages/Project/Overview";
 
 function AppRoutes() {
   return (
@@ -37,12 +39,21 @@ function AppRoutes() {
             <Route path="members" element={<OrganizationMembers />} />
             <Route path="projects" element={<MyProjects />} />
             <Route path="projects/create" element={<CreateProject />} />
-            <Route path="billing" element={<div>Billing</div>} />
+            <Route path="billing" element={<div>Your current plan + Billing</div>} />
+            <Route path="integrations" element={<div>Integrations</div>} />
+            <Route path="settings" element={<OrganizationSettings />} />
+          </Route>
+
+          <Route path="/organizations/:orgId/projects/:projectId" element={<ViewProject />}>
+            <Route index element={<ProjectOverview />} />
+            <Route path="members" element={<div>Project Members</div>} />
             <Route path="integrations" element={<div>Integrations</div>} />
             <Route path="api-keys" element={<div>API Keys</div>} />
             <Route path="webhooks" element={<div>Webhooks</div>} />
             <Route path="audit-logs" element={<div>Audit Logs</div>} />
-            <Route path="settings" element={<OrganizationSettings />} />
+            <Route path="monitoring" element={<div>Monitoring</div>} />
+            <Route path="billing" element={<div>Billing</div>} />
+            <Route path="settings" element={<div>Project Settings</div>} />
           </Route>
 
           {/* Projects */}

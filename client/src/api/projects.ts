@@ -38,3 +38,27 @@ export async function getProjects() {
   if (!response.ok) throw new Error("Not authenticated");
   return response.json();
 }
+
+export async function getProjectBySlug(slug: string) {
+  const response = await fetch(`${API_BASE}/projects/${slug}`, {
+    method: "GET",
+    credentials: "include",
+    headers: {
+      "Content-Type": "application/json",
+    },
+  });
+
+  if (response.status === 404) {
+    const data = await response.json();
+    const error = new Error(data.error || "Project not found");
+    // @ts-expect-error status
+    error.status = 404;
+    throw error;
+  }
+
+  if (!response.ok) {
+    throw new Error("Failed to fetch project");
+  }
+
+  return response.json();
+}

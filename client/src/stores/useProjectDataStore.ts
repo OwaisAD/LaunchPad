@@ -12,6 +12,7 @@ interface ProjectDataState {
     slug: string;
     status: string;
     stack: string;
+    repositoryUrl: string | null;
     organizationId: string;
     createdById: string;
     createdAt: string;
@@ -40,6 +41,7 @@ interface ProjectDataState {
       slug: string;
       status: string;
       stack: string;
+      repositoryUrl: string | null;
       organizationId: string;
       createdById: string;
       createdAt: string;
