@@ -89,6 +89,7 @@ const ViewProject = () => {
 
   const menuItems = [
     { name: "Overview", path: `/organizations/${orgId}/projects/${projectId}` },
+    { name: "Deployments", path: `/organizations/${orgId}/projects/${projectId}/deployments` },
     { name: "Project Members", path: `/organizations/${orgId}/projects/${projectId}/members` },
     { name: "Integrations", path: `/organizations/${orgId}/projects/${projectId}/integrations` },
     { name: "API Keys", path: `/organizations/${orgId}/projects/${projectId}/api-keys` },

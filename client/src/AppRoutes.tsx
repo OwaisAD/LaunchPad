@@ -46,6 +46,7 @@ function AppRoutes() {
 
           <Route path="/organizations/:orgId/projects/:projectId" element={<ViewProject />}>
             <Route index element={<ProjectOverview />} />
+            <Route path="deployments" element={<div>Deployments</div>} />
             <Route path="members" element={<div>Project Members</div>} />
             <Route path="integrations" element={<div>Integrations</div>} />
             <Route path="api-keys" element={<div>API Keys</div>} />

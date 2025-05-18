@@ -74,6 +74,22 @@ const ProjectOverview = () => {
               {formatDistanceToNow(new Date(project.updatedAt), { addSuffix: true })})
             </p>
           </div>
+
+          <p>
+            <Label>Last Deployed:</Label>{" "}
+            {project.updatedAt ? format(new Date(project.updatedAt), "yyyy-MM-dd HH:mm") : "Never"}
+          </p>
+          <p>
+            <Label>Deployment Link</Label>:{" "}
+            <a
+              href={`https://${project.slug}.launchpad.sportia.dk`}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-blue-600 hover:underline"
+            >
+              {`https://${project.slug}.launchpad.sportia.dk`}
+            </a>
+          </p>
         </div>
       </section>
 
