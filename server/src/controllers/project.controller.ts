@@ -7,7 +7,7 @@ import { ZodError } from "zod";
 import { getZodErrors } from "../validations/handleZodErrors";
 import z from "zod";
 import slugify from "slugify";
-import { scaffoldProject } from "../utils/scaffoldProject";
+// import { scaffoldProject } from "../utils/scaffoldProject";
 
 const projectSchema = z.object({
   orgSlug: z.string().min(1),
