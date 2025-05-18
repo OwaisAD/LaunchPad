@@ -1,4 +1,9 @@
 {
   "extends": "./tsconfig.json",
-  "exclude": ["**/*.test.ts", "**/*.spec.ts", "src/templates"]
+  "exclude": [
+    "**/*.test.ts",
+    "**/*.spec.ts",
+    "src/templates/fullstack-react-express-app/tests",
+    "src/templates/fullstack-react-express-app/tests/**/*"
+  ]
 }
