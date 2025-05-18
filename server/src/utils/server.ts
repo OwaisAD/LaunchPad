@@ -18,6 +18,8 @@ function createServer() {
     res.status(204).end();
   });
 
+  app.set("trust proxy", true);
+
   app.use(
     cors({
       credentials: true,
