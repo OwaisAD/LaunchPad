@@ -12,7 +12,7 @@
     "start:prod": "npx prisma db push --accept-data-loss && NODE_ENV=production node src/index.js",
     "build": "tsc",
     "type-check": "tsc --noEmit",
-    "lint": "eslint src",
+    "lint": "eslint src --ignore-pattern src/templates/**",
     "lint:fix": "eslint src --fix --ignore-pattern src/templates/**",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
