@@ -107,8 +107,8 @@ const ProjectCard = ({ project, currentUserId }: ProjectCardProps) => {
       </div>
 
       {/* Content */}
-      <div className="flex flex-col items-center text-center h-full w-full justify-center px-4">
-        <h3 className="text-xl md:text-2xl font-medium text-gray-900 break-all">{project.name}</h3>
+      <div className="flex flex-col items-center text-center h-full justify-center px-4">
+        <h3 className="text-xl md:text-2xl font-medium text-gray-900">{project.name}</h3>
 
         {project.description && (
           <p className="text-sm text-muted-foreground mt-2 leading-relaxed">{project.description}</p>

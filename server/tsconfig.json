@@ -33,6 +33,7 @@
     "node_modules", // Exclude the node_modules directory
     "**/*.spec.ts",
     "**/*.test.ts", // Exclude test files
-    "src/templates"
+    "src/templates",
+    "src/projects"
   ]
 }

@@ -7,11 +7,11 @@ interface ScaffoldOptions {
   frontend: string;
   backend: string;
   databases: string[];
-  dbConnector: string;
-  logging: boolean;
-  monitoring: boolean;
-  testing: boolean;
-  auth: boolean;
+  dbConnector: string[];
+  logging: string[];
+  monitoring: string[];
+  testing: string[];
+  auth: string;
 }
 
 export async function scaffoldProject(options: ScaffoldOptions): Promise<string> {
@@ -30,8 +30,8 @@ export async function scaffoldProject(options: ScaffoldOptions): Promise<string>
     auth,
   });
 
-  const templateRoot = path.join(__dirname, "..", "templates", "fullstack-react-express");
-  const projectRoot = path.join("/projects", slug);
+  const templateRoot = path.resolve("src/templates/fullstack-react-express");
+  const projectRoot = path.join("./src/projects", slug);
 
   await fs.copy(templateRoot, projectRoot);
 
@@ -43,6 +43,11 @@ export async function scaffoldProject(options: ScaffoldOptions): Promise<string>
 
   // Replace placeholders in Dockerfile or config
   const composePath = path.join(projectRoot, "docker-compose.yml");
+
+  console.log(composePath);
+  if (!(await fs.pathExists(composePath))) {
+    throw new Error(`Missing docker-compose.yml at ${composePath}`);
+  }
   const composeContent = await fs.readFile(composePath, "utf-8");
 
   const updatedCompose = composeContent.replace(/{{PROJECT_SLUG}}/g, slug);

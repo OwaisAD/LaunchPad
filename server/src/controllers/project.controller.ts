@@ -7,7 +7,8 @@ import { ZodError } from "zod";
 import { getZodErrors } from "../validations/handleZodErrors";
 import z from "zod";
 import slugify from "slugify";
-// import { scaffoldProject } from "../utils/scaffoldProject";
+import { scaffoldProject } from "../utils/scaffoldProject";
+import { pushToGitHub } from "../utils/pushToGitHub";
 
 const projectSchema = z.object({
   orgSlug: z.string().min(1),
@@ -108,29 +109,35 @@ const handleCreateProject = async (req: Request, res: Response) => {
     // TODO : maybe this should happen in the background as jobs in a queue ..
     // SCAFFOLD PROJECT FROM TEMPLATE THROUGH A SCAFFOLD FUNCTION - stat with a react vite + express template simple
 
-    // const projectLocation = await scaffoldProject({
-    //   projectName: data.projectName,
-    //   slug,
-    //   frontend: data.frontend,
-    //   backend: data.backend,
-    //   databases: data.databases,
-    //   dbConnector: data.dbConnector,
-    //   logging: data.logging,
-    //   monitoring: data.monitoring,
-    //   testing: data.testing,
-    //   auth: data.auth,
-    // });
+    const projectLocation = await scaffoldProject({
+      projectName: data.projectName,
+      slug,
+      frontend: data.frontend,
+      backend: data.backend,
+      databases: data.databases || [],
+      dbConnector: data.dbConnector || [],
+      logging: data.logging || [],
+      monitoring: data.monitoring || [],
+      testing: data.testing || [],
+      auth: data.auth || "",
+    });
 
-    // const pushToGitHub = await pushToGitHub({
-    //   projectName: data.projectName,
-    //   slug,
-    //   repo: data.repo,
-    //   projectLocation,
-    // });
+    console.log("Project location:", projectLocation);
+
+    const url = await pushToGitHub({
+      projectName: data.projectName,
+      slug,
+      repo: data.repo,
+      projectLocation,
+    });
+
+    console.log("Repo url:", url);
 
     // CREATE DOCKERFILE? DOCKER-COMPOSE - use traefik as a reverse proxy to launch project
     // PUSH TO NEW GITHUB REPO - store repisotiry url in project
     //
+
+    // REMOVE SCAFFOLDED PROJECT FROM LOCAL - use fs-extra to remove the folder
 
     res.status(200).json({
       message: "Project received",
