@@ -7,6 +7,7 @@ import { ZodError } from "zod";
 import { getZodErrors } from "../validations/handleZodErrors";
 import z from "zod";
 import slugify from "slugify";
+import { scaffoldProject } from "../utils/scaffoldProject";
 
 const projectSchema = z.object({
   orgSlug: z.string().min(1),
@@ -82,30 +83,59 @@ const handleCreateProject = async (req: Request, res: Response) => {
       return;
     }
 
-    const result = await prisma.project.create({
-      data: {
-        name: data.projectName,
-        slug,
-        description: data.description || "",
-        stack: JSON.stringify(data),
-        status: "PENDING",
-        organization: {
-          connect: {
-            slug: data.orgSlug,
-          },
-        },
-        createdBy: {
-          connect: {
-            id: userId,
-          },
-        },
-      },
+    // const result = await prisma.project.create({
+    //   data: {
+    //     name: data.projectName,
+    //     slug,
+    //     description: data.description || "",
+    //     stack: JSON.stringify(data),
+    //     status: "PENDING",
+    //     organization: {
+    //       connect: {
+    //         slug: data.orgSlug,
+    //       },
+    //     },
+    //     createdBy: {
+    //       connect: {
+    //         id: userId,
+    //       },
+    //     },
+    //   },
+    // });
+
+    // console.log(result);
+
+    // TODO : maybe this should happen in the background as jobs in a queue ..
+    // SCAFFOLD PROJECT FROM TEMPLATE THROUGH A SCAFFOLD FUNCTION - stat with a react vite + express template simple
+
+    const projectLocation = await scaffoldProject({
+      projectName: data.projectName,
+      slug,
+      frontend: data.frontend,
+      backend: data.backend,
+      databases: data.databases,
+      dbConnector: data.dbConnector,
+      logging: data.logging,
+      monitoring: data.monitoring,
+      testing: data.testing,
+      auth: data.auth,
     });
 
-    console.log(result);
+    const pushToGitHub = await pushToGitHub({
+      projectName: data.projectName,
+      slug,
+      repo: data.repo,
+      projectLocation,
+    });
+
+    // CREATE DOCKERFILE? DOCKER-COMPOSE - use traefik as a reverse proxy to launch project
+    // PUSH TO NEW GITHUB REPO - store repisotiry url in project
+    //
 
     res.status(200).json({
-      message: "Project created successfully",
+      message: "Project received",
+      slug,
+      // id: result.id,
     });
   } catch (error) {
     if (error instanceof UnauthorizedError) {

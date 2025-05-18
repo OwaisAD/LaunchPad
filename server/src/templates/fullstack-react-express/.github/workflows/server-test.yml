@@ -1,0 +1,62 @@
+name: Testing LaunchPad Server
+on:
+  push:
+    branches-ignore:
+      - main
+
+env:
+  DATABASE_URL: postgresql://postgres:postgres@localhost:5432/launchpad
+  REDIS_URL: redis://localhost:6379
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  testing-server:
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:17.4-alpine3.21
+        env:
+          POSTGRES_PASSWORD: postgres
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+      redis:
+        image: redis:latest
+        ports:
+          - 6379:6379
+        options: >-
+          --health-cmd "redis-cli ping"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setting up Node.js environment
+        uses: ./.github/workflows/shared
+
+      - name: Run TypeScript type checking
+        run: npm run type-check --workspace=server
+
+      - name: Run ESLint and fix
+        run: npm run lint:fix --workspace=server
+
+      - name: Format with Prettier
+        run: npm run format --workspace=server
+
+      - name: Check for remaining ESLint errors
+        run: npm run lint --workspace=server
+
+      - name: Check for remaining formatting issues
+        run: npm run format:check --workspace=server
+
+      - name: Building LaunchPad server to check for build errors
+        run: npm run build --workspace=server

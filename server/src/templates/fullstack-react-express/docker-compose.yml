@@ -1,0 +1,42 @@
+services:
+  server:
+    container_name: server
+    image: ghcr.io/owaisad/launchpad/{{PROJECT_SLUG}}-server:latest
+    restart: always
+    ports:
+      - "5080:5080"
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.{{PROJECT_SLUG}}-api.rule=Host(`api.{{PROJECT_SLUG}}.launchpad.sportia.dk`)"
+      # - "traefik.http.routers.server.entrypoints=websecure"
+      # - "traefik.http.routers.server.tls.certresolver=letsencrypt"
+    volumes:
+      - ./docker-data/server:/usr/src/app
+    networks:
+      - launchpad-{{PROJECT_SLUG}}
+
+  client:
+    container_name: client
+    image: ghcr.io/owaisad/launchpad/client:latest
+    restart: always
+    ports:
+      - "3001:3001"
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.{{PROJECT_SLUG}}.rule=Host(`{{PROJECT_SLUG}}.launchpad.sportia.dk`)"
+      # - "traefik.http.routers.client.entrypoints=websecure"
+      # - "traefik.http.routers.client.tls.certresolver=letsencrypt"
+    depends_on:
+      - server
+    volumes:
+      - ./docker-data/client:/usr/src/app
+    networks:
+      - launchpad-{{PROJECT_SLUG}}
+
+
+volumes:
+  docker-data:
+
+networks:
+  launchpad-{{PROJECT_SLUG}}:
+    driver: bridge

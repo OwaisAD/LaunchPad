@@ -38,6 +38,7 @@ const ToggleButtonGroup = ({ options, selected, setSelected, multi = false }: To
           onClick={() => handleClick(opt.name)}
         >
           {opt.name}
+          {opt.note && <span className="text-sm text-gray-500">{opt.note}</span>}
         </Button>
       ))}
     </div>

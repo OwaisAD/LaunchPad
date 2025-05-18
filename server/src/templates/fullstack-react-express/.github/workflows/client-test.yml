@@ -1,0 +1,64 @@
+name: Testing LaunchPad Client
+on:
+  push:
+    branches-ignore:
+      - main
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  testing-client:
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:17.4-alpine3.21
+        ports:
+          - 5432:5432
+        env:
+          POSTGRES_DB: launchpad
+          POSTGRES_USER: ${POSTGRES_USER}
+          POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      redis:
+        image: redis:latest
+        ports:
+          - 6379:6379
+        env:
+          REDIS_PASSWORD: ${REDIS_PASSWORD}
+        options: >-
+          --health-cmd "redis-cli ping"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setting up Node.js environment
+        uses: ./.github/workflows/shared
+
+      # Step 3 - Running prettier check
+      - name: Run Prettier Check
+        run: npm run format --workspace=client
+
+      # Step 4 - Running linter
+      - name: Run Linter
+        run: npm run lint --workspace=client
+
+      - name: Install Playwright Browsers
+        run: npx playwright install --with-deps
+
+      - name: Run UI tests (Playwright)
+        run: npm run test:ui --workspace=client
+
+      - uses: actions/upload-artifact@v4
+        if: ${{ !cancelled() }}
+        with:
+          name: playwright-report
+          path: playwright-report/
+          retention-days: 30
+
+      - name: Building LaunchPad Client to check for build errors
+        run: npm run build --workspace=client

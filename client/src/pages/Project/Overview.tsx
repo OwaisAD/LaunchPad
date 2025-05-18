@@ -164,10 +164,7 @@ const ProjectOverview = () => {
               <Label>Org ID:</Label> {project.organization.id}
             </p>
             <p>
-              <Label>Owner ID:</Label> {project.organization.ownerId}
-            </p>
-            <p>
-              <Label>Created At:</Label> {new Date(project.organization.createdAt).toLocaleDateString()}
+              <Label>Owner ID:</Label> {project.createdBy.id}
             </p>
           </div>
         </div>
