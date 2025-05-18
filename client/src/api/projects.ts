@@ -1,5 +1,6 @@
-const API_BASE =
-  import.meta.env.MODE === "development" ? import.meta.env.VITE_API_URL : "https://launchpad.sportia.dk/api";
+import { API_URL } from "@/utils/constants";
+
+const API_BASE = import.meta.env.MODE === "development" ? import.meta.env.VITE_API_URL : API_URL;
 
 export async function createProject(data: {
   orgSlug: string;
