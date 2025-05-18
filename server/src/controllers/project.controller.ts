@@ -108,25 +108,25 @@ const handleCreateProject = async (req: Request, res: Response) => {
     // TODO : maybe this should happen in the background as jobs in a queue ..
     // SCAFFOLD PROJECT FROM TEMPLATE THROUGH A SCAFFOLD FUNCTION - stat with a react vite + express template simple
 
-    const projectLocation = await scaffoldProject({
-      projectName: data.projectName,
-      slug,
-      frontend: data.frontend,
-      backend: data.backend,
-      databases: data.databases,
-      dbConnector: data.dbConnector,
-      logging: data.logging,
-      monitoring: data.monitoring,
-      testing: data.testing,
-      auth: data.auth,
-    });
+    // const projectLocation = await scaffoldProject({
+    //   projectName: data.projectName,
+    //   slug,
+    //   frontend: data.frontend,
+    //   backend: data.backend,
+    //   databases: data.databases,
+    //   dbConnector: data.dbConnector,
+    //   logging: data.logging,
+    //   monitoring: data.monitoring,
+    //   testing: data.testing,
+    //   auth: data.auth,
+    // });
 
-    const pushToGitHub = await pushToGitHub({
-      projectName: data.projectName,
-      slug,
-      repo: data.repo,
-      projectLocation,
-    });
+    // const pushToGitHub = await pushToGitHub({
+    //   projectName: data.projectName,
+    //   slug,
+    //   repo: data.repo,
+    //   projectLocation,
+    // });
 
     // CREATE DOCKERFILE? DOCKER-COMPOSE - use traefik as a reverse proxy to launch project
     // PUSH TO NEW GITHUB REPO - store repisotiry url in project
