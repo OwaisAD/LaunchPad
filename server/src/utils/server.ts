@@ -30,7 +30,7 @@ function createServer() {
 
   app.use(
     clerkMiddleware({
-      authorizedParties: ["https://launchpad.sportia.dk", "http://localhost:3000"],
+      authorizedParties: ["https://api.launchpad.sportia.dk", "http://localhost:3000"],
     })
   );
   app.use(compression());
