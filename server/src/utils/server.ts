@@ -29,7 +29,8 @@ function createServer() {
   app.use(
     cors({
       credentials: true,
-      origin: ["https://launchpad.sportia.dk", "http://localhost:5173"],
+      origin: ["https://launchpad.sportia.dk"],
+      methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
     })
   );
 
