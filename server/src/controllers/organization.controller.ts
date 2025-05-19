@@ -12,6 +12,11 @@ const handleGetUserOrganizations = async (req: Request, res: Response) => {
   try {
     const userId = validateUser(req);
 
+    if (!userId) {
+      res.status(401).json({ error: "Unauthorized" });
+      return;
+    }
+
     const user = await prisma.user.findUnique({
       where: { id: userId },
       include: {

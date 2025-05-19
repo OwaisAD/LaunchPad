@@ -163,6 +163,11 @@ const handleGetUserProjects = async (req: Request, res: Response) => {
   try {
     const userId = validateUser(req);
 
+    if (!userId) {
+      res.status(401).json({ error: "Unauthorized" });
+      return;
+    }
+
     const projects = await prisma.project.findMany({
       where: {
         organization: {

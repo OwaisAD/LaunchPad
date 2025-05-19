@@ -22,6 +22,7 @@ function createServer() {
 
   app.use(
     clerkMiddleware({
+      authorizedParties: ["https://launchpad.sportia.dk", "http://localhost:3000", "https://clerk.dev"],
       proxyUrl: "https://launchpad.sportia.dk",
     })
   );
@@ -29,7 +30,7 @@ function createServer() {
   app.use(
     cors({
       credentials: true,
-      origin: ["https://launchpad.sportia.dk"],
+      origin: ["https://launchpad.sportia.dk", "http://localhost:3000", "https://clerk.dev"],
       methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
     })
   );
