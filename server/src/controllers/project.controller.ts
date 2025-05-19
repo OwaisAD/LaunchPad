@@ -9,8 +9,8 @@ import z from "zod";
 import slugify from "slugify";
 import { scaffoldProject } from "../utils/scaffoldProject";
 import { pushToGitHub } from "../utils/pushToGitHub";
-import fs from "fs-extra";
-import { cleanUpProjectFolder } from "../utils/cleanUpProjectFolder";
+// import fs from "fs-extra";
+// import { cleanUpProjectFolder } from "../utils/cleanUpProjectFolder";
 
 const projectSchema = z.object({
   orgSlug: z.string().min(1),
@@ -135,7 +135,7 @@ const handleCreateProject = async (req: Request, res: Response) => {
 
     console.log(result);
 
-    await cleanUpProjectFolder(projectLocation);
+    // await cleanUpProjectFolder(projectLocation);
 
     res.status(200).json({
       message: "Project received",

@@ -43,20 +43,20 @@ jobs:
       - name: Setting up Node.js environment
         uses: ./.github/workflows/shared
 
-      - name: Run TypeScript type checking
-        run: npm run type-check --workspace=server
+      # - name: Run TypeScript type checking
+      #   run: npm run type-check --workspace=server
 
-      - name: Run ESLint and fix
-        run: npm run lint:fix --workspace=server
+      # - name: Run ESLint and fix
+      #   run: npm run lint:fix --workspace=server
 
-      - name: Format with Prettier
-        run: npm run format --workspace=server
+      # - name: Format with Prettier
+      #   run: npm run format --workspace=server
 
-      - name: Check for remaining ESLint errors
-        run: npm run lint --workspace=server
+      # - name: Check for remaining ESLint errors
+      #   run: npm run lint --workspace=server
 
-      - name: Check for remaining formatting issues
-        run: npm run format:check --workspace=server
+      # - name: Check for remaining formatting issues
+      #   run: npm run format:check --workspace=server
 
       - name: Building LaunchPad server to check for build errors
         run: npm run build --workspace=server

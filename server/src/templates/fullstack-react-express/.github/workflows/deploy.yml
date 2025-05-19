@@ -61,3 +61,10 @@ jobs:
           echo "Creating version tag: $TAG_NAME"
           git tag $TAG_NAME
           git push origin $TAG_NAME
+
+      - name: Notify LaunchPad to deploy
+        run: |
+          curl -X POST https://api.launchpad.sportia.dk/hooks/deploy \
+            -H "Authorization: Bearer ${{ secrets.LAUNCHPAD_DEPLOY_TOKEN }}" \
+            -H "Content-Type: application/json" \
+            -d '{"slug": "ps47"}'

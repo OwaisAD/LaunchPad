@@ -2,6 +2,7 @@ import { Express, Request, Response } from "express";
 import OrganizationRouter from "./routes/organization.routes";
 import TechOptionsRouter from "./routes/tech-options.routes";
 import ProjectRouter from "./routes/project.routes";
+import HooksRoute from "./routes/hooks.routes";
 
 function routes(app: Express) {
   app.get("/", (_req: Request, res: Response) => {
@@ -16,6 +17,7 @@ function routes(app: Express) {
   app.use("/organizations", OrganizationRouter);
   app.use("/tech-options", TechOptionsRouter);
   app.use("/projects", ProjectRouter);
+  app.use("/hooks", HooksRoute);
 
   // Catch unregistered routes
   app.all("/{*any}", (req: Request, res: Response) => {
