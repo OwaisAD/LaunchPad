@@ -71,7 +71,10 @@ export async function pushToGitHub(options: PushOptions): Promise<string> {
 
   await sodium.ready;
   const binkey = sodium.from_base64(publicKey.key, sodium.base64_variants.ORIGINAL);
-  const encryptedBytes = sodium.crypto_box_seal(GITHUB_TOKEN!, binkey);
+  const DEPLOY_TOKEN = process.env.LAUNCHPAD_DEPLOY_TOKEN;
+  if (!DEPLOY_TOKEN) throw new Error("Missing LaunchPad deploy token");
+
+  const encryptedBytes = sodium.crypto_box_seal(DEPLOY_TOKEN, binkey);
   const encrypted = sodium.to_base64(encryptedBytes, sodium.base64_variants.ORIGINAL);
 
   // 2. Set the encrypted token as a secret
