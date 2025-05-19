@@ -14,12 +14,7 @@ export default defineConfig({
   },
   server: {
     cors: {
-      origin: [
-        "https://launchpad.sportia.dk",
-        "https://api.launchpad.sportia.dk",
-        "http://localhost:8080",
-        "https://clerk.dev",
-      ],
+      origin: ["https://launchpad.sportia.dk", "http://localhost:8080", "https://clerk.dev"],
       methods: ["GET", "POST"],
       allowedHeaders: ["Content-Type"],
     },
