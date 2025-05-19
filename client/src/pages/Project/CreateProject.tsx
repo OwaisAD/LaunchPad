@@ -13,7 +13,7 @@ import { getTechOptions } from "@/api/tech-options";
 import Loader from "@/components/Loader";
 import ToggleButtonGroup from "./ToggleButtonGroup";
 import { createProject } from "@/api/projects";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 
 // Schema & types
 const createProjectSchema = z.object({
@@ -44,6 +44,7 @@ export type TechOptionType = {
 
 const CreateProjectForm = () => {
   const { orgId } = useParams();
+  const navigate = useNavigate();
 
   const { data, isError, isLoading, error } = useQuery({
     queryKey: ["techOptions"],
@@ -74,7 +75,8 @@ const CreateProjectForm = () => {
     mutationFn: createProject,
     onSuccess: () => {
       toast.success("Project created successfully");
-      // form.reset();
+      form.reset();
+      navigate("/projects");
     },
     onError: (err) => {
       toast.error(err.message || "Something went wrong");

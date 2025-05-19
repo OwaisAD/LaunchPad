@@ -19,6 +19,7 @@ import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { toast } from "sonner";
+import { useState } from "react";
 
 const createOrganizationSchema = z.object({
   name: z.string().min(1, "Name is required").max(100, "Name must be less than 100 characters"),
@@ -32,11 +33,14 @@ type CreateOrganizationDialogProps = {
 };
 
 const CreateOrganizationDialog = ({ refetch }: CreateOrganizationDialogProps) => {
+  const [isOpen, setIsOpen] = useState(false);
+
   const mutation = useMutation({
     mutationFn: createOrganization,
     onSuccess: async (data) => {
       toast.success("Organization created successfully");
       refetch();
+      setIsOpen(false);
       console.log(data);
     },
     onError: (error) => {
@@ -69,7 +73,7 @@ const CreateOrganizationDialog = ({ refetch }: CreateOrganizationDialogProps) =>
   };
 
   return (
-    <Dialog>
+    <Dialog open={isOpen} onOpenChange={setIsOpen}>
       <DialogTrigger>
         <Button className="flex items-center justify-center bg-blue-500 text-white px-3 py-1 rounded cursor-pointer">
           <IoAddCircleOutline />
