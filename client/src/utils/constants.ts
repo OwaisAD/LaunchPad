@@ -1,1 +1,1 @@
-export const API_URL = "https://api.launchpad.sportia.dk";
+export const API_URL = "/api";

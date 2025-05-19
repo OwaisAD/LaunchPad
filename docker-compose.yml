@@ -35,18 +35,20 @@ services:
       - ./docker-data/server:/usr/src/app
     networks:
       - launchpad
-      - traefik_default
-    labels:
-      - "traefik.enable=true"
-      - "traefik.http.routers.api.rule=Host(`api.launchpad.sportia.dk`)"
-      - "traefik.http.routers.api.entrypoints=websecure"
-      - "traefik.http.routers.api.tls.certresolver=letsencrypt"
-      - "traefik.http.services.api.loadbalancer.server.port=8080"
+    #   - traefik_default
+    # labels:
+    #   - "traefik.enable=true"
+    #   - "traefik.http.routers.api.rule=Host(`api.launchpad.sportia.dk`)"
+    #   - "traefik.http.routers.api.entrypoints=websecure"
+    #   - "traefik.http.routers.api.tls.certresolver=letsencrypt"
+    #   - "traefik.http.services.api.loadbalancer.server.port=8080"
 
   client:
     container_name: client
     image: ghcr.io/owaisad/launchpad/client:latest
     restart: always
+    ports:
+      - "3000:3000"
     environment:
       NODE_ENV: production
       VITE_CLERK_FRONTEND_API: ${VITE_CLERK_FRONTEND_API}
@@ -57,13 +59,13 @@ services:
       - ./docker-data/client:/usr/src/app
     networks:
       - launchpad
-      - traefik_default
-    labels:
-      - "traefik.enable=true"
-      - "traefik.http.routers.client.rule=Host(`launchpad.sportia.dk`)"
-      - "traefik.http.routers.client.entrypoints=websecure"
-      - "traefik.http.routers.client.tls.certresolver=letsencrypt"
-      - "traefik.http.services.client.loadbalancer.server.port=3000"
+    #   - traefik_default
+    # labels:
+    #   - "traefik.enable=true"
+    #   - "traefik.http.routers.client.rule=Host(`launchpad.sportia.dk`)"
+    #   - "traefik.http.routers.client.entrypoints=websecure"
+    #   - "traefik.http.routers.client.tls.certresolver=letsencrypt"
+    #   - "traefik.http.services.client.loadbalancer.server.port=3000"
 
   watchtower:
     container_name: watchtower
