@@ -14,9 +14,9 @@ import { clerkMiddleware } from "@clerk/express";
 function createServer() {
   const app = express();
 
-  app.get("/favicon.ico", (_req: Request, res: Response) => {
-    res.status(204).end();
-  });
+  // app.get("/favicon.ico", (_req: Request, res: Response) => {
+  //   res.status(204).end();
+  // });
 
   app.set("trust proxy", true);
 
