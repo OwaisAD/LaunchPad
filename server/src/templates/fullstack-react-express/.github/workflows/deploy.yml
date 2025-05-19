@@ -67,7 +67,7 @@ jobs:
           REPO_NAME=$(basename "${{ github.repository }}")
           SLUG=$(echo $REPO_NAME | sed 's/^LP-//' | tr '[:upper:]' '[:lower:]')
           echo "Deploying slug: $SLUG"
-          curl -X POST https://launchpad.sportia.dk/api/hooks/deploy \
+          curl -X POST http://165.227.172.244:5050/hooks/deploy \
             -H "Authorization: Bearer ${{ secrets.LAUNCHPAD_DEPLOY_TOKEN }}" \
             -H "Content-Type: application/json" \
             -d "{\"slug\": \"$SLUG\"}"
