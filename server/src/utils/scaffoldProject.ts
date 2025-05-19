@@ -53,5 +53,19 @@ export async function scaffoldProject(options: ScaffoldOptions): Promise<string>
   const updatedCompose = composeContent.replace(/{{PROJECT_SLUG}}/g, slug);
   await fs.writeFile(composePath, updatedCompose);
 
+  // create readme file
+  const readmeContent = `
+# ${projectName}
+
+## Description
+This is a project scaffolded by LaunchPad.
+
+## Getting Started
+1. Clone the repository
+2. Install dependencies
+3. Run the project
+`;
+  await fs.writeFile(path.join(projectRoot, "README.md"), readmeContent);
+
   return projectRoot;
 }
