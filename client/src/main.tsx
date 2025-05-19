@@ -21,7 +21,11 @@ if (!PUBLISHABLE_KEY) {
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
-    <ClerkProvider publishableKey={PUBLISHABLE_KEY} afterSignOutUrl="/sign-in">
+    <ClerkProvider
+      publishableKey={PUBLISHABLE_KEY}
+      afterSignOutUrl="/sign-in"
+      proxyUrl={"https://api.launchpad.sportia.dk"}
+    >
       <BrowserRouter>
         <HelmetProvider>
           <App />

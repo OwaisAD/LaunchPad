@@ -21,17 +21,18 @@ function createServer() {
   app.set("trust proxy", true);
 
   app.use(
+    clerkMiddleware({
+      proxyUrl: "https://launchpad.sportia.dk",
+    })
+  );
+
+  app.use(
     cors({
       credentials: true,
       origin: ["https://launchpad.sportia.dk", "http://localhost:5173"],
     })
   );
 
-  app.use(
-    clerkMiddleware({
-      proxyUrl: "https://api.launchpad.sportia.dk",
-    })
-  );
   app.use(compression());
   app.use(cookieParser());
 
