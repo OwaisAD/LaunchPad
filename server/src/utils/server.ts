@@ -30,7 +30,8 @@ function createServer() {
 
   app.use(
     clerkMiddleware({
-      authorizedParties: ["https://api.launchpad.sportia.dk","https://launchpad.sportia.dk", "http://localhost:3000"],
+      authorizedParties: ["https://api.launchpad.sportia.dk", "https://launchpad.sportia.dk", "http://localhost:3000"],
+      proxyUrl: "https://api.launchpad.sportia.dk",
     })
   );
   app.use(compression());
