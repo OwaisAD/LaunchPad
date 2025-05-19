@@ -60,6 +60,9 @@ export async function pushToGitHub(options: PushOptions): Promise<string> {
 
   console.log("Pushed to GitHub:", repoUrl);
 
+  //  remove the .git folder after pushing
+  await fs.remove(gitFolderPath);
+
   // Add secret (LAUNCHPAD_DEPLOY_TOKEN) to repo
   const { data: publicKey } = await octokit.actions.getRepoPublicKey({
     owner: GITHUB_USERNAME,
