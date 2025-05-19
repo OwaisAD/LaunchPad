@@ -12,25 +12,6 @@ const handleGetUserOrganizations = async (req: Request, res: Response) => {
   try {
     const userId = validateUser(req);
 
-    if (!userId) {
-      res.status(401).json({ error: "Unauthorized" });
-      return;
-    }
-
-    const user = await prisma.user.findUnique({
-      where: { id: userId },
-      include: {
-        Organization: true,
-      },
-    });
-
-    console.log("User data from Prisma:", user);
-
-    if (!user) {
-      res.status(404).json({ error: "User not found" });
-      return;
-    }
-
     const organizations = await prisma.organization.findMany({
       where: {
         Membership: {
