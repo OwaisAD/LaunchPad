@@ -23,15 +23,13 @@ function createServer() {
   app.use(
     cors({
       credentials: true,
-      origin: [process.env.CLIENT_URL ?? "http://localhost:5173"],
-      methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+      origin: ["https://launchpad.sportia.dk", "http://localhost:5173"],
     })
   );
 
   app.use(
     clerkMiddleware({
-      authorizedParties: ["https://api.launchpad.sportia.dk", "https://launchpad.sportia.dk", "http://localhost:3000"],
-      // proxyUrl: "https://api.launchpad.sportia.dk",
+      proxyUrl: "https://api.launchpad.sportia.dk",
     })
   );
   app.use(compression());
