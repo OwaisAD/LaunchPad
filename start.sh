@@ -1,14 +1,15 @@
 #!/bin/bash
 
-set -e
+set -e  # Exit immediately if a command exits with a non-zero status
 
 echo "🛑 Stopping and removing existing Docker Compose services (including volumes)..."
 docker-compose down --remove-orphans --volumes
 echo "✅ Services stopped and cleaned up."
 
-echo "🧹 Pruning unused Docker data (images, containers, networks, volumes)..."
-docker system prune -a --volumes -f
-echo "✅ Docker system pruned."
+# Optional: Uncomment if you want to remove *all* images (use with caution!)
+# echo "🧹 Removing all Docker images to ensure a clean build..."
+# docker rmi -f $(docker images -q) || true
+# echo "✅ All Docker images removed."
 
 echo "📦 Pulling the latest Docker images..."
 docker-compose pull

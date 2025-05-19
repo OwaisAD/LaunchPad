@@ -24,7 +24,6 @@ createRoot(document.getElementById("root")!).render(
     <ClerkProvider
       publishableKey={PUBLISHABLE_KEY}
       afterSignOutUrl="/sign-in"
-      proxyUrl={"https://api.launchpad.sportia.dk"}
     >
       <BrowserRouter>
         <HelmetProvider>
