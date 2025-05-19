@@ -64,7 +64,10 @@ jobs:
 
       - name: Notify LaunchPad to deploy
         run: |
-          curl -X POST https://api.launchpad.sportia.dk/hooks/deploy \
+          REPO_NAME=$(basename "${{ github.repository }}")
+          SLUG=$(echo $REPO_NAME | sed 's/^LP-//' | tr '[:upper:]' '[:lower:]')
+          echo "Deploying slug: $SLUG"
+          curl -X POST https://launchpad.sportia.dk/api/hooks/deploy \
             -H "Authorization: Bearer ${{ secrets.LAUNCHPAD_DEPLOY_TOKEN }}" \
             -H "Content-Type: application/json" \
-            -d '{"slug": "ps47"}'
+            -d "{\"slug\": \"$SLUG\"}"
