@@ -38,6 +38,9 @@ export async function pushToGitHub(options: PushOptions): Promise<string> {
   });
 
   await git.init();
+  await git.addConfig("user.name", "LaunchPad Bot");
+  await git.addConfig("user.email", "launchpad@example.com");
+
   git.checkoutLocalBranch("master");
   await git.add(".");
   await git.commit(`Initial commit for ${projectName} through Launchpad`);
