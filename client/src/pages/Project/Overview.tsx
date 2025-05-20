@@ -80,7 +80,7 @@ const ProjectOverview = () => {
             {project.updatedAt ? format(new Date(project.updatedAt), "yyyy-MM-dd HH:mm") : "Never"}
           </p>
           <p>
-            <Label>Deployment Link</Label>:{" "}
+            <Label>Deployment Links</Label>: CLIENT:{" "}
             <a
               href={`https://${project.slug}.launchpad.sportia.dk`}
               target="_blank"
@@ -88,6 +88,16 @@ const ProjectOverview = () => {
               className="text-blue-600 hover:underline"
             >
               {`https://${project.slug}.launchpad.sportia.dk`}
+            </a>
+            <br />
+            SERVER:{" "}
+            <a
+              href={`https://${project.slug}-api.launchpad.sportia.dk`}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-blue-600 hover:underline"
+            >
+              {`https://${project.slug}.launchpad.sportia.dk/api`}
             </a>
           </p>
         </div>
