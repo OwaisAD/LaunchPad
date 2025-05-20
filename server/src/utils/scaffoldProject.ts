@@ -50,7 +50,6 @@ export async function scaffoldProject(options: ScaffoldOptions): Promise<string>
   // Replace placeholders in Dockerfile or config
   const composePath = path.join(projectRoot, "docker-compose.yml");
 
-  console.log(composePath);
   if (!(await fs.pathExists(composePath))) {
     throw new Error(`Missing docker-compose.yml at ${composePath}`);
   }
@@ -58,6 +57,10 @@ export async function scaffoldProject(options: ScaffoldOptions): Promise<string>
 
   const updatedCompose = composeContent.replace(/{{PROJECT_SLUG}}/g, slug);
   await fs.writeFile(composePath, updatedCompose);
+
+  // Save a pristine template version to use at deploy time
+  const templatePath = path.join(projectRoot, "template.yml");
+  await fs.writeFile(templatePath, composeContent);
 
   // create readme file
   const readmeContent = `
