@@ -4,7 +4,7 @@ services:
     image: ghcr.io/owaisad/lp-{{PROJECT_SLUG}}/server:latest
     restart: always
     ports:
-      - "${API_PORT}:8080"
+      - "{{API_PORT}}:8080"
     networks:
       - launchpad-{{PROJECT_SLUG}}
 
@@ -13,7 +13,7 @@ services:
     image: ghcr.io/owaisad/lp-{{PROJECT_SLUG}}/client:latest
     restart: always
     ports:
-      - "${CLIENT_PORT}:3001"
+      - "{{CLIENT_PORT}}:3001"
     depends_on:
       - server
     networks:
