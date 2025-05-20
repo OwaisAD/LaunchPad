@@ -33,6 +33,7 @@ services:
       LAUNCHPAD_DEPLOY_TOKEN: ${LAUNCHPAD_DEPLOY_TOKEN}
     volumes:
       - ./docker-data/server:/usr/src/app
+      - /root/LaunchPad/projects:/usr/src/app/src/projects
     networks:
       - launchpad
 

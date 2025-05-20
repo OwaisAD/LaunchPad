@@ -31,7 +31,13 @@ export async function scaffoldProject(options: ScaffoldOptions): Promise<string>
   });
 
   const templateRoot = path.resolve("src/templates/fullstack-react-express");
-  const projectRoot = path.join("./src/projects", slug);
+  const isDev = process.env.NODE_ENV === "development";
+
+  const basePath = isDev
+    ? path.join(__dirname, "..", "projects") // local path like ./src/projects
+    : "/usr/src/app/projects"; // Docker-mounted path
+
+  const projectRoot = path.join(basePath, slug);
 
   await fs.copy(templateRoot, projectRoot);
 
