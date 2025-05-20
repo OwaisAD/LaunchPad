@@ -32,8 +32,7 @@ services:
       GITHUB_TOKEN: ${GITHUB_TOKEN}
       LAUNCHPAD_DEPLOY_TOKEN: ${LAUNCHPAD_DEPLOY_TOKEN}
     volumes:
-      - ./docker-data/server:/usr/src/app
-      - /root/LaunchPad/projects:/usr/src/app/src/projects
+       - /root/LaunchPad/projects:/usr/src/app/projects
     networks:
       - launchpad
 
