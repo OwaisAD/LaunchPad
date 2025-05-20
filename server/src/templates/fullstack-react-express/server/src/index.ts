@@ -5,7 +5,7 @@ import createServer from './utils/server';
 dotenv.config();
 
 export const app = createServer();
-const port = process.env.PORT || 8000;
+const port = process.env.PORT || 8080;
 
 async function main() {
   app.listen(port, () => {
