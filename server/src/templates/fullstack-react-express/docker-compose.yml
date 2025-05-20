@@ -1,14 +1,14 @@
 services:
   server:
     container_name: server-{{PROJECT_SLUG}}
-    image: ghcr.io/owaisad/launchpad/{{PROJECT_SLUG}}-server:latest
+    image: ghcr.io/owaisad/lp-{{PROJECT_SLUG}}/server:latest
     restart: always
     networks:
       - launchpad-{{PROJECT_SLUG}}
 
   client:
     container_name: client-{{PROJECT_SLUG}}
-    image: ghcr.io/owaisad/launchpad/client:latest
+    image: ghcr.io/owaisad/lp-{{PROJECT_SLUG}}/client:latest
     restart: always
     depends_on:
       - server
