@@ -129,15 +129,18 @@ const ProjectOverview = () => {
       <section className="bg-white border border-gray-200 rounded-xl p-6 shadow-sm space-y-6">
         <h2 className="text-lg font-semibold text-gray-800">Technology Stack</h2>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          <div>
+          <div className="flex flex-col space-y-4">
             <p>
-              <Label>Frontend:</Label> {stack.frontend}
+              <Label>Frontend:</Label>
+              <p className="text-gray-500">{stack.frontend}</p>
             </p>
             <p>
-              <Label>Backend:</Label> {stack.backend}
+              <Label>Backend:</Label>
+              <p className="text-gray-500">{stack.backend}</p>
             </p>
             <p>
-              <Label>Authentication:</Label> {stack.auth || "None"}
+              <Label>Authentication:</Label>
+              <p className="text-gray-500">{stack.authentication ? stack.authentication : "None"}</p>
             </p>
           </div>
           <div>
@@ -159,21 +162,33 @@ const ProjectOverview = () => {
               <Label>Logging:</Label>
             </p>
             <div className="flex flex-wrap gap-2 mt-1">
-              {stack.logging?.map((log: string) => <Pill key={log} text={log} />) || <span>None</span>}
+              {stack.logging.length ? (
+                stack.logging?.map((log: string) => <Pill key={log} text={log} />)
+              ) : (
+                <span className="font-medium text-gray-500 text-sm mt-1">None</span>
+              )}
             </div>
 
             <p className="mt-4">
               <Label>Monitoring:</Label>
             </p>
             <div className="flex flex-wrap gap-2 mt-1">
-              {stack.monitoring?.map((mon: string) => <Pill key={mon} text={mon} />) || <span>None</span>}
+              {stack.monitoring.length ? (
+                stack.monitoring?.map((mon: string) => <Pill key={mon} text={mon} />)
+              ) : (
+                <span className="font-medium text-gray-500 text-sm mt-1">None</span>
+              )}
             </div>
 
             <p className="mt-4">
               <Label>Testing:</Label>
             </p>
             <div className="flex flex-wrap gap-2 mt-1">
-              {stack.testing?.map((test: string) => <Pill key={test} text={test} />) || <span>None</span>}
+              {stack.testing.length ? (
+                stack.testing?.map((test: string) => <Pill key={test} text={test} />)
+              ) : (
+                <span className="font-medium text-gray-500 text-sm mt-1">None</span>
+              )}
             </div>
           </div>
         </div>
