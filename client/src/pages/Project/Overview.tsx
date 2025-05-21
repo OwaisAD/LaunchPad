@@ -26,6 +26,10 @@ const ProjectOverview = () => {
   const { project } = useOutletContext<OutletContextType>();
   const stack = JSON.parse(project.stack);
 
+  const isActive = project.status?.toLowerCase() === "active";
+  const clientUrl = `https://${project.slug}.launchpad.sportia.dk`;
+  const serverUrl = `${clientUrl}/api`;
+
   return (
     <div className="space-y-10">
       <div>
@@ -79,28 +83,44 @@ const ProjectOverview = () => {
             <Label>Last Deployed:</Label>{" "}
             {project.updatedAt ? format(new Date(project.updatedAt), "yyyy-MM-dd HH:mm") : "Never"}
           </p>
-          <p>
+          <p className="mt-4">
             <Label>Deployment Links</Label>:
-            <br />
-            CLIENT:{" "}
-            <a
-              href={`https://${project.slug}.launchpad.sportia.dk`}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-blue-600 hover:underline"
-            >
-              {`https://${project.slug}.launchpad.sportia.dk`}
-            </a>
-            <br />
-            SERVER:{" "}
-            <a
-              href={`https://${project.slug}.launchpad.sportia.dk/api`}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-blue-600 hover:underline"
-            >
-              {`https://${project.slug}.launchpad.sportia.dk/api`}
-            </a>
+            <ul className="mt-1 space-y-1">
+              <li>
+                CLIENT:{" "}
+                {isActive ? (
+                  <a
+                    href={clientUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-blue-600 hover:underline"
+                  >
+                    {clientUrl}
+                  </a>
+                ) : (
+                  <span className="text-gray-400 cursor-not-allowed" title="Deployment not available yet">
+                    {clientUrl}
+                  </span>
+                )}
+              </li>
+              <li>
+                SERVER:{" "}
+                {isActive ? (
+                  <a
+                    href={serverUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-blue-600 hover:underline"
+                  >
+                    {serverUrl}
+                  </a>
+                ) : (
+                  <span className="text-gray-400 cursor-not-allowed" title="Deployment not available yet">
+                    {serverUrl}
+                  </span>
+                )}
+              </li>
+            </ul>
           </p>
         </div>
       </section>
