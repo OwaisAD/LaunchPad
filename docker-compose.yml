@@ -70,6 +70,4 @@ volumes:
 
 networks:
   launchpad:
-    driver: bridge
-  traefik_default:
     external: true
