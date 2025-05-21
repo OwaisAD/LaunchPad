@@ -1,8 +1,10 @@
-declare namespace Express {
+import "express";
+
+declare module "express" {
   interface Request {
-    correlationId: string;
-    user: {
-      email?: string;
+    correlationId?: string;
+    user?: {
+      email: string;
       userId: string;
     };
   }
