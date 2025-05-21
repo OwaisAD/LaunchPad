@@ -71,4 +71,16 @@ async function createOrganization(
   }
 }
 
-export { createOrganization };
+async function getOrganizations(userId: string) {
+  return await prisma.organization.findMany({
+    where: {
+      Membership: {
+        some: {
+          userId,
+        },
+      },
+    },
+  });
+}
+
+export { createOrganization, getOrganizations };

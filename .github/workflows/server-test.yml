@@ -57,6 +57,8 @@ jobs:
 
       - name: Check for remaining formatting issues
         run: npm run format:check --workspace=server
+      - name: Run tests
+        run: npm run test --workspace=server
 
       - name: Building LaunchPad server to check for build errors
         run: npm run build --workspace=server

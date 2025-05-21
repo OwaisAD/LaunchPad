@@ -1,0 +1,84 @@
+# Catch-all fallback for unknown subdomains (HTTP)
+server {
+    listen 80 default_server;
+    server_name _;
+    
+    add_header Cache-Control "no-store, no-cache, must-revalidate, proxy-revalidate, max-age=0";
+    return 404;
+}
+
+# Catch-all fallback for unknown subdomains (HTTPS)
+server {
+    listen 443 ssl default_server;
+    server_name _;
+
+    ssl_certificate /etc/letsencrypt/live/launchpad.sportia.dk-0001/fullchain.pem;
+    ssl_certificate_key /etc/letsencrypt/live/launchpad.sportia.dk-0001/privkey.pem;
+    include /etc/letsencrypt/options-ssl-nginx.conf;
+    ssl_dhparam /etc/letsencrypt/ssl-dhparams.pem;
+
+    add_header Cache-Control "no-store, no-cache, must-revalidate, proxy-revalidate, max-age=0";
+    return 404;
+}
+
+# Redirect www to non-www (HTTP)
+server {
+    listen 80;
+    server_name www.launchpad.sportia.dk;
+
+    return 301 https://launchpad.sportia.dk$request_uri;
+}
+
+# Redirect www to non-www (HTTPS)
+server {
+    listen 443 ssl;
+    server_name www.launchpad.sportia.dk;
+
+    ssl_certificate /etc/letsencrypt/live/launchpad.sportia.dk-0001/fullchain.pem;
+    ssl_certificate_key /etc/letsencrypt/live/launchpad.sportia.dk-0001/privkey.pem;
+    include /etc/letsencrypt/options-ssl-nginx.conf;
+    ssl_dhparam /etc/letsencrypt/ssl-dhparams.pem;
+
+    return 301 https://launchpad.sportia.dk$request_uri;
+}
+
+# Main site HTTP → HTTPS redirect
+server {
+    listen 80;
+    server_name launchpad.sportia.dk;
+
+    return 301 https://$host$request_uri;
+}
+
+# Main site HTTPS server
+server {
+    listen 443 ssl;
+    server_name launchpad.sportia.dk;
+
+    ssl_certificate /etc/letsencrypt/live/launchpad.sportia.dk-0001/fullchain.pem;
+    ssl_certificate_key /etc/letsencrypt/live/launchpad.sportia.dk-0001/privkey.pem;
+    include /etc/letsencrypt/options-ssl-nginx.conf;
+    ssl_dhparam /etc/letsencrypt/ssl-dhparams.pem;
+
+    location /api/ {
+        limit_req zone=api_limit burst=20 nodelay;
+
+        proxy_pass http://localhost:8080/;
+        proxy_http_version 1.1;
+        proxy_set_header Upgrade $http_upgrade;
+        proxy_set_header Connection 'upgrade';
+        proxy_set_header Host $host;
+        proxy_cache_bypass $http_upgrade;
+    }
+
+    location / {
+        limit_req zone=frontend_limit burst=10 nodelay;
+
+        proxy_pass http://localhost:3000;
+        proxy_http_version 1.1;
+        proxy_set_header Upgrade $http_upgrade;
+        proxy_set_header Connection 'upgrade';
+        proxy_set_header Host $host;
+        proxy_cache_bypass $http_upgrade;
+    }
+}

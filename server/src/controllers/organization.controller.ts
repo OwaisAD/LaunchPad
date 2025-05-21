@@ -6,22 +6,12 @@ import { createOrganizationSchema } from "../validations/createOrganizationSchem
 import { logger } from "../utils/logger";
 import { ZodError } from "zod";
 import { getZodErrors } from "../validations/handleZodErrors";
-import { createOrganization } from "../services/organization.services";
+import { createOrganization, getOrganizations } from "../services/organization.services";
 
 const handleGetUserOrganizations = async (req: Request, res: Response) => {
   try {
     const userId = validateUser(req);
-
-    const organizations = await prisma.organization.findMany({
-      where: {
-        Membership: {
-          some: {
-            userId,
-          },
-        },
-      },
-    });
-
+    const organizations = await getOrganizations(userId);
     res.status(200).json({
       organizations,
     });
