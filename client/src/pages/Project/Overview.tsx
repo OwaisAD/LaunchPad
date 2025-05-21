@@ -80,7 +80,9 @@ const ProjectOverview = () => {
             {project.updatedAt ? format(new Date(project.updatedAt), "yyyy-MM-dd HH:mm") : "Never"}
           </p>
           <p>
-            <Label>Deployment Links</Label>: CLIENT:{" "}
+            <Label>Deployment Links</Label>:
+            <br />
+            CLIENT:{" "}
             <a
               href={`https://${project.slug}.launchpad.sportia.dk`}
               target="_blank"
