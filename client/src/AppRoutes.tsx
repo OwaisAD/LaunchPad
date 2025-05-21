@@ -23,8 +23,8 @@ function AppRoutes() {
       {/* Public Routes */}
       <Route index path="/" element={<LandingPage />} />
 
-      <Route path="/sign-in" element={<Login />} />
-      <Route path="/sign-up" element={<CreateAccount />} />
+      <Route path="/sign-in/*" element={<Login />} />
+      <Route path="/sign-up/*" element={<CreateAccount />} />
 
       {/* Protected Routes */}
       <Route element={<RequireAuth />}>

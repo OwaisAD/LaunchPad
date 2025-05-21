@@ -94,7 +94,7 @@ const ProjectOverview = () => {
             <br />
             SERVER:{" "}
             <a
-              href={`https://${project.slug}-api.launchpad.sportia.dk`}
+              href={`https://${project.slug}.launchpad.sportia.dk/api`}
               target="_blank"
               rel="noopener noreferrer"
               className="text-blue-600 hover:underline"
