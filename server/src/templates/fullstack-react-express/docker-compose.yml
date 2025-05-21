@@ -7,9 +7,8 @@ services:
       - "{{API_PORT}}:8080"
     environment:
       NODE_ENV: production
-      DATABASE_URL: postgresql://user:mypassword@pg:5432/{{PROJECT_SLUG}}
+      DATABASE_URL: postgresql://user:mypassword@postgres:5432/{{PROJECT_SLUG}}
     networks:
-      - launchpad-{{PROJECT_SLUG}}
       - launchpad
 
   client:
@@ -21,11 +20,8 @@ services:
     depends_on:
       - server
     networks:
-      - launchpad-{{PROJECT_SLUG}}
       - launchpad
 
 networks:
-  launchpad-{{PROJECT_SLUG}}:
-    driver: bridge
   launchpad:
     external: true
