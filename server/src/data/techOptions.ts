@@ -4,7 +4,26 @@ export const techOptions = [
     label: "Select Frontend/Client Framework",
     multi: false,
     isOptional: false,
-    options: [{ name: "ReactJS" }, { name: "Vue" }, { name: "Angular" }],
+    options: [
+      {
+        name: "ReactJS",
+        note: "Using Vite",
+        documentation: "https://vite.dev/guide/",
+      },
+      {
+        name: "Vue",
+        note: "Using Vite",
+        documentation: "https://vite.dev/guide/",
+      },
+      {
+        name: "Angular",
+        documentation: "https://v17.angular.io/docs",
+      },
+      {
+        name: "ASP.NET",
+        documentation: "https://learn.microsoft.com/en-us/aspnet/core/?view=aspnetcore-7.0",
+      },
+    ],
   },
   {
     key: "backend",
@@ -12,8 +31,12 @@ export const techOptions = [
     multi: false,
     isOptional: false,
     options: [
-      { name: "ExpressJS", note: "Runs on Node.js 22.4.0 LTS" },
-      { name: "NestJS", note: "Runs on Node.js 22.4.0 LTS" },
+      {
+        name: "ExpressJS",
+        note: "Runs on Node.js 22.4.0 LTS",
+        documentation: "https://expressjs.com/",
+      },
+      { name: "NestJS", note: "Runs on Node.js 22.4.0 LTS", documentation: "https://docs.nestjs.com/" },
     ],
   },
   {
@@ -21,7 +44,16 @@ export const techOptions = [
     label: "Select one or more Databases",
     multi: true,
     isOptional: false,
-    options: [{ name: "PostgreSQL" }, { name: "Redis" }, { name: "MongoDB" }, { name: "Neo4j" }],
+    options: [
+      {
+        name: "PostgreSQL",
+        note: "Relational",
+        documentation: "https://www.postgresql.org/docs/",
+      },
+      { name: "Redis", note: "In-memory data store", documentation: "https://redis.io/docs/" },
+      { name: "MongoDB", note: "NoSQL", documentation: "https://www.mongodb.com/docs/" },
+      { name: "Neo4j", note: "Graph DB", documentation: "https://neo4j.com/docs/" },
+    ],
   },
   // {
   //   key: "deployment",
@@ -43,10 +75,20 @@ export const techOptions = [
     multi: true,
     isOptional: false,
     options: [
-      { name: "Kysely" },
-      { name: "Prisma ORM" },
-      { name: "PG" },
-      { name: "TypeORM" },
+      {
+        name: "Kysely",
+        documentation: "https://kysely.dev/",
+      },
+      {
+        name: "Prisma ORM",
+        documentation: "https://www.prisma.io/docs/",
+      },
+      {
+        name: "PG",
+      },
+      {
+        name: "TypeORM",
+      },
       { name: "Sequelize" },
       { name: "Mongoose" },
       { name: "neo4j-driver" },
@@ -72,13 +114,22 @@ export const techOptions = [
     label: "Select Testing Framework(s)",
     multi: true,
     isOptional: true,
-    options: [{ name: "Jest" }, { name: "Mocha" }, { name: "Chai" }],
+    options: [
+      { name: "Vitest", note: "Default testing library" },
+      { name: "Jest" },
+      { name: "Mocha" },
+      { name: "Chai" },
+    ],
   },
   {
     key: "auth",
     label: "Select Authentication Libraries",
     multi: false,
     isOptional: true,
-    options: [{ name: "Auth0" }, { name: "Firebase Auth" }, { name: "Clerk" }],
+    options: [
+      { name: "Auth0", documentation: "https://auth0.com/docs" },
+      { name: "Firebase Auth", documentation: "https://firebase.google.com/docs/auth" },
+      { name: "Clerk", documentation: "https://clerk.dev/docs" },
+    ],
   },
 ];

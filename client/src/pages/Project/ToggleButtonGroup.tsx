@@ -2,7 +2,7 @@ import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 
 type ToggleButtonGroupProps = {
-  options: Array<{ name: string; note?: string }>;
+  options: Array<{ name: string; note?: string; documentation?: string }>;
   selected: string[] | string;
   setSelected: (value: string | string[] | ((prev: string | string[]) => string | string[])) => void;
   multi?: boolean;
@@ -34,11 +34,13 @@ const ToggleButtonGroup = ({ options, selected, setSelected, multi = false }: To
           key={opt.name}
           type="button"
           variant={isSelected(opt.name) ? "default" : "outline"}
-          className={cn("rounded-full", isSelected(opt.name) && "bg-black text-white")}
+          className={cn("rounded-full px-6 py-5", isSelected(opt.name) && "bg-black text-white")}
           onClick={() => handleClick(opt.name)}
         >
-          {opt.name}
-          {opt.note && <span className="text-sm text-gray-500">{opt.note}</span>}
+          <div className="flex flex-col items-center leading-tight">
+            <span className="font-medium text-md truncate">{opt.name}</span>
+            {opt.note && <span className="text-xs text-gray-400">{opt.note}</span>}
+          </div>
         </Button>
       ))}
     </div>
