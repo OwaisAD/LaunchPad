@@ -1,15 +1,19 @@
+import { describe, it, expect, beforeEach, vi } from "vitest";
 import { getOrganizations } from "../../services/organization.services";
 import prisma from "../../../prisma/client";
 
-jest.mock("../../../prisma/client", () => ({
-  organization: {
-    findMany: jest.fn(),
-  },
-}));
-
+vi.mock("../../../prisma/client", () => {
+  return {
+    default: {
+      organization: {
+        findMany: vi.fn(),
+      },
+    },
+  };
+});
 describe("Organization Service", () => {
   beforeEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   it("should call prisma to get organizations", async () => {
@@ -38,7 +42,8 @@ describe("Organization Service", () => {
       },
     ];
 
-    (prisma.organization.findMany as jest.Mock).mockResolvedValue(mockOrganizations);
+    const findManyMock = prisma.organization.findMany as unknown as ReturnType<typeof vi.fn>;
+    findManyMock.mockResolvedValue(mockOrganizations);
 
     const result = await getOrganizations("testUserId");
 

@@ -29,18 +29,18 @@
     "noUnusedLocals": true, // Report errors on unused locals
     "noUnusedParameters": true, // Report errors on unused parameters
     "noFallthroughCasesInSwitch": true, // Report errors for fallthrough cases in switch statement
-    "types": ["node", "jest"]
+    "typeRoots": ["./types", "./node_modules/@types"]
   },
   "include": [
-    "src", // Include all files in the src directory
-    "types"
+    "src/**/*", // Include all files in the src directory
+    "src/__tests__",
+    "types/globals.d.ts",
+    "types/express"
   ],
   "exclude": [
     "node_modules", // Exclude the node_modules directory
     "**/*.spec.ts",
-    "src/templates/**/*.ts",
-    "src/controllers/**/*.ts",
-    "src/middleware/**/*.ts",
+    "**/*.test.ts", // Exclude test files
     "src/templates"
   ]
 }

@@ -23,13 +23,13 @@ export const isAuthenticated = async (req: Request, res: Response) => {
       throw new UnauthenticatedError("Invalid session data");
     }
 
-    req.user.email = email;
-    req.user.userId = userId;
+    req.user!.email = email;
+    req.user!.userId = userId;
 
     res.status(200).json({
       validateUser: true,
-      email: req.user.email,
-      userId: req.user.userId,
+      email: req.user!.email,
+      userId: req.user!.userId,
     });
   } catch (error) {
     const status = error instanceof UnauthenticatedError ? 401 : 500;

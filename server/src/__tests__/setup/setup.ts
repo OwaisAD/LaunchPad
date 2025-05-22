@@ -1,11 +1,12 @@
 import prisma from "../../../prisma/client";
 import createServer from "../../utils/server";
+import { beforeAll, beforeEach, afterAll } from "vitest";
 // import { redisClient } from "../../redis/client";
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export let app: any;
 
-global.beforeAll(async () => {
+beforeAll(async () => {
   app = createServer();
 
   // if (!redisClient.isOpen) {
@@ -14,7 +15,7 @@ global.beforeAll(async () => {
   // redisClient.on("error", () => console.log("Connection to redis server failed"));
 });
 
-global.beforeEach(async () => {
+beforeEach(async () => {
   // clear database from all tables
   await prisma.$transaction([
     prisma.membership.deleteMany(),
@@ -25,7 +26,7 @@ global.beforeEach(async () => {
   ]);
 });
 
-global.afterAll(async () => {
+afterAll(async () => {
   console.log("Disconnecting from Prisma...");
   await prisma.$disconnect();
   console.log("Prisma disconnected.");
