@@ -2,14 +2,14 @@
 
 set -e  # Exit immediately if a command exits with a non-zero status
 
-echo "🛑 Stopping and removing existing Docker Compose services (including volumes)..."
-docker-compose down --remove-orphans --volumes
-echo "✅ Services stopped and cleaned up."
+echo "🛑 Stopping and removing Docker Compose services (excluding pg_data)..."
+docker-compose down --remove-orphans
+echo "✅ Services stopped (volumes not removed)."
 
-# Optional: Uncomment if you want to remove *all* images (use with caution!)
-# echo "🧹 Removing all Docker images to ensure a clean build..."
-# docker rmi -f $(docker images -q) || true
-# echo "✅ All Docker images removed."
+# Remove unwanted volumes manually (e.g., only docker-data)
+echo "🧹 Removing non-persistent volumes (e.g., client data)..."
+docker volume rm launchpad_docker-data || true
+echo "✅ Non-persistent volumes cleaned."
 
 echo "📦 Pulling the latest Docker images..."
 docker-compose pull
