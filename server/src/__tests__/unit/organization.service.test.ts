@@ -16,8 +16,8 @@ describe("Organization Service", () => {
     vi.clearAllMocks();
   });
 
-  it("should call prisma to get organizations", async () => {
-    const mockOrganizations = [
+  it("should return organizations for a valid user", async () => {
+    const expectedOrganizations = [
       {
         id: "org1",
         name: "Organization 1",
@@ -43,13 +43,13 @@ describe("Organization Service", () => {
     ];
 
     const findManyMock = prisma.organization.findMany as unknown as ReturnType<typeof vi.fn>;
-    findManyMock.mockResolvedValue(mockOrganizations);
+    findManyMock.mockResolvedValue(expectedOrganizations);
 
     const result = await getOrganizations("testUserId");
 
-    expect(result).toEqual(mockOrganizations);
-    expect(prisma.organization.findMany).toHaveBeenCalledTimes(1);
-    expect(prisma.organization.findMany).toHaveBeenCalledWith({
+    expect(result).toEqual(expectedOrganizations);
+    expect(findManyMock).toHaveBeenCalledTimes(1);
+    expect(findManyMock).toHaveBeenCalledWith({
       where: {
         Membership: {
           some: {
@@ -58,5 +58,22 @@ describe("Organization Service", () => {
         },
       },
     });
+  });
+
+  it("should throw an error when prisma throws", async () => {
+    const findManyMock = vi.fn().mockRejectedValue(new Error("DB failure"));
+    prisma.organization.findMany = findManyMock;
+
+    await expect(getOrganizations("user1")).rejects.toThrow("DB failure");
+  });
+
+  it("should return an empty array when no organizations are found", async () => {
+    const findManyMock = vi.fn().mockResolvedValue([]);
+    prisma.organization.findMany = findManyMock;
+
+    const result = await getOrganizations("user-without-orgs");
+
+    expect(result).toEqual([]);
+    expect(findManyMock).toHaveBeenCalledTimes(1);
   });
 });
