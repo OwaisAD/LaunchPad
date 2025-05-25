@@ -18,8 +18,8 @@
     "format": "prettier --write .",
     "format:check": "prettier --check .",
     "test:migrate": "npx dotenv -e .env.test -- npx prisma migrate reset -f",
+    "test": "NODE_ENV=test npm run test:migrate && vitest",
     "testold": "npm run test:migrate && jest --runInBand --verbose --coverage",
-    "test": "NODE_ENV=test vitest",
     "test:run": "vitest --run",
     "test:ui": "vitest --ui",
     "coverage": "vitest run --coverage"

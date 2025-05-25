@@ -52,7 +52,7 @@ const CreateProjectForm = () => {
   const { orgId } = useParams();
   const navigate = useNavigate();
 
-  const updateDocs = (groupKey: string, selected: string[] | string, options: TechOptionType["options"]) => {
+  const updateDocs = (_groupKey: string, selected: string[] | string, options: TechOptionType["options"]) => {
     const selectedArray = Array.isArray(selected) ? selected : [selected];
     const filtered = options
       .filter((opt) => selectedArray.includes(opt.name) && opt.documentation)
