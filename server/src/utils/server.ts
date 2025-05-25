@@ -20,12 +20,15 @@ function createServer() {
 
   app.set("trust proxy", true);
 
-  app.use(
-    clerkMiddleware({
-      authorizedParties: ["https://launchpad.sportia.dk", "http://localhost:3000", "https://clerk.dev"],
-      proxyUrl: "https://launchpad.sportia.dk",
-    })
-  );
+  // only use Clerk middleware in production
+  if (process.env.NODE_ENV !== "test") {
+    app.use(
+      clerkMiddleware({
+        authorizedParties: ["https://launchpad.sportia.dk", "http://localhost:3000", "https://clerk.dev"],
+        proxyUrl: "https://launchpad.sportia.dk",
+      })
+    );
+  }
 
   app.use(
     cors({
