@@ -15,7 +15,11 @@ const GITHUB_USERNAME = "OwaisAD";
 const GITHUB_TOKEN = process.env.GITHUB_TOKEN;
 
 if (!GITHUB_USERNAME || !GITHUB_TOKEN) {
-  throw new Error("GitHub credentials are not set in the environment variables");
+  if (process.env.NODE_ENV === "test") {
+    console.warn("Skipping GitHub push in test environment");
+  } else {
+    throw new Error("GitHub credentials are not set in the environment variables");
+  }
 }
 
 export async function pushToGitHub(options: PushOptions): Promise<string> {
