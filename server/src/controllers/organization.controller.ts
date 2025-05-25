@@ -6,7 +6,7 @@ import { createOrganizationSchema } from "../validations/createOrganizationSchem
 import { logger } from "../utils/logger";
 import { ZodError } from "zod";
 import { getZodErrors } from "../validations/handleZodErrors";
-import { createOrganization, getOrganizations } from "../services/organization.services";
+import { createOrganization, getOrganizations, inviteMember } from "../services/organization.services";
 
 const handleGetUserOrganizations = async (req: Request, res: Response) => {
   try {
@@ -102,73 +102,22 @@ const getOrganizationBySlug = async (req: Request, res: Response) => {
   }
 };
 
-const inviteMember = async (req: Request, res: Response) => {
+const handleInviteMember = async (req: Request, res: Response) => {
   try {
     // check if user exists and add to organization
     const userId = validateUser(req);
     const { email } = req.body;
-    const { id } = req.params;
+    const { id: organizationId } = req.params;
 
-    const organization = await prisma.organization.findUnique({
-      where: {
-        id,
-      },
-      include: {
-        Membership: {
-          include: {
-            user: true,
-          },
-        },
-      },
-    });
+    const result = await inviteMember(userId, organizationId, email);
 
-    if (!organization) {
-      res.status(404).json({ error: "Organization not found" });
-      return;
-    }
-
-    const isAdmin = organization.Membership.some(
-      (member: { userId: string; role: string }) => member.userId === userId && member.role === "ADMIN"
-    );
-
-    if (!isAdmin) {
-      res.status(403).json({ error: "You are not authorized to invite members to this organization." });
-      return;
-    }
-
-    const userAlreadyExists = organization.Membership.some(
-      (member: { userId: string; role: string; user: { email: string } }) => member.user.email === email
-    );
-
-    if (userAlreadyExists) {
-      res.status(400).json({ error: "User already exists in the organization" });
-      return;
-    }
-
-    // check if user exists in system
-    const user = await prisma.user.findUnique({
-      where: {
-        email,
-      },
-    });
-
-    if (!user) {
-      res.status(404).json({ error: `User with email ${email} not found` });
-      return;
-    }
-
-    // add user to organization
-    await prisma.membership.create({
-      data: {
-        userId: user.id,
-        organizationId: organization.id,
-        role: "USER",
-      },
-    });
-
-    res.status(200).json({ message: "User added to organization successfully" });
+    res.status(200).json(result);
     // validate
   } catch (error) {
+    if (error instanceof Error) {
+      res.status(400).json({ error: error.message });
+    }
+
     console.error("Error inviting member:", error);
     res.status(500).json({ error: "Internal server error" });
   }
@@ -278,6 +227,6 @@ export default {
   handleCreateOrganization,
   getOrganizationBySlug,
   // deleteOrganization,
-  inviteMember,
+  handleInviteMember,
   changeRole,
 };

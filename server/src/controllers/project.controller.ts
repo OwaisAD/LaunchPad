@@ -6,9 +6,7 @@ import { logger } from "../utils/logger";
 import { ZodError } from "zod";
 import { getZodErrors } from "../validations/handleZodErrors";
 import z from "zod";
-import slugify from "slugify";
-import { scaffoldProject } from "../utils/scaffoldProject";
-import { pushToGitHub } from "../utils/pushToGitHub";
+import { createProject, getUserProjects } from "../services/project.services";
 // import fs from "fs-extra";
 // import { cleanUpProjectFolder } from "../utils/cleanUpProjectFolder";
 
@@ -30,7 +28,6 @@ const projectSchema = z.object({
 const handleCreateProject = async (req: Request, res: Response) => {
   try {
     const userId = validateUser(req);
-
     const parsed = projectSchema.safeParse(req.body);
 
     if (!parsed.success) {
@@ -38,110 +35,9 @@ const handleCreateProject = async (req: Request, res: Response) => {
       return;
     }
 
-    const data = parsed.data;
-    const slug = slugify(data.projectName, {
-      lower: true,
-      strict: true,
-      replacement: "-",
-      trim: true,
-    });
+    const result = await createProject(userId, parsed.data);
 
-    console.log("Parsed data:", data);
-    console.log("Slug:", slug);
-    console.log("Orgslug", data.orgSlug);
-
-    // validate if the user is part of the organization and admin
-
-    const org = await prisma.organization.findUnique({
-      where: {
-        slug: data.orgSlug,
-      },
-      include: {
-        Membership: {
-          where: {
-            userId,
-          },
-        },
-      },
-    });
-
-    if (!org) {
-      res.status(404).json({ error: "Organization not found" });
-      return;
-    }
-    if (org.Membership[0].role !== "ADMIN") {
-      res.status(403).json({ error: "User is not an admin of the organization" });
-      return;
-    }
-
-    // check if project already exists
-    const existingProject = await prisma.project.findFirst({
-      where: {
-        slug,
-      },
-    });
-
-    if (existingProject) {
-      res.status(400).json({ error: "Project with the same name or slug already exists" });
-      return;
-    }
-
-    // TODO : maybe this should happen in the background as jobs in a queue ..
-
-    const projectLocation = await scaffoldProject({
-      projectName: data.projectName,
-      slug,
-      frontend: data.frontend,
-      backend: data.backend,
-      databases: data.databases || [],
-      dbConnector: data.dbConnector || [],
-      logging: data.logging || [],
-      monitoring: data.monitoring || [],
-      testing: data.testing || [],
-      auth: data.auth || "",
-    });
-
-    console.log("Project location:", projectLocation);
-
-    const url = await pushToGitHub({
-      projectName: data.projectName,
-      slug,
-      repo: data.repo,
-      projectLocation,
-    });
-
-    console.log("Repo url:", url);
-
-    const result = await prisma.project.create({
-      data: {
-        name: data.projectName,
-        slug,
-        description: data.description || "",
-        stack: JSON.stringify(data),
-        status: "PENDING",
-        repositoryUrl: url,
-        organization: {
-          connect: {
-            slug: data.orgSlug,
-          },
-        },
-        createdBy: {
-          connect: {
-            id: userId,
-          },
-        },
-      },
-    });
-
-    console.log(result);
-
-    // await cleanUpProjectFolder(projectLocation);
-
-    res.status(200).json({
-      message: "Project received",
-      slug,
-      // id: result.id,
-    });
+    res.status(201).json(result);
   } catch (error) {
     if (error instanceof UnauthorizedError) {
       res.status(401).json({ error: error.message });
@@ -149,8 +45,7 @@ const handleCreateProject = async (req: Request, res: Response) => {
     }
 
     if (error instanceof ZodError) {
-      const zodErrors = getZodErrors(error);
-      res.status(400).json({ error: zodErrors });
+      res.status(400).json({ error: getZodErrors(error) });
       return;
     }
 
@@ -168,37 +63,7 @@ const handleGetUserProjects = async (req: Request, res: Response) => {
       return;
     }
 
-    const projects = await prisma.project.findMany({
-      where: {
-        organization: {
-          Membership: {
-            some: {
-              userId,
-            },
-          },
-        },
-      },
-      include: {
-        createdBy: {
-          select: {
-            id: true,
-            firstName: true,
-            lastName: true,
-            email: true,
-            imageUrl: true,
-          },
-        },
-        organization: {
-          select: {
-            id: true,
-            name: true,
-            slug: true,
-            logo: true,
-            website: true,
-          },
-        },
-      },
-    });
+    const projects = await getUserProjects(userId);
 
     res.status(200).json({ projects });
   } catch (error) {
@@ -208,8 +73,7 @@ const handleGetUserProjects = async (req: Request, res: Response) => {
     }
 
     if (error instanceof ZodError) {
-      const zodErrors = getZodErrors(error);
-      res.status(400).json({ error: zodErrors });
+      res.status(400).json({ error: getZodErrors(error) });
       return;
     }
 

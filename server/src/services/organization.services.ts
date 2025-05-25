@@ -3,6 +3,18 @@ import prisma from "../../prisma/client";
 import { PrismaClientKnownRequestError } from "@prisma/client/runtime/library";
 import slugify from "slugify";
 
+async function getOrganizations(userId: string) {
+  return await prisma.organization.findMany({
+    where: {
+      Membership: {
+        some: {
+          userId,
+        },
+      },
+    },
+  });
+}
+
 async function createOrganization(
   userId: string,
   organization: {
@@ -32,10 +44,7 @@ async function createOrganization(
 
     const newOrganization = await prisma.organization.create({
       data: {
-        name: organization.name,
-        description: organization.description,
-        website: organization.website,
-        location: organization.location,
+        ...organization,
         slug,
         owner: {
           connect: {
@@ -63,7 +72,7 @@ async function createOrganization(
 
     if (error instanceof Error) {
       logger.error("Error creating organization:", error.message);
-      throw new Error(error.message);
+      throw error;
     }
 
     logger.error("Error creating organization:", error);
@@ -71,16 +80,61 @@ async function createOrganization(
   }
 }
 
-async function getOrganizations(userId: string) {
-  return await prisma.organization.findMany({
+async function inviteMember(userId: string, organizationId: string, email: string) {
+  const organization = await prisma.organization.findUnique({
     where: {
+      id: organizationId,
+    },
+    include: {
       Membership: {
-        some: {
-          userId,
+        include: {
+          user: true,
         },
       },
     },
   });
+
+  if (!organization) {
+    throw new Error("Organization not found");
+  }
+
+  const isAdmin = organization.Membership.some(
+    (member: { userId: string; role: string }) => member.userId === userId && member.role === "ADMIN"
+  );
+
+  if (!isAdmin) {
+    throw new Error("You are not authorized to invite members to this organization.");
+  }
+
+  const userAlreadyExists = organization.Membership.some(
+    (member: { userId: string; role: string; user: { email: string } }) => member.user.email === email
+  );
+
+  if (userAlreadyExists) {
+    throw new Error("User already exists in the organization");
+  }
+
+  // check if user exists in system
+  const user = await prisma.user.findUnique({
+    where: {
+      email,
+    },
+  });
+
+  if (!user) {
+    throw new Error(`User with email ${email} not found`);
+  }
+
+  // add user to organization
+  await prisma.membership.create({
+    data: {
+      userId: user.id,
+      organizationId: organization.id,
+      role: "USER",
+    },
+  });
+
+  return { message: "User added to organization successfully" };
 }
 
-export { createOrganization, getOrganizations };
+export { createOrganization, getOrganizations, inviteMember };
