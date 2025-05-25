@@ -36,6 +36,13 @@ jobs:
           --health-interval 10s
           --health-timeout 5s
           --health-retries 5
+
+        env:
+          DATABASE_URL: postgresql://postgres:postgres@localhost:5432/launchpad
+          REDIS_URL: redis://localhost:6379
+          CLERK_PUBLISHABLE_KEY: ${{ secrets.CLERK_PUBLISHABLE_KEY }}
+          CLERK_SECRET_KEY: ${{ secrets.CLERK_SECRET_KEY }}
+          LAUNCHPAD_DEPLOY_TOKEN: ${{ secrets.LAUNCHPAD_DEPLOY_TOKEN }}
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
