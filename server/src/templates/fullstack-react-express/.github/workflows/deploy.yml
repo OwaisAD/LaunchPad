@@ -1,4 +1,4 @@
-name: Deploying LaunchPad Client and Server
+name: Deploying LaunchPad Scaffold Project Client and Server
 
 on:
   push:

@@ -1,4 +1,4 @@
-name: Testing LaunchPad Client
+name: Testing LaunchPad Scaffold Project Client
 on:
   push:
     branches-ignore:
