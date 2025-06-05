@@ -1,4 +1,4 @@
-# Bachelor Project - LaunchPad
+# LaunchPad
 
 ## Contributors
 
@@ -11,5 +11,4 @@
 - [Installation](#installation)
 - [Usage](#usage)
 - [Future Improvements](#future-improvements)
-
-Design and Development Specification Document
+- Design and Development Specification Document
