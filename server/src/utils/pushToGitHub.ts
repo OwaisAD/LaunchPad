@@ -33,14 +33,14 @@ export async function pushToGitHub(options: PushOptions): Promise<string> {
     auth: GITHUB_TOKEN,
   });
 
-  // 1. Clean up .git if it already exists
+  // Clean up .git if it already exists - this is useful for re-running the scaffold
   const gitFolderPath = path.join(projectLocation, ".git");
   if (await fs.pathExists(gitFolderPath)) {
     console.log("Cleaning up existing .git folder...");
     await fs.remove(gitFolderPath);
   }
 
-  // 2. Create a new GitHub repository
+  // Create a new GitHub repository
   const { data } = await octokit.repos.createForAuthenticatedUser({
     name: repoName,
     private: true,

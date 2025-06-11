@@ -33,6 +33,7 @@ describe("Project Service - create project", () => {
   };
 
   it("should create project if user is admin and project does not exist", async () => {
+    // Arrange
     const mockOrg = {
       slug: "my-org",
       Membership: [{ userId: "adminUser", role: "ADMIN" }],
@@ -53,8 +54,10 @@ describe("Project Service - create project", () => {
     (scaffoldProject as unknown as ReturnType<typeof vi.fn>).mockResolvedValue("/project/path");
     (pushToGitHub as unknown as ReturnType<typeof vi.fn>).mockResolvedValue("https://github.com/my-repo");
 
+    // Act
     const result = await createProject("adminUser", mockData);
 
+    // Assert
     expect(result).toEqual({
       message: "Project created successfully",
       slug: "my-project",

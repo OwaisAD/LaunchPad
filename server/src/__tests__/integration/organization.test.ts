@@ -23,15 +23,18 @@ describe("Integration Tests - Organizations", () => {
   });
 
   it("should invite a user to an organization", async () => {
+    // Arrange
     const adminUser = await createDummyUser();
     const dummyUser2 = await createGenericDummyUser();
 
     const org = await createOrganizationForUser(adminUser.id);
 
+    // Act
     const res = await request(app).post(`/organizations/${org.id}/invite`).send({
       email: dummyUser2.email,
     });
 
+    // Assert
     expect(res.status).toBe(200);
     expect(res.body.message).toBe("User added to organization successfully");
   });

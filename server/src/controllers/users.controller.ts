@@ -11,8 +11,6 @@ async function handleClerkWebhook(req: Request, res: Response) {
     ? process.env.CLERK_WEBHOOK_SIGNING_SECRET_DEV
     : process.env.CLERK_WEBHOOK_SIGNING_SECRET;
 
-  console.log(SIGNING_SECRET);
-
   if (!SIGNING_SECRET) {
     console.error("Missing Clerk signing secret");
     throw new Error("Error: Please add CLERK_SIGNING_SECRET from Clerk Dashboard to .env or .env.local");
@@ -40,12 +38,10 @@ async function handleClerkWebhook(req: Request, res: Response) {
     }) as WebhookEvent;
 
     const { id } = evt.data;
-    console.log(evt);
 
     const eventType = evt.type;
 
     console.log(`Received webhook with ID ${id} and event type of ${eventType}`);
-    console.log("Webhook payload:", evt.data);
 
     if (eventType === "user.created") {
       const { data } = evt;

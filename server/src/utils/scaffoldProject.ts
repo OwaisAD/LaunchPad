@@ -16,19 +16,9 @@ interface ScaffoldOptions {
 
 export async function scaffoldProject(options: ScaffoldOptions): Promise<string> {
   const { projectName, slug, frontend, backend, databases, dbConnector, logging, monitoring, testing, auth } = options;
-
-  console.log("Scaffolding project with options:", {
-    projectName,
-    slug,
-    frontend,
-    backend,
-    databases,
-    dbConnector,
-    logging,
-    monitoring,
-    testing,
-    auth,
-  });
+  console.log(
+    `Scaffolding project: ${projectName} (${slug}) with frontend: ${frontend}, backend: ${backend}, databases: ${databases.join(", ")}, dbConnector: ${dbConnector.join(", ")}, logging: ${logging.join(", ")}, monitoring: ${monitoring.join(", ")}, testing: ${testing.join(", ")}, auth: ${auth}`
+  );
 
   const templateRoot = path.resolve("src/templates/fullstack-react-express");
   const isDev = process.env.NODE_ENV === "development";
