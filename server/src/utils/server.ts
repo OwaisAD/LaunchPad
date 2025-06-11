@@ -11,7 +11,12 @@ import { logRequestDetails } from "../middleware/loggerMiddleware";
 import usersController from "../controllers/users.controller";
 import { clerkMiddleware } from "@clerk/express";
 import { register, Counter, Histogram, Gauge } from "prom-client";
-import os from 'os';
+import os from "os";
+
+export const projectsCreatedCounter = new Counter({
+  name: "projects_created_total",
+  help: "Total number of created projects",
+});
 
 function createServer() {
   const app = express();

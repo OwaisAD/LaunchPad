@@ -4,6 +4,7 @@ import slugify from "slugify";
 import { UnauthorizedError } from "../errors/UnauthorizedError";
 import { scaffoldProject } from "../utils/scaffoldProject";
 import { pushToGitHub } from "../utils/pushToGitHub";
+import { projectsCreatedCounter } from "../utils/server";
 
 export async function createProject(
   userId: string,
@@ -101,6 +102,8 @@ export async function createProject(
       },
     },
   });
+
+  projectsCreatedCounter.inc();
 
   logger.info("Project created successfully", { projectId: result.id, slug });
   return {
