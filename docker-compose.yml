@@ -78,7 +78,7 @@ services:
     ports:
       - "9090:9090"
     networks:
-      - app-network
+      - launchpad
     restart: always
 
   grafana:
@@ -92,11 +92,13 @@ services:
     volumes:
       - grafana_data:/var/lib/grafana
     networks:
-      - app-network
+      - launchpad
 
 volumes:
   docker-data:
   pg_data:
+  prometheus_data:
+  grafana_data:
 
 networks:
   launchpad:
