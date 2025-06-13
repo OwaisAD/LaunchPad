@@ -28,6 +28,18 @@ export async function createProject(data: {
   return response.json();
 }
 
+export async function getProjectsByOrg(orgSlug: string) {
+  const response = await fetch(`${API_BASE}/projects/org/${orgSlug}`, {
+    method: "GET",
+    credentials: "include",
+    headers: {
+      "Content-Type": "application/json",
+    },
+  });
+  if (!response.ok) throw new Error("Not authenticated");
+  return response.json();
+}
+
 export async function getProjects() {
   const response = await fetch(`${API_BASE}/projects`, {
     method: "GET",

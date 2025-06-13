@@ -144,8 +144,72 @@ const handleGetProjectBySlug = async (req: Request, res: Response) => {
   }
 };
 
+const handleGetUserProjectsByOrganization = async (req: Request, res: Response) => {
+  try {
+    const userId = validateUser(req);
+
+    if (!userId) {
+      res.status(401).json({ error: "Unauthorized" });
+      return;
+    }
+  
+    const { orgSlug } = req.params;
+
+    const organization = await prisma.organization.findUnique({
+      where: { slug: orgSlug },
+      include: {
+        Membership: {
+          where: { userId },
+          select: { userId: true },
+        },
+      },
+    });
+    if (!organization || organization.Membership.length === 0) {
+      res.status(404).json({ error: "Organization not found or user not a member" });
+      return;
+    }
+    const projects = await prisma.project.findMany({
+      where: { organizationId: organization.id },
+      include: {
+        organization: {
+          select: {
+            id: true,
+            name: true,
+            slug: true,
+            logo: true,
+            website: true,
+          },
+        },
+        createdBy: {
+          select: {
+            id: true,
+            firstName: true,
+            lastName: true,
+            email: true,
+            imageUrl: true,
+          },
+        },
+      },
+    });
+    res.status(200).json({ projects });
+  } catch (error) {
+    if (error instanceof UnauthorizedError) {
+      res.status(401).json({ error: error.message });
+      return;
+    }
+    if (error instanceof ZodError) {
+      const zodErrors = getZodErrors(error);
+      res.status(400).json({ error: zodErrors });
+      return;
+    }
+    logger.error("Error fetching projects by organization:", error);
+    res.status(500).json({ error: "Internal server error" });
+  }
+};
+
 export default {
   handleCreateProject,
   handleGetUserProjects,
   handleGetProjectBySlug,
+  handleGetUserProjectsByOrganization,
 };

@@ -9,6 +9,7 @@ const ProjectRoute = express.Router();
 
 ProjectRoute.post("/", authMiddleware, projectController.handleCreateProject);
 ProjectRoute.get("/", authMiddleware, projectController.handleGetUserProjects);
+ProjectRoute.get("/org/:orgSlug", authMiddleware, projectController.handleGetUserProjectsByOrganization);
 ProjectRoute.get("/:slug", authMiddleware, projectController.handleGetProjectBySlug);
 
 export default ProjectRoute;

@@ -1,4 +1,4 @@
-import { getProjects } from "@/api/projects";
+import { getProjects, getProjectsByOrg } from "@/api/projects";
 import { ChoseOrganizationDialog } from "@/components/ChoseOrganizationDialog";
 import Loader from "@/components/Loader";
 import PageHeading from "@/components/PageHeading";
@@ -25,7 +25,7 @@ const MyProjects = () => {
 
   const { data, isLoading, isError, error, refetch } = useQuery({
     queryKey: ["projects"],
-    queryFn: getProjects,
+    queryFn: getProjectsByOrg.bind(null, orgId || ""),
   });
 
   useEffect(() => {
