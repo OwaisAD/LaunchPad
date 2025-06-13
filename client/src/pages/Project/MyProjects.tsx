@@ -1,4 +1,4 @@
-import { getProjects, getProjectsByOrg } from "@/api/projects";
+import { getProjectsByOrg } from "@/api/projects";
 import { ChoseOrganizationDialog } from "@/components/ChoseOrganizationDialog";
 import Loader from "@/components/Loader";
 import PageHeading from "@/components/PageHeading";
